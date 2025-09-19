@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(()=>{const e=document.querySelector(".menu_burger"),n=document.querySelector(".menu-header_close"),t=document.querySelector(".nav");e&&n&&t&&(e.addEventListener("click",(()=>{t.classList.add("nav--open")})),n.addEventListener("click",(()=>{t.classList.remove("nav--open")})))}));
