@@ -1118,10 +1118,12 @@
             }
             /* Кнопка-плитка "Все турниры" — аккуратный вид */
             .card--all {
+                display: flex;
+                justify-content: space-between;
                 position: relative;
                 display: grid;
                 place-items: center;
-                padding: 28px 76px; /* запас справа под стрелку */
+                padding: 28px 30px; /* запас справа под стрелку */
                 min-height: 200px; /* как у обычных карточек */
                 width: clamp(200px, 32vw, 340px);
                 border-radius: 24px;
@@ -1591,6 +1593,11 @@
                 .drawer__panel,
                 .drawer__backdrop {
                     transition: none !important;
+                }
+            }
+            @media (max-width: 400px) {
+                h2.section__title.in {
+                    width: 200px;
                 }
             }
         </style>
@@ -2120,7 +2127,7 @@
                                 aria-label="Все турниры"
                             >
                                 <div class="card__topbar"></div>
-                                <span class="label">Все турниры</span>
+                                <span class="label">Все<br />турниры</span>
                                 <span class="arrow" aria-hidden="true">
                                     <svg
                                         width="18"
