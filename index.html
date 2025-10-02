@@ -1,1 +1,2612 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="./css/main.css"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"><title>site</title></head><body><section class="hero"><div class="container"><header class="header"><div class="logo"><a class="logo_link" href="#"><img class="logo_img" src="./img/logo.svg" alt="логотип"></a></div><div class="menu_burger"><img class="burger_img" src="./img/burger.svg" alt="меню"></div><div class="nav"><nav class="menu"><div class="menu_header"><div class="menu-header_close"><img class="close_img" src="./img/close.svg" alt="закрыть"></div><div class="menu-header_user-icon"><img class="user-icon_img" src="./img/user-icon.png" alt="пользователь"></div></div><ul class="menu_list"><li class="menu_item"><a class="menu_link" href="#">ЧТО ЗА ИГРА</a></li><li class="menu_item"><a class="menu_link" href="#">ТУРНИРЫ</a></li><li class="menu_item"><a class="menu_link" href="#">ТОП ИГРОКОВ</a></li><li class="menu_item"><a class="menu_link" href="#">ПОДДЕРЖКА</a></li></ul><div class="menu_button"><a class="menu-button_link" href="#"><div class="menu-button_item"><div class="menu-button_text">ВОЙТИ</div></div></a><a class="menu-button_link" href="#"><div class="menu-button_item"><div class="menu-button_text">РЕГИСТРАЦИЯ</div></div></a></div></nav></div></header><div class="hero_desk"><div class="desk_text"><div class="desk_blood"><img class="desk-text_blood" src="./img/blood.svg" alt="кровь"></div><h1 class="desk-text_title">МЯСОРУБКА</h1><div class="container"><div class="desk_masarubka"><div class="hero_button"><a class="hero-button_link" href="#"><div class="hero-button_item"><div class="hero-button_text">ВОЙТИ</div></div></a><a class="hero-button_link" href="#"><div class="hero-button_item"><div class="hero-button_text">РЕГИСТРАЦИЯ</div></div></a></div><div class="conteiner"><div class="conteiner2"><div class="desk_masarubka-container"><div class="masarubka_line"><img class="line_1" src="./img/line_1.svg" alt="мясо"><img class="line_2" src="./img/line_2.svg" alt="мясо"><img class="line_3" src="./img/line_3.svg" alt="мясо"><img class="line_4" src="./img/line_4.svg" alt="мясо"></div><img class="masarubka_main-img" src="./img/masarubka-main.png" alt="мясарубка"><img class="masarubka_handle-img" src="./img/masarubka-handle.svg" alt="ручка мясарубки"></div></div></div></div></div></div></div></div></section><script src="./js/main.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Qubit</title>
+        <meta
+            name="description"
+            content="Турниры на скорость и логику. Вход по коду, по логину или регистрация."
+        />
+        <style>
+            :root {
+                --bg-1: #0b1220;
+                --bg-2: #020617;
+                --fg: #e2e8f0;
+                --fg-strong: #f8fafc;
+                --fg-muted: #94a3b8;
+                --muted: rgba(255, 255, 255, 0.06);
+                --muted-2: rgba(255, 255, 255, 0.08);
+                --border: rgba(255, 255, 255, 0.1);
+                --border-2: rgba(255, 255, 255, 0.2);
+                --card: rgba(255, 255, 255, 0.06);
+                --card-border: rgba(255, 255, 255, 0.1);
+                --accent-from: #f43f5e;
+                --accent-to: #f59e0b;
+                --green: #22c55e;
+                --green-2: #16a34a;
+                --container: 80rem;
+                --header-h: 56px;
+                --radius: 16px;
+                --grid-o: 0.05; /* прозрачность сетки */
+                color-scheme: dark;
+                --formula-o: 0.1;
+                --formula-color: #fff;
+                --formula-blend: overlay;
+                --grid-o: 0.05; /* базовая видимость в тёмной теме */
+                --grid-color: rgba(
+                    255,
+                    255,
+                    255,
+                    0.9
+                ); /* белые линии для тёмной темы */
+                --grid-size: 32px;
+            }
+            :root[data-theme="light"] {
+                --grid-o: 0.1; /* делаем заметнее на светлом */
+                --grid-color: rgba(2, 6, 23, 0.35);
+                --bg-1: #f6f7fb;
+                --bg-2: #ffffff;
+                --fg: #0b1220;
+                --fg-strong: #020617;
+                --fg-muted: #4b5563;
+                --muted: rgba(0, 0, 0, 0.06);
+                --muted-2: rgba(0, 0, 0, 0.08);
+                --border: rgba(0, 0, 0, 0.1);
+                --border-2: rgba(0, 0, 0, 0.2);
+                --card: rgba(0, 0, 0, 0.04);
+                --card-border: rgba(0, 0, 0, 0.08);
+                --grid-o: 0.08;
+                color-scheme: light;
+                --formula-o: 0.16; /* чуть заметнее на светлом фоне */
+                --formula-color: #334155; /* тёмно-серый вместо белого */
+                --formula-blend: multiply; /* лучше «приклеивается» к светлому фону */
+                --grid-o: 0.04;
+            }
+            #themeToggle svg {
+                display: block;
+            }
+            #themeToggle .sun {
+                display: none;
+            }
+            [data-theme="light"] #themeToggle .sun {
+                display: block;
+            }
+            [data-theme="light"] #themeToggle .moon {
+                display: none;
+            }
+            body,
+            .header,
+            .card,
+            .drawer__panel,
+            .modal__panel {
+                transition: background-color 0.25s ease, color 0.25s ease,
+                    border-color 0.25s ease;
+            }
+            /* Скрыть горизонтальный скролл у карусели */
+            html,
+            body {
+                /* прокрутка остаётся, но полоса скрыта */
+                overflow: auto;
+                -ms-overflow-style: none; /* IE/старый Edge */
+                scrollbar-width: none; /* Firefox */
+            }
+            html::-webkit-scrollbar,
+            body::-webkit-scrollbar {
+                width: 0;
+                height: 0;
+                display: none; /* Chrome/Safari/новый Edge */
+            }
+
+            /* Скрыть горизонтальный скролл у карусели */
+            .hscroll {
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE/Edge legacy */
+            }
+            .hscroll::-webkit-scrollbar {
+                /* Chrome/Safari/Edge */
+                height: 0;
+                display: none;
+            }
+            .hscroll::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .hscroll::-webkit-scrollbar-thumb {
+                background: transparent;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                height: 100%;
+            }
+            body {
+                margin: 0;
+                font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+                    Cantarell, Noto Sans, Helvetica, Arial;
+                background: radial-gradient(
+                        ellipse at top,
+                        rgba(244, 63, 94, 0.1),
+                        transparent 45%
+                    ),
+                    radial-gradient(
+                        ellipse at bottom,
+                        rgba(251, 191, 36, 0.06),
+                        transparent 50%
+                    ),
+                    linear-gradient(var(--bg-2), var(--bg-1) 55%, var(--bg-2));
+                color: var(--fg);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                padding-top: var(--header-h);
+                padding-bottom: max(16px, env(safe-area-inset-bottom));
+            }
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+            .container {
+                width: 100%;
+                max-width: var(--container);
+                margin-inline: auto;
+                padding-inline: 16px;
+            }
+
+            /* GRID overlay */
+            .grid {
+                opacity: var(--grid-o);
+                background-image: linear-gradient(
+                        to right,
+                        var(--grid-color) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        to bottom,
+                        var(--grid-color) 1px,
+                        transparent 1px
+                    );
+                background-size: var(--grid-size) var(--grid-size);
+                pointer-events: none;
+                position: fixed;
+                inset: 0;
+                z-index: -1;
+            }
+            @media (prefers-contrast: more) {
+                .grid {
+                    opacity: calc(var(--grid-o) + 0.05);
+                }
+            }
+
+            /* HEADER */
+            .header {
+                position: fixed;
+                inset: 0 0 auto 0;
+                height: var(--header-h);
+                z-index: 1000;
+                backdrop-filter: saturate(1.1) blur(8px);
+                background: color-mix(in oklab, var(--bg-2) 75%, transparent);
+                border-bottom: 1px solid var(--border);
+            }
+            .header__inner {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+            }
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 800;
+                color: var(--fg-strong);
+            }
+            .brand__chip {
+                display: grid;
+                place-items: center;
+                width: 28px;
+                height: 28px;
+                border-radius: 10px;
+                color: var(--bg-1);
+                background-image: linear-gradient(
+                    135deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+            }
+            .brand__text {
+                letter-spacing: 0.02em;
+            }
+            .nav {
+                display: none;
+                gap: 24px;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+            }
+            .nav__link {
+                font-size: 14px;
+            }
+            .nav__link:hover {
+                color: var(--fg-strong);
+            }
+            @media (min-width: 992px) {
+                .nav {
+                    display: flex;
+                }
+            }
+            .header__actions {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                border-radius: 12px;
+                padding: 10px 14px;
+                font-size: 15px;
+                border: 1px solid transparent;
+                cursor: pointer;
+                color: var(--fg);
+            }
+            .btn--muted {
+                background: var(--muted);
+                border-color: var(--border);
+            }
+            .btn--muted:hover {
+                background: var(--muted-2);
+            }
+            .btn--accent {
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                color: #0b1220;
+                font-weight: 800;
+                border: none;
+                display: flex;
+                justify-content: center;
+            }
+            .btn--icon-only {
+                padding: 10px;
+                width: 40px;
+                height: 40px;
+                justify-content: center;
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                background: var(--muted);
+            }
+            .i {
+                display: block;
+            }
+
+            /* DRAWER */
+            .drawer {
+                position: fixed;
+                inset: 0;
+                z-index: 2000;
+                display: grid;
+                grid-template-columns: 1fr;
+                pointer-events: none;
+            }
+            .drawer[hidden] {
+                display: none;
+            }
+            .drawer__backdrop {
+                grid-row: 1;
+                grid-column: 1;
+                background: rgba(0, 0, 0, 0.55);
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+            .drawer__panel {
+                grid-row: 1;
+                grid-column: 1;
+                justify-self: end;
+                width: min(92vw, 360px);
+                height: 100vh;
+                background: var(--bg-1);
+                border-left: 1px solid var(--border);
+                transform: translateX(102%);
+                transition: transform 0.28s;
+                display: flex;
+                flex-direction: column;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .drawer--open .drawer__backdrop {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .drawer--open .drawer__panel {
+                transform: translateX(0);
+                pointer-events: auto;
+            }
+            .drawer__top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 8px;
+                padding: 12px 16px;
+                position: sticky;
+                top: 0;
+                background: color-mix(in oklab, var(--bg-1) 92%, transparent);
+                border-bottom: 1px solid var(--border);
+            }
+            .drawer__user {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .avatar {
+                display: grid;
+                place-items: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 999px;
+                background: var(--muted-2);
+                font-weight: 800;
+            }
+            .drawer__close {
+                background: var(--muted);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 8px;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
+            .drawer__nav {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+            }
+            .drawer__link {
+                padding: 12px;
+                border-radius: 12px;
+                background: var(--muted);
+                border: 1px solid var(--border);
+            }
+            .drawer__link:hover {
+                background: var(--muted-2);
+            }
+
+            /* SIDE DOTS */
+            .side-nav {
+                position: fixed;
+                right: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 900;
+                display: none;
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+            @media (min-width: 1200px) {
+                .side-nav {
+                    display: flex;
+                    right: 24px;
+                }
+            }
+            .side-nav__dot {
+                position: relative;
+                display: grid;
+                place-items: center;
+                width: 12px;
+                height: 12px;
+                border-radius: 999px;
+                border: 1px solid color-mix(in oklab, #fff 20%, transparent);
+                background: var(--muted);
+                transition: transform 0.2s, background 0.2s;
+            }
+            .side-nav__dot:hover {
+                transform: scale(1.1);
+            }
+            .side-nav__dot.active {
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                border-color: transparent;
+            }
+            .side-nav__dot::after {
+                content: attr(data-label);
+                position: absolute;
+                right: 150%;
+                white-space: nowrap;
+                background: color-mix(in oklab, var(--bg-2) 90%, transparent);
+                color: var(--fg);
+                font-size: 12px;
+                padding: 4px 8px;
+                border-radius: 8px;
+                border: 1px solid var(--border);
+                opacity: 0;
+                transform: translateX(6px);
+                pointer-events: none;
+                transition: opacity 0.15s, transform 0.15s;
+            }
+            .side-nav__dot:hover::after {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            /* HERO */
+            .hero {
+                position: relative;
+            }
+            .hero__stage {
+                position: sticky;
+                top: 0;
+                min-height: calc(var(--vh, 1vh) * 100);
+                min-height: 100svh;
+                display: grid;
+                place-items: center;
+                overflow: hidden;
+                padding-top: 28px;
+            }
+            .hero__inner {
+                display: grid;
+                gap: 18px;
+                justify-items: center;
+                padding-inline: 16px;
+                padding-block: 64px;
+            }
+            .card--all {
+                display: grid;
+                place-items: center;
+                text-align: center;
+                gap: 10px;
+                min-height: 220px; /* чтобы по высоте не отличалась */
+            }
+            .card--all .cta {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 12px 16px;
+                border-radius: 14px;
+                font-weight: 900;
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                color: #0b1220;
+                border: none;
+            }
+            .card--all .desc {
+                font-size: 14px;
+                color: var(--fg-muted);
+            }
+            .card--all svg {
+                display: block;
+            }
+            .card--all:hover {
+                filter: brightness(1.05);
+            }
+            .word {
+                font-weight: 1000;
+                line-height: 1;
+                letter-spacing: -0.02em;
+                text-align: center;
+                font-size: 1000px; /* base, JS will fit */
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                background-size: 200% 100%;
+                background-position: 0% 50%;
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+                animation: breathe 6s ease-in-out infinite,
+                    gloss 7.5s ease-in-out infinite;
+                white-space: nowrap;
+                max-width: 100%;
+            }
+            @keyframes breathe {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.02);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            @keyframes gloss {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .word {
+                    animation: none;
+                }
+            }
+            .tagline {
+                font-size: clamp(14px, 2.6vw, 18px);
+                color: var(--fg-muted);
+            }
+
+            /* Formulas in HERO only */
+            .formulas {
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                opacity: 0.1;
+            }
+            .formulas span {
+                position: absolute;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
+                    "Liberation Mono", monospace;
+                color: #fff;
+                font-weight: 700;
+                mix-blend-mode: overlay;
+                opacity: 0.9;
+                transform: rotate(var(--rot, 0deg));
+                white-space: nowrap;
+            }
+            .formulas .f1 {
+                left: 6%;
+                top: 20%;
+                font-size: 28px;
+                --rot: -14deg;
+            }
+            .formulas .f2 {
+                left: 64%;
+                top: 18%;
+                font-size: 22px;
+                --rot: 8deg;
+            }
+            .formulas .f3 {
+                left: 22%;
+                top: 60%;
+                font-size: 26px;
+                --rot: -8deg;
+            }
+            .formulas .f4 {
+                left: 72%;
+                top: 64%;
+                font-size: 24px;
+                --rot: 12deg;
+            }
+            .formulas .f5 {
+                left: 40%;
+                top: 34%;
+                font-size: 20px;
+                --rot: -6deg;
+            }
+            .formulas .f6 {
+                left: 12%;
+                top: 72%;
+                font-size: 18px;
+                --rot: 5deg;
+            }
+            .formulas .f7 {
+                left: 78%;
+                top: 42%;
+                font-size: 19px;
+                --rot: -10deg;
+            }
+            .formulas .f8 {
+                left: 52%;
+                top: 76%;
+                font-size: 17px;
+                --rot: 7deg;
+            }
+            .formulas .f9 {
+                left: 30%;
+                top: 16%;
+                font-size: 21px;
+                --rot: -4deg;
+            }
+            .formulas .f10 {
+                left: 86%;
+                top: 28%;
+                font-size: 18px;
+                --rot: 9deg;
+            }
+
+            /* Sections */
+            .section {
+                padding-block: 56px;
+            }
+            .kicker {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 4px 10px;
+                font-size: 12px;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+                border-radius: 999px;
+                border: 1px solid var(--border);
+                background: var(--muted);
+                width: max-content;
+            }
+            .section__title {
+                font-size: clamp(22px, 3vw, 36px);
+                color: var(--fg-strong);
+                font-weight: 900;
+                margin: 8px 0;
+            }
+            .accent-bar {
+                height: 4px;
+                width: 110px;
+                border-radius: 999px;
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                margin-top: 6px;
+                margin-bottom: 10px;
+            }
+            .lead {
+                margin-top: 12px;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+                line-height: 1.75;
+            }
+
+            /* WHAT */
+            .what__title {
+                font-size: clamp(26px, 4.6vw, 40px);
+                font-weight: 900;
+                color: var(--fg-strong);
+                margin: 6px 0;
+            }
+            .feature-card {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                background: color-mix(in oklab, var(--bg-1) 85%, transparent);
+                border: 1px solid var(--border);
+                border-radius: 18px;
+                padding: 12px 14px;
+            }
+            .feature-card + .feature-card {
+                margin-top: 10px;
+            }
+            .feature-card__icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 12px;
+                background-image: linear-gradient(
+                    135deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+            }
+            .feature-card__title {
+                font-weight: 800;
+                color: var(--fg-strong);
+            }
+            .feature-card__sub {
+                font-size: 14px;
+                color: color-mix(in oklab, var(--fg), #fff 10%);
+            }
+            .note {
+                display: flex;
+                gap: 10px;
+                align-items: flex-start;
+                margin-top: 12px;
+                color: var(--fg-muted);
+            }
+            .note__icon {
+                width: 22px;
+                height: 22px;
+                border-radius: 8px;
+                display: grid;
+                place-items: center;
+                background: var(--muted);
+                border: 1px solid var(--border);
+            }
+
+            /* Horizontal tournaments */
+            .hscroll-wrap {
+                position: relative;
+            }
+            .hscroll {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: 85%;
+                gap: 16px;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                padding-block: 6px;
+            }
+            .hscroll > * {
+                scroll-snap-align: start;
+            }
+            @media (min-width: 640px) {
+                .hscroll {
+                    grid-auto-columns: 50%;
+                }
+            }
+            @media (min-width: 1200px) {
+                .hscroll {
+                    grid-auto-columns: 33.333%;
+                }
+            }
+            .hscroll__controls {
+                position: absolute;
+                inset: auto 0 100% 0;
+                display: flex;
+                justify-content: flex-end;
+                gap: 8px;
+                padding-bottom: 8px;
+            }
+            .card {
+                position: relative;
+                overflow: hidden;
+                border-radius: 16px;
+                border: 1px solid var(--card-border);
+                background: var(--card);
+                padding: 16px;
+            }
+            .card__topbar {
+                position: absolute;
+                inset: 0 0 auto 0;
+                height: 4px;
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+            }
+            .card__head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            .meta {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+            }
+            .status {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                padding: 4px 10px;
+                border-radius: 999px;
+                border: 1px solid var(--border);
+            }
+            .status .dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 999px;
+                background: currentColor;
+                display: inline-block;
+            }
+            .status--soon {
+                color: #fde68a;
+                background: rgba(253, 230, 138, 0.1);
+                border-color: rgba(253, 230, 138, 0.3);
+            }
+            .status--live {
+                color: #86efac;
+                background: rgba(134, 239, 172, 0.1);
+                border-color: rgba(134, 239, 172, 0.3);
+            }
+            .status--ended {
+                color: #cbd5e1;
+                background: rgba(203, 213, 225, 0.08);
+                border-color: rgba(203, 213, 225, 0.3);
+            }
+            .card__title {
+                color: var(--fg-strong);
+                font-weight: 800;
+                font-size: 18px;
+                margin: 0;
+            }
+            .card__sub {
+                margin: 4px 0 0;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+                font-size: 14px;
+            }
+            .card__meta {
+                display: flex;
+                justify-content: space-between;
+                gap: 8px;
+                margin-top: 12px;
+                color: color-mix(in oklab, var(--fg), #fff 5%);
+                font-size: 14px;
+                flex-wrap: wrap;
+            }
+            .card__actions {
+                display: flex;
+                gap: 8px;
+                margin-top: 16px;
+                flex-wrap: wrap;
+            }
+
+            /* TOP players (с круглыми номерами) */
+            .board {
+                margin-top: 16px;
+                border: 1px solid var(--border);
+                border-radius: 22px;
+                background: color-mix(in oklab, var(--bg-1) 85%, transparent);
+                overflow: hidden;
+            }
+            .row {
+                display: grid;
+                grid-template-columns: auto auto 1fr auto;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 14px;
+                border-top: 1px solid var(--border);
+            }
+            .row:first-child {
+                border-top: none;
+            }
+            /* кружки 1–3 как на скрине */
+            .rankchip {
+                display: grid;
+                place-items: center;
+                width: 44px;
+                height: 44px;
+                border-radius: 14px;
+                font-weight: 900;
+                font-size: 18px;
+                color: #0b1220;
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+            }
+            .rankchip--1 {
+                background-image: linear-gradient(135deg, #f59e0b, #fbbf24);
+            }
+            .rankchip--2 {
+                background-image: linear-gradient(135deg, #e5e7eb, #94a3b8);
+                color: #0f172a;
+            }
+            .rankchip--3 {
+                background-image: linear-gradient(135deg, #f97316, #ea580c);
+            }
+            .rankchip--n {
+                background: var(--muted);
+                color: var(--fg);
+            }
+            /* аватар-инициалы */
+            .badge {
+                display: grid;
+                place-items: center;
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+                background: var(--muted);
+                border: 1px solid var(--border);
+                font-weight: 800;
+                color: var(--fg-strong);
+            }
+            .row__mid {
+                display: grid;
+            }
+            .row__name {
+                font-weight: 900;
+                color: var(--fg-strong);
+            }
+            .row__sub {
+                font-size: 13px;
+                color: color-mix(in oklab, var(--fg), #fff 10%);
+            }
+            .row__right {
+                display: grid;
+                gap: 4px;
+                justify-items: end;
+            }
+            .score {
+                padding: 10px 12px;
+                border-radius: 14px;
+                background: linear-gradient(
+                    135deg,
+                    color-mix(in oklab, var(--green) 22%, transparent),
+                    color-mix(in oklab, var(--green-2) 18%, transparent)
+                );
+                border: 1px solid
+                    color-mix(in oklab, var(--green) 40%, transparent);
+                font-weight: 900;
+                color: #d1fae5;
+                min-width: 96px;
+                text-align: center;
+            }
+            .wins {
+                font-size: 13px;
+                color: color-mix(in oklab, var(--fg), #fff 12%);
+            }
+            .topbar-btn {
+                margin-left: auto;
+                border: 1px solid var(--border);
+                background: var(--muted);
+                border-radius: 18px;
+                padding: 8px 12px;
+                color: color-mix(in oklab, var(--fg), #fff 6%);
+                display: inline-flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            /* FOOTER */
+            .footer {
+                margin-top: 32px;
+                border-top: 1px solid var(--border);
+                background: color-mix(in oklab, var(--bg-2) 75%, transparent);
+            }
+            .footer__grid {
+                display: grid;
+                gap: 16px;
+                padding: 24px 0;
+                padding-left: 10px;
+            }
+            @media (min-width: 640px) {
+                .footer__grid {
+                    grid-template-columns: 1fr 1fr;
+                }
+            }
+            .footer__brand {
+                font-weight: 800;
+                color: var(--fg-strong);
+                font-size: 18px;
+            }
+            .footer__text {
+                margin-top: 8px;
+                color: var(--fg-muted);
+                font-size: 14px;
+            }
+            .footer__links {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-top: 6px;
+            }
+            .footer__link {
+                color: var(--fg);
+                opacity: 0.9;
+            }
+            .footer__copy {
+                margin-top: 10px;
+                color: var(--fg-muted);
+                font-size: 14px;
+            }
+
+            /* Modal */
+            .modal {
+                position: fixed;
+                inset: 0;
+                z-index: 2100;
+                display: grid;
+                grid-template-columns: 1fr;
+                place-items: center;
+            }
+            .modal[hidden] {
+                display: none;
+            }
+            .modal__backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.6);
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+            .modal__panel {
+                position: relative;
+                width: min(92vw, 440px);
+                border-radius: 16px;
+                background: var(--bg-1);
+                border: 1px solid var(--border);
+                padding: 16px;
+                transform: translateY(10px);
+                opacity: 0;
+                transition: transform 0.2s, opacity 0.2s;
+            }
+            .modal--open .modal__backdrop {
+                opacity: 1;
+            }
+            .modal--open .modal__panel {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .modal__head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+            .modal__title {
+                font-weight: 800;
+                color: var(--fg-strong);
+                font-size: 18px;
+            }
+            .modal__close {
+                background: var(--muted);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 8px;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
+            .modal__body {
+                display: grid;
+                gap: 10px;
+            }
+            .modal__note {
+                font-size: 12px;
+                color: var(--fg-muted);
+                margin-top: 6px;
+            }
+
+            /* Reveal */
+            [data-reveal] {
+                opacity: 0;
+                transform: translateY(18px);
+                transition: opacity 0.6s ease, transform 0.6s ease;
+            }
+            [data-reveal].in {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .formulas {
+                opacity: var(--formula-o);
+            }
+            .formulas span {
+                color: var(--formula-color);
+                mix-blend-mode: var(--formula-blend);
+            }
+            @supports (-webkit-text-stroke: 1px black) {
+                /* тонкий контур на светлой теме — ещё +читабельность */
+                [data-theme="light"] .formulas span {
+                    -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.06);
+                }
+            }
+
+            /* -------- 2) Контраст статусов (жёлтый/зелёный/серый) -------- */
+            [data-theme="light"] .status--soon {
+                color: #a16207; /* тёмный янтарный (AA) */
+                background: #fef3c7; /* светло-жёлтая подложка */
+                border-color: #f59e0b33;
+            }
+            [data-theme="light"] .status--live {
+                color: #166534; /* тёмный зелёный (AA) */
+                background: #dcfce7; /* светло-зелёная подложка */
+                border-color: #16a34a33;
+            }
+            [data-theme="light"] .status--ended {
+                color: #374151; /* графитовый текст */
+                background: #f3f4f6; /* нейтральная подложка */
+                border-color: #94a3b833;
+            }
+
+            /* -------- 3) «Очки» в топе — сделать читаемыми на светлом -------- */
+            [data-theme="light"] .score {
+                background: #bbf7d0; /* монолитная светло-зелёная, без градиента */
+                color: #065f46; /* тёмный текст для контраста */
+                border: 1px solid #34d399;
+                text-shadow: none;
+            }
+
+            /* -------- 4) Нейтральные элементы (серые) чуть темнее -------- */
+            [data-theme="light"] .badge {
+                background: #eef2f7;
+                color: #0b1220;
+                border-color: #cbd5e1;
+            }
+            [data-theme="light"] .board {
+                border-color: #e5e7eb;
+            }
+            [data-theme="light"] .row {
+                border-top-color: #e5e7eb;
+            }
+            /* Кнопка-плитка "Все турниры" — аккуратный вид */
+            .card--all {
+                position: relative;
+                display: grid;
+                place-items: center;
+                padding: 28px 76px; /* запас справа под стрелку */
+                min-height: 200px; /* как у обычных карточек */
+                width: clamp(200px, 32vw, 340px);
+                border-radius: 24px;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                background: radial-gradient(
+                        120% 120% at 0% 0%,
+                        rgba(255, 255, 255, 0.18),
+                        transparent 38%
+                    ),
+                    linear-gradient(
+                        135deg,
+                        var(--accent-from) 0%,
+                        #f97316 60%,
+                        var(--accent-to) 100%
+                    );
+                color: #0b1220;
+                transition: transform 0.15s ease, filter 0.15s ease;
+            }
+            .card--all .card__topbar {
+                display: none;
+            }
+            .card--all .label {
+                font-weight: 900;
+                font-size: clamp(18px, 2.6vw, 22px);
+                letter-spacing: 0.01em;
+            }
+            .card--all .arrow {
+                position: absolute;
+                right: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                display: grid;
+                place-items: center;
+                background: rgba(255, 255, 255, 0.92);
+                color: #0b1220;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+                transition: transform 0.15s ease, background 0.15s ease;
+            }
+            .card--all:hover {
+                transform: translateY(-2px);
+            }
+            .card--all:hover .arrow {
+                transform: translate(2px, -50%);
+            }
+            .card--all:active {
+                transform: translateY(0);
+                filter: saturate(0.98);
+            }
+
+            /* корректировки для тёмной/светлой темы */
+            :root[data-theme="light"] .card--all {
+                border-color: rgba(0, 0, 0, 0.08);
+            }
+            :root:not([data-theme="light"]) .card--all {
+                border-color: rgba(255, 255, 255, 0.12);
+            }
+            :root {
+                --btn-float: 2px; /* подъём при hover */
+                --btn-press-bright: 0.98; /* затемнение при active */
+                --btn-press-sat: 0.98;
+            }
+
+            /* Какие элементы считаем кнопками */
+            .btn,
+            .topbar-btn,
+            .drawer__link,
+            .drawer__close,
+            .modal__close,
+            #burger,
+            #drawerClose,
+            #modalClose {
+                position: relative;
+                transition: transform 0.15s ease, box-shadow 0.15s ease,
+                    filter 0.15s ease, background-color 0.15s ease,
+                    border-color 0.15s ease, color 0.15s ease;
+                will-change: transform, filter;
+            }
+
+            /* Подъём и усиление тени при hover */
+            .btn:hover,
+            .topbar-btn:hover,
+            .drawer__link:hover,
+            .drawer__close:hover,
+            .modal__close:hover,
+            #burger:hover,
+            #drawerClose:hover,
+            #modalClose:hover {
+                transform: translateY(calc(-1 * var(--btn-float)));
+            }
+
+            /* Акцентным добавим чуть более заметную тень при hover */
+            .btn--accent:hover {
+                box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+                filter: saturate(1.05);
+            }
+
+            /* «Мутным» — лёгкое подсветление фона при hover */
+            .btn--muted:hover,
+            .drawer__link:hover,
+            .topbar-btn:hover {
+                box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+                filter: brightness(1.03);
+            }
+
+            /* Икон-кнопки — микро-масштаб, чтобы не «прыгали» слишком */
+            .btn--icon-only:hover,
+            .drawer__close:hover,
+            .modal__close:hover,
+            #burger:hover {
+                transform: translateY(calc(-0.6 * var(--btn-float))) scale(1.02);
+            }
+
+            /* Состояние active (нажатие) — опускаем обратно и немного приглушаем */
+            .btn:active,
+            .topbar-btn:active,
+            .drawer__link:active,
+            .drawer__close:active,
+            .modal__close:active,
+            #burger:active,
+            #drawerClose:active,
+            #modalClose:active {
+                transform: translateY(0) scale(0.99);
+                filter: brightness(var(--btn-press-bright))
+                    saturate(var(--btn-press-sat));
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            }
+
+            /* Фокус-кольцо для клавиатуры */
+            .btn:focus-visible,
+            .topbar-btn:focus-visible,
+            .drawer__link:focus-visible,
+            .drawer__close:focus-visible,
+            .modal__close:focus-visible,
+            #burger:focus-visible,
+            #drawerClose:focus-visible,
+            #modalClose:focus-visible {
+                outline: 3px solid
+                    color-mix(in oklab, #fff 75%, var(--accent-to));
+                outline-offset: 2px;
+                border-color: transparent;
+            }
+
+            /* Уважение prefers-reduced-motion — делаем движения мягче */
+            @media (prefers-reduced-motion: reduce) {
+                .btn,
+                .topbar-btn,
+                .drawer__link,
+                .drawer__close,
+                .modal__close,
+                #burger,
+                #drawerClose,
+                #modalClose {
+                    transition-duration: 0.05s;
+                }
+                .btn:hover,
+                .topbar-btn:hover,
+                .drawer__link:hover,
+                .drawer__close:hover,
+                .modal__close:hover,
+                #burger:hover,
+                #drawerClose:hover,
+                #modalClose:hover {
+                    transform: translateY(-1px);
+                }
+            }
+            /* герой-зона занимает экран МИНУС фиксированный хэдэр */
+            .hero__stage {
+                position: sticky; /* можно оставить sticky */
+                top: 0;
+                min-height: 100svh;
+                margin-top: -55px;
+                display: grid;
+                place-items: center; /* центр по горизонтали и вертикали */
+                padding: 0; /* убираем лишние отступы сверху/снизу */
+            }
+
+            /* внутренний контейнер — компактные отступы и центр текста */
+            .hero__inner {
+                display: grid;
+                gap: 16px;
+                justify-items: center;
+                text-align: center;
+                padding: clamp(12px, 3vw, 24px);
+                margin: 0 auto;
+                max-width: min(1100px, 100% - 32px);
+            }
+            /* hero-кнопка: сочный градиент, мягкая тень, блик */
+            .btn--hero {
+                position: relative;
+                border: none;
+                padding: 14px 28px;
+                border-radius: 999px;
+                font-weight: 900;
+                background-image: linear-gradient(
+                    90deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                color: #0b1220;
+                box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+                transition: transform 0.15s ease, box-shadow 0.15s ease,
+                    filter 0.15s ease;
+            }
+            .btn--hero::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border-radius: inherit;
+                background: linear-gradient(
+                    to bottom,
+                    rgba(255, 255, 255, 0.28),
+                    transparent 42%
+                );
+                pointer-events: none;
+            }
+
+            /* ховер/актив — как у плитки "Все турниры" */
+            .btn--hero:hover {
+                transform: translateY(-2px);
+                filter: saturate(1.05);
+                box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+            }
+            .btn--hero:active {
+                transform: translateY(0) scale(0.99);
+                filter: brightness(0.98);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+            }
+
+            /* фокус-кольцо */
+            .btn--hero:focus-visible {
+                outline: 3px solid
+                    color-mix(in oklab, #fff 75%, var(--accent-to));
+                outline-offset: 3px;
+            }
+            @media (max-width: 640px) {
+                .hero__inner {
+                    gap: 12px;
+                }
+            }
+            /* ===== Drawer 2.0 ===== */
+            .drawer__panel {
+                background: color-mix(in oklab, var(--bg-1) 92%, transparent);
+            }
+            /* верхняя плашка с мягкой линией */
+            .drawer__top {
+                border-bottom: 1px solid var(--border);
+                background: color-mix(in oklab, var(--bg-1) 96%, transparent);
+            }
+
+            /* usercard c градиентным кольцом */
+            .drawer__usercard {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 16px;
+            }
+            .avatar--ring {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                border-radius: 999px;
+                display: grid;
+                place-items: center;
+                background: var(--muted);
+            }
+            .avatar--ring::before {
+                content: "";
+                position: absolute;
+                inset: -2px;
+                border-radius: inherit;
+                background: conic-gradient(
+                    from 180deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                -webkit-mask: linear-gradient(#000 0 0) content-box,
+                    linear-gradient(#000 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                padding: 2px;
+            }
+            .user-meta {
+                display: grid;
+                line-height: 1.2;
+            }
+            .user-name {
+                font-weight: 800;
+                color: var(--fg-strong);
+            }
+            .user-role {
+                font-size: 12px;
+                color: var(--fg-muted);
+            }
+
+            /* группы меню */
+            .drawer__group {
+                padding: 10px 16px;
+            }
+            .drawer__label {
+                font-size: 12px;
+                color: var(--fg-muted);
+                margin: 0 0 8px 2px;
+            }
+
+            /* пункт меню как мини-карточка */
+            .drawer__item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                padding: 12px 14px;
+                border-radius: 14px;
+                background: var(--muted);
+                border: 1px solid var(--border);
+                transition: transform 0.14s ease, background 0.14s ease,
+                    box-shadow 0.14s ease;
+            }
+            .drawer__item + .drawer__item {
+                margin-top: 10px;
+            }
+            .drawer__item:hover {
+                transform: translateY(-2px);
+                background: var(--muted-2);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+            }
+            .drawer__item:active {
+                transform: translateY(0) scale(0.99);
+            }
+            .drawer__item .left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .drawer__item .ico {
+                width: 36px;
+                height: 36px;
+                border-radius: 12px;
+                display: grid;
+                place-items: center;
+                color: #0b1220;
+                background-image: linear-gradient(
+                    135deg,
+                    var(--accent-from),
+                    var(--accent-to)
+                );
+                box-shadow: inset 0 1px rgba(255, 255, 255, 0.5);
+            }
+            .drawer__item .chev {
+                opacity: 0.7;
+            }
+
+            /* нижние экшены */
+            .drawer__actions {
+                padding: 8px 16px 16px;
+                display: grid;
+                gap: 10px;
+                margin: auto 0;
+            }
+            .btn--block {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* тоньше скролл у панели, без полос на iOS */
+            .drawer__panel {
+                overscroll-behavior: contain;
+            }
+            /* 1) Панель без прокрутки и полос */
+            .drawer__panel {
+                height: 100svh;
+                max-height: 100svh;
+                overflow: hidden; /* убираем скролл внутри панели */
+                scrollbar-width: none;
+            }
+            .drawer__panel::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* 2) Топ меню: юзер слева, иконки справа */
+            .drawer__top {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 12px 16px;
+                position: sticky;
+                top: 0;
+                border-bottom: 1px solid var(--border);
+                background: color-mix(in oklab, var(--bg-1) 96%, transparent);
+            }
+            .drawer__usercard {
+                flex: 1;
+                padding: 0;
+            } /* тянем влево */
+            .drawer__right {
+                margin-left: auto;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+
+            /* 3) Прячем «Навигация» */
+            .drawer__label {
+                display: none;
+            }
+
+            /* 4) Иконка темы как в хедере */
+            #themeToggleDrawerIcon svg {
+                display: block;
+            }
+            #themeToggleDrawerIcon .sun {
+                display: none;
+            }
+            [data-theme="light"] #themeToggleDrawerIcon .sun {
+                display: block;
+            }
+            [data-theme="light"] #themeToggleDrawerIcon .moon {
+                display: none;
+            }
+
+            /* 5) На всякий случай — убрать скролл у самого списка */
+            .drawer__nav {
+                overflow: hidden;
+            }
+
+            /* (необязательно) если оставалась нижняя кнопка темы — скрыть */
+            .drawer__actions [data-role="theme-btn"] {
+                display: none;
+            }
+            /* Тюним открытие/закрытие */
+            :root {
+                --tr-open: cubic-bezier(0.22, 1, 0.36, 1);
+                --tr-close: cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .drawer__panel {
+                transform: translateX(102%);
+                transition: transform 0.34s var(--tr-open), opacity 0.2s ease;
+            }
+            .drawer__backdrop {
+                opacity: 0;
+                transition: opacity 0.22s ease;
+            }
+
+            /* открыто */
+            .drawer--open .drawer__panel {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            .drawer--open .drawer__backdrop {
+                opacity: 1;
+            }
+
+            /* плавное закрытие (отдельный тайминг) */
+            .drawer--closing .drawer__panel {
+                transform: translateX(102%);
+                transition: transform 0.3s var(--tr-close), opacity 0.2s ease;
+            }
+            .drawer--closing .drawer__backdrop {
+                opacity: 0;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .drawer__panel,
+                .drawer__backdrop {
+                    transition: none !important;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="grid" aria-hidden="true"></div>
+
+        <header class="header">
+            <div class="container header__inner">
+                <a href="#" class="brand" aria-label="На главную">
+                    <span class="brand__chip">Q</span>
+                    <span class="brand__text">Qubit</span>
+                </a>
+                <div class="header__actions">
+                    <button
+                        class="btn btn--icon-only"
+                        id="themeToggle"
+                        aria-label="Сменить тему"
+                        aria-pressed="false"
+                        title="Тема"
+                    >
+                        <!-- луна (тёмная) -->
+                        <svg
+                            class="moon"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                        <!-- солнце (светлая) -->
+                        <svg
+                            class="sun"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5L4 4m16 16-1-1M19 5l1-1M5 19l-1 1"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                            <circle cx="12" cy="12" r="4" fill="currentColor" />
+                        </svg>
+                    </button>
+                    <button
+                        class="btn btn--icon-only"
+                        id="burger"
+                        aria-label="Открыть меню"
+                        aria-controls="drawer"
+                        aria-expanded="false"
+                    >
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            class="i"
+                        >
+                            <path
+                                d="M4 6h16M4 12h16M4 18h16"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Drawer -->
+        <div id="drawer" class="drawer" hidden>
+            <div
+                class="drawer__panel"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Меню"
+            >
+                <div
+                    class="drawer__panel"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Меню"
+                >
+                    <div class="drawer__top">
+                        <div class="drawer__usercard">
+                            <div class="avatar avatar--ring">U</div>
+                            <div class="user-meta">
+                                <div class="user-name">Гость</div>
+                                <div class="user-role">Не авторизован</div>
+                            </div>
+                        </div>
+
+                        <!-- иконка темы, как в хедере -->
+                        <button
+                            class="btn btn--icon-only"
+                            id="themeToggleDrawerIcon"
+                            aria-label="Сменить тему"
+                            aria-pressed="false"
+                            title="Тема"
+                        >
+                            <svg
+                                class="moon"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                    fill="currentColor"
+                                />
+                            </svg>
+                            <svg
+                                class="sun"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5 5L4 4m16 16-1-1M19 5l1-1M5 19l-1 1"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                />
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="4"
+                                    fill="currentColor"
+                                />
+                            </svg>
+                        </button>
+
+                        <!-- крестик строго справа -->
+                        <button
+                            class="btn btn--icon-only drawer__close"
+                            id="drawerClose"
+                            aria-label="Закрыть"
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    d="M18 6L6 18M6 6l12 12"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <nav
+                        class="drawer__nav"
+                        id="drawerNav"
+                        style="flex: 1; overflow: auto"
+                    >
+                        <div class="drawer__group">
+                            <div class="drawer__label">Навигация</div>
+
+                            <a href="#what" class="drawer__item">
+                                <div class="left">
+                                    <span class="ico"
+                                        ><svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 6v2m0 3v5"
+                                                stroke="currentColor"
+                                                stroke-width="2"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                            /></svg
+                                    ></span>
+                                    <span>Что за игра</span>
+                                </div>
+                                <svg
+                                    class="chev"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M9 6l6 6-6 6"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </a>
+
+                            <a href="#tournaments" class="drawer__item">
+                                <div class="left">
+                                    <span class="ico"
+                                        ><svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M8 4h8v3h3v3a7 7 0 0 1-7 7 7 7 0 0 1-7-7V7h3V4z"
+                                                fill="currentColor"
+                                            /></svg
+                                    ></span>
+                                    <span>Турниры</span>
+                                </div>
+                                <svg
+                                    class="chev"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M9 6l6 6-6 6"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </a>
+
+                            <a href="#top" class="drawer__item">
+                                <div class="left">
+                                    <span class="ico"
+                                        ><svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M4 14h4v6H4zM10 10h4v10h-4zM16 6h4v14h-4z"
+                                                fill="currentColor"
+                                            /></svg
+                                    ></span>
+                                    <span>Рейтинг</span>
+                                </div>
+                                <svg
+                                    class="chev"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M9 6l6 6-6 6"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </a>
+
+                            <a href="#footer" class="drawer__item">
+                                <div class="left">
+                                    <span class="ico"
+                                        ><svg
+                                            width="18"
+                                            height="18"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z"
+                                                fill="currentColor"
+                                            /></svg
+                                    ></span>
+                                    <span>Контакты</span>
+                                </div>
+                                <svg
+                                    class="chev"
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M9 6l6 6-6 6"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </nav>
+
+                    <div class="drawer__actions">
+                        <button
+                            class="btn btn--accent btn--block"
+                            id="drawerLogin"
+                        >
+                            Войти
+                        </button>
+                        <button
+                            class="btn btn--muted btn--block"
+                            id="themeToggleDrawer"
+                            data-role="theme-btn"
+                        >
+                            Светлая тема
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="drawer__backdrop" id="drawerBackdrop"></div>
+        </div>
+
+        <!-- Right-side dots -->
+        <aside class="side-nav" aria-label="Боковое меню">
+            <a href="#hero" class="side-nav__dot" data-label="Начало"></a>
+            <a href="#what" class="side-nav__dot" data-label="Что за игра"></a>
+            <a
+                href="#tournaments"
+                class="side-nav__dot"
+                data-label="Турниры"
+            ></a>
+            <a href="#top" class="side-nav__dot" data-label="Топ игроков"></a>
+            <a href="#footer" class="side-nav__dot" data-label="Футер"></a>
+        </aside>
+
+        <main>
+            <!-- HERO -->
+            <section id="hero" class="hero">
+                <div class="hero__stage">
+                    <div class="formulas" aria-hidden="true">
+                        <span class="f1">S = πr²</span
+                        ><span class="f2">a² + b² = c²</span
+                        ><span class="f3">F = ma</span>
+                        <span class="f4">∑ i=1..n i = n(n+1)/2</span
+                        ><span class="f5">e^{iπ}+1=0</span>
+                        <span class="f6">P(A∩B)=P(A)·P(B)</span
+                        ><span class="f7">lg a + lg b = lg(ab)</span>
+                        <span class="f8">lim_{x→0} sin x / x = 1</span
+                        ><span class="f9">d/dx (x^n) = n·x^{n-1}</span>
+                        <span class="f10">∫ e^x dx = e^x + C</span>
+                    </div>
+                    <div class="hero__inner">
+                        <div class="word" id="word">QUBIT</div>
+                        <div class="tagline">
+                            Бей рекорды — счёт идёт на секунды
+                        </div>
+                        <div class="hero__cta">
+                            <button
+                                id="openLogin"
+                                class="btn btn--accent btn--hero"
+                                style="min-width: 220px"
+                            >
+                                Войти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WHAT -->
+            <section id="what" class="section">
+                <div class="container">
+                    <div class="kicker" data-reveal>Что за игра</div>
+                    <h2 class="what__title" data-reveal>
+                        Qubit — турнир на скорость и логику
+                    </h2>
+                    <div class="accent-bar" data-reveal></div>
+                    <p class="lead" data-reveal>
+                        Игра идёт раундами. В каждом
+                        <strong>таймер</strong> запускается, участники отвечают
+                        на задачи, а очки начисляются за скорость и точность.
+                        Ведущий управляет этапами, а зрители видят общий
+                        прогресс.
+                    </p>
+
+                    <div class="feature-card" data-reveal>
+                        <div class="feature-card__icon"></div>
+                        <div>
+                            <div class="feature-card__title">
+                                Быстрые раунды
+                            </div>
+                            <div class="feature-card__sub">
+                                30–90 секунд на задачу — не зевай
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal>
+                        <div class="feature-card__icon"></div>
+                        <div>
+                            <div class="feature-card__title">
+                                Честная схватка
+                            </div>
+                            <div class="feature-card__sub">
+                                Единые правила, авто-проверка ответов
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-card" data-reveal>
+                        <div class="feature-card__icon"></div>
+                        <div>
+                            <div class="feature-card__title">Живое табло</div>
+                            <div class="feature-card__sub">
+                                Рейтинги, серии побед и награды
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOURNAMENTS -->
+            <section id="tournaments" class="section">
+                <div class="container">
+                    <div class="kicker" data-reveal>Турниры</div>
+                    <div style="display: flex; align-items: center; gap: 10px">
+                        <h2 class="section__title" data-reveal>
+                            Текущие и ближайшие
+                        </h2>
+                    </div>
+                    <div class="accent-bar" data-reveal></div>
+
+                    <div class="hscroll-wrap" data-reveal="fade">
+                        <div class="hscroll__controls">
+                            <button
+                                class="btn btn--muted"
+                                id="hsLeft"
+                                aria-label="Прокрутить влево"
+                            >
+                                ←
+                            </button>
+                            <button
+                                class="btn btn--accent"
+                                id="hsRight"
+                                aria-label="Прокрутить вправо"
+                            >
+                                →
+                            </button>
+                        </div>
+                        <div class="hscroll" id="hscroll">
+                            <article class="card">
+                                <div class="card__topbar"></div>
+                                <div class="card__head">
+                                    <span class="status status--soon"
+                                        ><span class="dot"></span>Скоро</span
+                                    ><span class="meta">01 окт, 20:00</span>
+                                </div>
+                                <h3 class="card__title">Осенняя рубка #12</h3>
+                                <p class="card__sub">Микс задач</p>
+                                <div class="card__meta">
+                                    <span class="meta">28 игроков</span
+                                    ><span class="meta">5 раундов</span>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="#" class="btn btn--muted"
+                                        >Открыть</a
+                                    ><button class="btn btn--accent">
+                                        Присоединиться
+                                    </button>
+                                </div>
+                            </article>
+                            <article class="card">
+                                <div class="card__topbar"></div>
+                                <div class="card__head">
+                                    <span class="status status--live"
+                                        ><span class="dot"></span>В эфире</span
+                                    ><span class="meta">Сегодня</span>
+                                </div>
+                                <h3 class="card__title">Спринт 30</h3>
+                                <p class="card__sub">Блиц</p>
+                                <div class="card__meta">
+                                    <span class="meta">18 игроков</span
+                                    ><span class="meta">3 раунда</span>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="#" class="btn btn--muted"
+                                        >Открыть</a
+                                    ><button class="btn btn--accent">
+                                        Присоединиться
+                                    </button>
+                                </div>
+                            </article>
+                            <article class="card">
+                                <div class="card__topbar"></div>
+                                <div class="card__head">
+                                    <span class="status status--ended"
+                                        ><span class="dot"></span>Завершён</span
+                                    ><span class="meta">27 сен, 18:00</span>
+                                </div>
+                                <h3 class="card__title">Логические загадки</h3>
+                                <p class="card__sub">Комбинаторика</p>
+                                <div class="card__meta">
+                                    <span class="meta">40 игроков</span
+                                    ><span class="meta">4 раунда</span>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="#" class="btn btn--muted"
+                                        >Открыть</a
+                                    >
+                                </div>
+                            </article>
+                            <article class="card">
+                                <div class="card__topbar"></div>
+                                <div class="card__head">
+                                    <span class="status status--soon"
+                                        ><span class="dot"></span>Скоро</span
+                                    ><span class="meta">03 окт, 17:00</span>
+                                </div>
+                                <h3 class="card__title">Командная заруба</h3>
+                                <p class="card__sub">Логика + скорость</p>
+                                <div class="card__meta">
+                                    <span class="meta">22 игрока</span
+                                    ><span class="meta">4 раунда</span>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="#" class="btn btn--muted"
+                                        >Открыть</a
+                                    ><button class="btn btn--accent">
+                                        Присоединиться
+                                    </button>
+                                </div>
+                            </article>
+                            <a
+                                class="card card--all"
+                                href="#"
+                                aria-label="Все турниры"
+                            >
+                                <div class="card__topbar"></div>
+                                <span class="label">Все турниры</span>
+                                <span class="arrow" aria-hidden="true">
+                                    <svg
+                                        width="18"
+                                        height="18"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            d="M5 12h14M13 5l7 7-7 7"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            fill="none"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        />
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TOP players -->
+            <section id="top" class="section">
+                <div class="container">
+                    <div class="kicker" data-reveal>Рейтинг</div>
+                    <div
+                        style="
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            justify-content: space-between;
+                        "
+                    >
+                        <h2 class="section__title" data-reveal>Топ игроков</h2>
+                        <a href="#" class="topbar-btn" data-reveal
+                            >Полный рейтинг</a
+                        >
+                    </div>
+                    <div class="accent-bar" data-reveal></div>
+
+                    <div class="board" data-reveal>
+                        <div class="row">
+                            <div class="rankchip rankchip--1">1</div>
+                            <div class="badge">N</div>
+                            <div class="row__mid">
+                                <div class="row__name">Neo</div>
+                                <div class="row__sub">Серия: 4</div>
+                            </div>
+                            <div class="row__right">
+                                <div class="score">1980 RP</div>
+                                <div class="wins">Побед: 12</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="rankchip rankchip--2">2</div>
+                            <div class="badge">A</div>
+                            <div class="row__mid">
+                                <div class="row__name">Astra</div>
+                                <div class="row__sub">Серия: 2</div>
+                            </div>
+                            <div class="row__right">
+                                <div class="score">1765 RP</div>
+                                <div class="wins">Побед: 9</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="rankchip rankchip--3">3</div>
+                            <div class="badge">Z</div>
+                            <div class="row__mid">
+                                <div class="row__name">Zed</div>
+                                <div class="row__sub">Серия: 1</div>
+                            </div>
+                            <div class="row__right">
+                                <div class="score">1702 RP</div>
+                                <div class="wins">Побед: 8</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="rankchip rankchip--n">4</div>
+                            <div class="badge">DL</div>
+                            <div class="row__mid">
+                                <div class="row__name">dlex</div>
+                                <div class="row__sub">&nbsp;</div>
+                            </div>
+                            <div class="row__right">
+                                <div class="score">1640 RP</div>
+                                <div class="wins">Побед: 7</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="rankchip rankchip--n">5</div>
+                            <div class="badge">YA</div>
+                            <div class="row__mid">
+                                <div class="row__name">yarik</div>
+                                <div class="row__sub">&nbsp;</div>
+                            </div>
+                            <div class="row__right">
+                                <div class="score">1594 RP</div>
+                                <div class="wins">Побед: 5</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer id="footer" class="footer">
+            <div class="container footer__grid">
+                <div>
+                    <div class="footer__brand">Qubit</div>
+                    <p class="footer__text">
+                        Платформа турниров в реальном времени. Учись быстро
+                        думать и выигрывать честно.
+                    </p>
+                    <div class="footer__links">
+                        <a href="#" class="footer__link">О проекте</a>
+                        <a href="#" class="footer__link">Турниры</a>
+                        <a href="#" class="footer__link">Правила</a>
+                        <a href="#" class="footer__link">Рейтинг</a>
+                        <a href="#" class="footer__link">Контакты</a>
+                        <a href="#" class="footer__link">Конфиденциальность</a>
+                    </div>
+                    <div class="footer__copy">
+                        © 2025 Qubit. Все права защищены.
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal" hidden>
+            <div class="modal__backdrop" id="modalBackdrop"></div>
+            <div
+                class="modal__panel"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="modalTitle"
+            >
+                <div class="modal__head">
+                    <div id="modalTitle" class="modal__title">
+                        Войти в Qubit
+                    </div>
+                    <button
+                        class="modal__close"
+                        id="modalClose"
+                        aria-label="Закрыть"
+                    >
+                        <svg
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            class="i"
+                        >
+                            <path
+                                d="M18 6L6 18M6 6l12 12"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal__body">
+                    <button
+                        class="btn btn--accent"
+                        style="justify-content: center"
+                    >
+                        Войти по коду
+                    </button>
+                    <button
+                        class="btn btn--muted"
+                        style="justify-content: center"
+                    >
+                        Войти по логину
+                    </button>
+                    <button
+                        class="btn btn--muted"
+                        style="justify-content: center"
+                    >
+                        Зарегистрироваться
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            /* ТЕМА: загрузка предпочтения, переключение и сохранение */
+            const themeToggle = document.getElementById("themeToggle");
+
+            function getPreferredTheme() {
+                const saved = localStorage.getItem("theme");
+                if (saved === "light" || saved === "dark") return saved;
+                return window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: light)").matches
+                    ? "light"
+                    : "dark";
+            }
+            function setTheme(t) {
+                document.documentElement.setAttribute("data-theme", t);
+                localStorage.setItem("theme", t);
+                themeToggle?.setAttribute("aria-pressed", t === "light");
+            }
+            document.addEventListener("DOMContentLoaded", () =>
+                setTheme(getPreferredTheme())
+            );
+
+            themeToggle?.addEventListener("click", () => {
+                const next =
+                    document.documentElement.getAttribute("data-theme") ===
+                    "light"
+                        ? "dark"
+                        : "light";
+                setTheme(next);
+            });
+
+            /* (необязательно) если пользователь не задавал тему — реагировать на смену системной */
+            if (!localStorage.getItem("theme") && window.matchMedia) {
+                window
+                    .matchMedia("(prefers-color-scheme: light)")
+                    .addEventListener("change", (e) => {
+                        setTheme(e.matches ? "light" : "dark");
+                    });
+            }
+            /* синхронизация подписи кнопки темы в меню */
+            function updateThemeButtons() {
+                const t =
+                    document.documentElement.getAttribute("data-theme") ===
+                    "light"
+                        ? "Тёмная тема"
+                        : "Светлая тема";
+                document
+                    .querySelectorAll('[data-role="theme-btn"]')
+                    .forEach((b) => (b.textContent = t));
+            }
+            document.addEventListener("DOMContentLoaded", updateThemeButtons);
+
+            /* если setTheme уже есть — дополним её вызовом обновления лейбла */
+            const __oldSetTheme = window.setTheme;
+            window.setTheme = function (t) {
+                __oldSetTheme
+                    ? __oldSetTheme(t)
+                    : document.documentElement.setAttribute("data-theme", t);
+                updateThemeButtons();
+            };
+
+            /* кнопка темы в меню */
+            const themeToggleDrawer =
+                document.getElementById("themeToggleDrawer");
+            themeToggleDrawer?.addEventListener("click", () => {
+                const next =
+                    document.documentElement.getAttribute("data-theme") ===
+                    "light"
+                        ? "dark"
+                        : "light";
+                setTheme(next);
+            });
+
+            /* по клику «Войти» в меню откроем твою модалку входа */
+            document
+                .getElementById("drawerLogin")
+                ?.addEventListener("click", () => {
+                    closeDrawer?.(); // закроем меню (ф-ция у тебя уже есть)
+                    openModal?.(); // откроем модалку входа
+                });
+            // Иконка темы в меню
+            const themeToggleDrawerIcon = document.getElementById(
+                "themeToggleDrawerIcon"
+            );
+            themeToggleDrawerIcon?.addEventListener("click", () => {
+                const next =
+                    document.documentElement.getAttribute("data-theme") ===
+                    "light"
+                        ? "dark"
+                        : "light";
+                setTheme(next); // используем твою существующую функцию
+            });
+
+            // Header padding sync
+            function syncHeaderPad() {
+                const h = document.querySelector(".header")?.offsetHeight || 56;
+                document.documentElement.style.setProperty(
+                    "--header-h",
+                    h + "px"
+                );
+                document.body.style.paddingTop = "var(--header-h)";
+            }
+            window.addEventListener("resize", syncHeaderPad, { passive: true });
+            document.addEventListener("DOMContentLoaded", syncHeaderPad);
+
+            // Robust 100vh on mobile
+            function setVH() {
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty("--vh", `${vh}px`);
+            }
+            window.addEventListener("resize", setVH, { passive: true });
+            window.addEventListener("orientationchange", setVH);
+            document.addEventListener("DOMContentLoaded", setVH);
+
+            // Drawer
+            const drawerClose = document.getElementById("drawerClose");
+            const drawerBackdrop = document.getElementById("drawerBackdrop");
+            const drawerNav = document.getElementById("drawerNav");
+            const drawer = document.getElementById("drawer");
+            const panel = drawer?.querySelector(".drawer__panel");
+            const burger = document.getElementById("burger");
+
+            function openDrawer() {
+                if (!drawer) return;
+                drawer.hidden = false;
+                // если закрывалось ранее — уберём служебный класс
+                drawer.classList.remove("drawer--closing");
+                requestAnimationFrame(() =>
+                    drawer.classList.add("drawer--open")
+                );
+                burger?.setAttribute("aria-expanded", "true");
+                document.body.style.overflow = "hidden";
+            }
+            function closeDrawer() {
+                if (!drawer) return;
+                // меняем состояние на "закрывается"
+                drawer.classList.remove("drawer--open");
+                drawer.classList.add("drawer--closing");
+                burger?.setAttribute("aria-expanded", "false");
+
+                // когда панель доедет — полностью спрячем контейнер
+                const onEnd = (e) => {
+                    if (e.target !== panel || e.propertyName !== "transform")
+                        return;
+                    drawer.classList.remove("drawer--closing");
+                    drawer.hidden = true;
+                    document.body.style.overflow = "";
+                    panel.removeEventListener("transitionend", onEnd);
+                };
+                panel.addEventListener("transitionend", onEnd);
+            }
+
+            burger?.addEventListener("click", openDrawer);
+            drawerClose?.addEventListener("click", closeDrawer);
+            drawerBackdrop?.addEventListener("click", closeDrawer);
+            drawerNav?.addEventListener("click", (e) => {
+                if (e.target.matches("a")) closeDrawer();
+            });
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && drawer && !drawer.hidden)
+                    closeDrawer();
+            });
+
+            // Side dots active
+            const dots = document.querySelectorAll(".side-nav__dot");
+            const sections = ["hero", "what", "tournaments", "top", "footer"]
+                .map((id) => document.getElementById(id))
+                .filter(Boolean);
+            const io = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        const id = entry.target.id;
+                        const active =
+                            entry.isIntersecting &&
+                            entry.intersectionRatio > 0.3;
+                        const link = [...dots].find(
+                            (a) => a.getAttribute("href") === `#${id}`
+                        );
+                        if (link) link.classList.toggle("active", active);
+                    });
+                },
+                { threshold: [0.3, 0.6] }
+            );
+            sections.forEach((sec) => io.observe(sec));
+
+            // Reveal on scroll
+            const revealEls = document.querySelectorAll("[data-reveal]");
+            const ioReveal = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add("in");
+                            ioReveal.unobserve(entry.target);
+                        }
+                    });
+                },
+                { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+            );
+            revealEls.forEach((el) => ioReveal.observe(el));
+
+            // Modal
+            const loginModal = document.getElementById("loginModal");
+            const modalBackdrop = document.getElementById("modalBackdrop");
+            const modalClose = document.getElementById("modalClose");
+            const openLogin = document.getElementById("openLogin");
+            let lastFocus = null;
+            function openModal() {
+                lastFocus = document.activeElement;
+                loginModal.hidden = false;
+                requestAnimationFrame(() =>
+                    loginModal.classList.add("modal--open")
+                );
+                document.body.style.overflow = "hidden";
+                const first = loginModal.querySelector(".modal__body .btn");
+                first?.focus();
+            }
+            function closeModal() {
+                loginModal.classList.remove("modal--open");
+                loginModal.addEventListener(
+                    "transitionend",
+                    () => {
+                        loginModal.hidden = true;
+                        document.body.style.overflow = "";
+                        lastFocus?.focus();
+                    },
+                    { once: true }
+                );
+            }
+            openLogin?.addEventListener("click", openModal);
+            modalBackdrop?.addEventListener("click", closeModal);
+            modalClose?.addEventListener("click", closeModal);
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape" && !loginModal.hidden) closeModal();
+                if (e.key === "Tab" && !loginModal.hidden) {
+                    const focusables = loginModal.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    const first = focusables[0],
+                        last = focusables[focusables.length - 1];
+                    if (e.shiftKey && document.activeElement === first) {
+                        last.focus();
+                        e.preventDefault();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        first.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            // Horizontal scroll buttons
+            const hs = document.getElementById("hscroll");
+            const hsLeft = document.getElementById("hsLeft");
+            const hsRight = document.getElementById("hsRight");
+            hsLeft?.addEventListener(
+                "click",
+                () =>
+                    hs &&
+                    hs.scrollBy({
+                        left: -hs.clientWidth * 0.9,
+                        behavior: "smooth",
+                    })
+            );
+            hsRight?.addEventListener(
+                "click",
+                () =>
+                    hs &&
+                    hs.scrollBy({
+                        left: hs.clientWidth * 0.9,
+                        behavior: "smooth",
+                    })
+            );
+
+            /* Fit the word to one line */
+            function fitWord() {
+                const el = document.getElementById("word");
+                if (!el) return;
+                const parent = el.parentElement;
+                const maxW =
+                    Math.min(parent.clientWidth, window.innerWidth) - 24;
+                const minPx = 48,
+                    maxPx = 240;
+                el.style.fontSize = maxPx + "px";
+                el.style.whiteSpace = "nowrap";
+                let w = el.scrollWidth;
+                let fs = parseFloat(getComputedStyle(el).fontSize);
+                if (w > 0) {
+                    const ratio = (maxW * 0.98) / w;
+                    const next = Math.max(
+                        minPx,
+                        Math.min(maxPx, Math.floor(fs * Math.min(1, ratio)))
+                    );
+                    el.style.fontSize = next + "px";
+                }
+            }
+            window.addEventListener("resize", fitWord, { passive: true });
+            window.addEventListener("orientationchange", fitWord);
+            document.addEventListener("DOMContentLoaded", () => {
+                fitWord();
+                setTimeout(fitWord, 50);
+            });
+        </script>
+    </body>
+</html>
