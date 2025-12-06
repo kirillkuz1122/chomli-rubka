@@ -1,0 +1,2319 @@
+:root {
+    --bg-1: #0b1220;
+    --bg-2: #020617;
+    --fg: #e2e8f0;
+    --fg-strong: #f8fafc;
+    --fg-muted: #94a3b8;
+    --muted: rgba(255, 255, 255, 0.06);
+    --muted-2: rgba(255, 255, 255, 0.08);
+    --border: rgba(255, 255, 255, 0.1);
+    --border-2: rgba(255, 255, 255, 0.2);
+    --card: rgba(255, 255, 255, 0.06);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --accent-from: #f43f5e;
+    --accent-to: #f59e0b;
+    --green: #22c55e;
+    --green-2: #16a34a;
+    --container: 80rem;
+    --header-h: 56px;
+    --radius: 16px;
+    --grid-o: 0.05; /* прозрачность сетки */
+    color-scheme: dark;
+    --formula-o: 0.1;
+    --formula-color: #fff;
+    --formula-blend: overlay;
+    --grid-o: 0.05; /* базовая видимость в тёмной теме */
+    --grid-color: rgba(255, 255, 255, 0.9); /* белые линии для тёмной темы */
+    --grid-size: 32px;
+}
+:root[data-theme="light"] {
+    --grid-o: 0.1; /* делаем заметнее на светлом */
+    --grid-color: rgba(2, 6, 23, 0.65);
+    --bg-1: #f6f7fb;
+    --bg-2: #ffffff;
+    --fg: #0b1220;
+    --fg-strong: #020617;
+    --fg-muted: #4b5563;
+    --muted: rgba(0, 0, 0, 0.06);
+    --muted-2: rgba(0, 0, 0, 0.08);
+    --border: rgba(0, 0, 0, 0.1);
+    --border-2: rgba(0, 0, 0, 0.2);
+    --card: rgba(0, 0, 0, 0.04);
+    --card-border: rgba(0, 0, 0, 0.08);
+    --grid-o: 0.08;
+    color-scheme: light;
+    --formula-o: 0.16; /* чуть заметнее на светлом фоне */
+    --formula-color: #334155; /* тёмно-серый вместо белого */
+    --formula-blend: multiply; /* лучше «приклеивается» к светлому фону */
+    --grid-o: 0.04;
+}
+#themeToggle svg {
+    display: block;
+}
+#themeToggle .sun {
+    display: none;
+}
+[data-theme="light"] #themeToggle .sun {
+    display: block;
+}
+[data-theme="light"] #themeToggle .moon {
+    display: none;
+}
+body,
+.header,
+.card,
+.drawer__panel,
+.modal__panel {
+    transition: background-color 0.25s ease, color 0.25s ease,
+        border-color 0.25s ease;
+}
+/* Скрыть горизонтальный скролл у карусели */
+html,
+body {
+    /* прокрутка остаётся, но полоса скрыта */
+    overflow: auto;
+    -ms-overflow-style: none; /* IE/старый Edge */
+    scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none; /* Chrome/Safari/новый Edge */
+}
+
+/* Скрыть горизонтальный скролл у карусели */
+.hscroll {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+}
+.hscroll::-webkit-scrollbar {
+    /* Chrome/Safari/Edge */
+    height: 0;
+    display: none;
+}
+.hscroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.hscroll::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    height: 100%;
+}
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+        Noto Sans, Helvetica, Arial;
+    background: radial-gradient(
+            ellipse at top,
+            rgba(244, 63, 94, 0.2),
+            transparent 45%
+        ),
+        radial-gradient(
+            ellipse at bottom,
+            rgba(251, 191, 36, 0.2),
+            transparent 50%
+        ),
+        linear-gradient(var(--bg-2), var(--bg-1) 55%, var(--bg-2));
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding-top: var(--header-h);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+.container {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: 16px;
+}
+
+/* GRID overlay */
+.grid {
+    opacity: var(--grid-o);
+    background-image: linear-gradient(
+            to right,
+            var(--grid-color) 1px,
+            transparent 1px
+        ),
+        linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+@media (prefers-contrast: more) {
+    .grid {
+        opacity: calc(var(--grid-o) + 0.05);
+    }
+}
+
+/* HEADER */
+.header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: var(--header-h);
+    z-index: 1000;
+    backdrop-filter: saturate(1.1) blur(8px);
+    background: color-mix(in oklab, var(--bg-2) 75%, transparent);
+    border-bottom: 1px solid var(--border);
+}
+.header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    color: var(--fg-strong);
+}
+.brand__chip {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    color: var(--bg-1);
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+}
+.brand__text {
+    letter-spacing: 0.02em;
+}
+.nav {
+    display: none;
+    gap: 24px;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+}
+.nav__link {
+    font-size: 14px;
+}
+.nav__link:hover {
+    color: var(--fg-strong);
+}
+@media (min-width: 992px) {
+    .nav {
+        display: flex;
+    }
+}
+.header__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 15px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--fg);
+}
+.btn--muted {
+    background: var(--muted);
+    border-color: var(--border);
+}
+.btn--muted:hover {
+    background: var(--muted-2);
+}
+.btn--accent {
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #0b1220;
+    font-weight: 800;
+    border: none;
+    display: flex;
+    justify-content: center;
+}
+.btn--icon-only {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--muted);
+}
+.i {
+    display: block;
+}
+
+/* DRAWER */
+.drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    grid-template-columns: 1fr;
+    pointer-events: none;
+}
+.drawer[hidden] {
+    display: none;
+}
+.drawer__backdrop {
+    grid-row: 1;
+    grid-column: 1;
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.drawer__panel {
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: end;
+    width: min(92vw, 360px);
+    height: 100vh;
+    background: var(--bg-1);
+    border-left: 1px solid var(--border);
+    transform: translateX(102%);
+    transition: transform 0.28s;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.drawer--open .drawer__backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+.drawer--open .drawer__panel {
+    transform: translateX(0);
+    pointer-events: auto;
+}
+.drawer__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    background: color-mix(in oklab, var(--bg-1) 92%, transparent);
+    border-bottom: 1px solid var(--border);
+}
+.drawer__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.avatar {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: var(--muted-2);
+    font-weight: 800;
+}
+.drawer__close {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+.drawer__nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+}
+.drawer__link {
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+}
+.drawer__link:hover {
+    background: var(--muted-2);
+}
+
+/* SIDE DOTS */
+.side-nav {
+    position: fixed;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 900;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+@media (min-width: 1200px) {
+    .side-nav {
+        display: flex;
+        right: 24px;
+    }
+}
+.side-nav__dot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in oklab, #fff 20%, transparent);
+    background: var(--muted);
+    transition: transform 0.2s, background 0.2s;
+}
+.side-nav__dot:hover {
+    transform: scale(1.1);
+}
+.side-nav__dot.active {
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    border-color: transparent;
+}
+.side-nav__dot::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 150%;
+    white-space: nowrap;
+    background: color-mix(in oklab, var(--bg-2) 90%, transparent);
+    color: var(--fg);
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    opacity: 0;
+    transform: translateX(6px);
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s;
+}
+.side-nav__dot:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* HERO */
+.hero {
+    position: relative;
+}
+.hero__stage {
+    position: sticky;
+    top: 0;
+    min-height: calc(var(--vh, 1vh) * 100);
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    padding-top: 28px;
+}
+.hero__inner {
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+    padding-inline: 16px;
+    padding-block: 64px;
+}
+.card--all {
+    display: grid;
+    place-items: center;
+    text-align: center;
+    gap: 10px;
+    min-height: 220px; /* чтобы по высоте не отличалась */
+}
+.card--all .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-weight: 900;
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #0b1220;
+    border: none;
+}
+.card--all .desc {
+    font-size: 14px;
+    color: var(--fg-muted);
+}
+.card--all svg {
+    display: block;
+}
+.card--all:hover {
+    filter: brightness(1.05);
+}
+.word {
+    font-weight: 1000;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    text-align: center;
+    font-size: 1000px; /* base, JS will fit */
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
+    animation: breathe 4s ease-in-out infinite, gloss 3.5s ease-in-out infinite;
+    white-space: nowrap;
+    max-width: 100%;
+}
+@keyframes breathe {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+@keyframes gloss {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .word {
+        animation: none;
+    }
+}
+.tagline {
+    font-size: clamp(14px, 2.6vw, 18px);
+    color: var(--fg-muted);
+}
+
+/* Formulas in HERO only */
+.formulas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.1;
+}
+.formulas span {
+    position: absolute;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
+        "Liberation Mono", monospace;
+    color: #fff;
+    font-weight: 700;
+    mix-blend-mode: overlay;
+    opacity: 0.9;
+    transform: rotate(var(--rot, 0deg));
+    white-space: nowrap;
+}
+.formulas .f1 {
+    left: 6%;
+    top: 20%;
+    font-size: 28px;
+    --rot: -14deg;
+}
+.formulas .f2 {
+    left: 64%;
+    top: 18%;
+    font-size: 22px;
+    --rot: 8deg;
+}
+.formulas .f3 {
+    left: 22%;
+    top: 60%;
+    font-size: 26px;
+    --rot: -8deg;
+}
+.formulas .f4 {
+    left: 72%;
+    top: 64%;
+    font-size: 24px;
+    --rot: 12deg;
+}
+.formulas .f5 {
+    left: 40%;
+    top: 34%;
+    font-size: 20px;
+    --rot: -6deg;
+}
+.formulas .f6 {
+    left: 12%;
+    top: 72%;
+    font-size: 18px;
+    --rot: 5deg;
+}
+.formulas .f7 {
+    left: 78%;
+    top: 42%;
+    font-size: 19px;
+    --rot: -10deg;
+}
+.formulas .f8 {
+    left: 52%;
+    top: 76%;
+    font-size: 17px;
+    --rot: 7deg;
+}
+.formulas .f9 {
+    left: 30%;
+    top: 16%;
+    font-size: 21px;
+    --rot: -4deg;
+}
+.formulas .f10 {
+    left: 86%;
+    top: 28%;
+    font-size: 18px;
+    --rot: 9deg;
+}
+
+/* Sections */
+.section {
+    padding-block: 56px;
+}
+.kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    width: max-content;
+}
+.section__title {
+    font-size: clamp(22px, 3vw, 36px);
+    color: var(--fg-strong);
+    font-weight: 900;
+    margin: 8px 0;
+}
+.accent-bar {
+    height: 4px;
+    width: 110px;
+    border-radius: 999px;
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+.lead {
+    margin-top: 12px;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+    line-height: 1.75;
+}
+
+/* WHAT */
+.what__title {
+    font-size: clamp(26px, 4.6vw, 40px);
+    font-weight: 900;
+    color: var(--fg-strong);
+    margin: 6px 0;
+}
+.feature-card {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: color-mix(in oklab, var(--bg-1) 85%, transparent);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 12px 14px;
+}
+.feature-card + .feature-card {
+    margin-top: 10px;
+}
+.feature-card__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+}
+.feature-card__title {
+    font-weight: 800;
+    color: var(--fg-strong);
+}
+.feature-card__sub {
+    font-size: 14px;
+    color: color-mix(in oklab, var(--fg), #fff 10%);
+}
+.note {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 12px;
+    color: var(--fg-muted);
+}
+.note__icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: var(--muted);
+    border: 1px solid var(--border);
+}
+
+/* Horizontal tournaments */
+.hscroll-wrap {
+    position: relative;
+}
+.hscroll {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 85%;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-block: 6px;
+}
+.hscroll > * {
+    scroll-snap-align: start;
+}
+@media (min-width: 640px) {
+    .hscroll {
+        grid-auto-columns: 50%;
+    }
+}
+@media (min-width: 1200px) {
+    .hscroll {
+        grid-auto-columns: 33.333%;
+    }
+}
+.hscroll__controls {
+    position: absolute;
+    inset: auto 0 100% 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-bottom: 8px;
+}
+.card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    background: var(--card);
+    padding: 16px;
+}
+.card__topbar {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+}
+.card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+}
+.status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+}
+.status .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: currentColor;
+    display: inline-block;
+}
+.status--soon {
+    color: #fde68a;
+    background: rgba(253, 230, 138, 0.1);
+    border-color: rgba(253, 230, 138, 0.3);
+}
+.status--live {
+    color: #86efac;
+    background: rgba(134, 239, 172, 0.1);
+    border-color: rgba(134, 239, 172, 0.3);
+}
+.status--ended {
+    color: #cbd5e1;
+    background: rgba(203, 213, 225, 0.08);
+    border-color: rgba(203, 213, 225, 0.3);
+}
+.card__title {
+    color: var(--fg-strong);
+    font-weight: 800;
+    font-size: 18px;
+    margin: 0;
+}
+.card__sub {
+    margin: 4px 0 0;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+    font-size: 14px;
+}
+.card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 12px;
+    color: color-mix(in oklab, var(--fg), #fff 5%);
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+.card__actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+/* TOP players (с круглыми номерами) */
+.board {
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: color-mix(in oklab, var(--bg-1) 85%, transparent);
+    overflow: hidden;
+}
+.row {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+    min-height: 89px;
+}
+.row:first-child {
+    border-top: none;
+}
+/* кружки 1–3 как на скрине */
+.rankchip {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 18px;
+    color: #0b1220;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.rankchip--1 {
+    background-image: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+.rankchip--2 {
+    background-image: linear-gradient(135deg, #e5e7eb, #94a3b8);
+    color: #0f172a;
+}
+.rankchip--3 {
+    background-image: linear-gradient(135deg, #f97316, #ea580c);
+}
+.rankchip--n {
+    background: var(--muted);
+    color: var(--fg);
+}
+/* аватар-инициалы */
+.badge {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    font-weight: 800;
+    color: var(--fg-strong);
+}
+.row__mid {
+    display: grid;
+}
+.row__name {
+    font-weight: 900;
+    color: var(--fg-strong);
+}
+.row__sub {
+    font-size: 13px;
+    color: color-mix(in oklab, var(--fg), #fff 10%);
+}
+.row__right {
+    display: grid;
+    gap: 4px;
+    justify-items: end;
+}
+.score {
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--green) 22%, transparent),
+        color-mix(in oklab, var(--green-2) 18%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, var(--green) 40%, transparent);
+    font-weight: 900;
+    color: #d1fae5;
+    min-width: 96px;
+    text-align: center;
+}
+.wins {
+    font-size: 13px;
+    color: color-mix(in oklab, var(--fg), #fff 12%);
+}
+.topbar-btn {
+    margin-left: auto;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    border-radius: 18px;
+    padding: 8px 12px;
+    color: color-mix(in oklab, var(--fg), #fff 6%);
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 32px;
+    border-top: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg-2) 75%, transparent);
+}
+.footer__grid {
+    display: grid;
+    gap: 16px;
+    padding: 24px 0;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+@media (min-width: 640px) {
+    .footer__grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.footer__brand {
+    font-weight: 800;
+    color: var(--fg-strong);
+    font-size: 18px;
+}
+.footer__text {
+    margin-top: 8px;
+    color: var(--fg-muted);
+    font-size: 14px;
+}
+.footer__links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 6px;
+}
+.footer__link {
+    color: var(--fg);
+    opacity: 0.9;
+}
+.footer__copy {
+    margin-top: 10px;
+    color: var(--fg-muted);
+    font-size: 14px;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2100;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+}
+.modal[hidden] {
+    display: none;
+}
+.modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.modal__panel {
+    position: relative;
+    width: min(92vw, 440px);
+    border-radius: 16px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    padding: 16px;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: transform 0.2s, opacity 0.2s;
+}
+.modal--open .modal__backdrop {
+    opacity: 1;
+}
+.modal--open .modal__panel {
+    opacity: 1;
+    transform: translateY(0);
+}
+.modal__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.modal__title {
+    font-weight: 800;
+    color: var(--fg-strong);
+    font-size: 18px;
+}
+.modal__close {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+.modal__body {
+    display: grid;
+    gap: 10px;
+}
+.modal__note {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-top: 6px;
+}
+
+/* Reveal */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-reveal].in {
+    opacity: 1;
+    transform: translateY(0);
+}
+.formulas {
+    opacity: var(--formula-o);
+}
+.formulas span {
+    color: var(--formula-color);
+    mix-blend-mode: var(--formula-blend);
+}
+@supports (-webkit-text-stroke: 1px black) {
+    /* тонкий контур на светлой теме — ещё +читабельность */
+    [data-theme="light"] .formulas span {
+        -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.06);
+    }
+}
+
+/* -------- 2) Контраст статусов (жёлтый/зелёный/серый) -------- */
+[data-theme="light"] .status--soon {
+    color: #a16207; /* тёмный янтарный (AA) */
+    background: #fef3c7; /* светло-жёлтая подложка */
+    border-color: #f59e0b33;
+}
+[data-theme="light"] .status--live {
+    color: #166534; /* тёмный зелёный (AA) */
+    background: #dcfce7; /* светло-зелёная подложка */
+    border-color: #16a34a33;
+}
+[data-theme="light"] .status--ended {
+    color: #374151; /* графитовый текст */
+    background: #f3f4f6; /* нейтральная подложка */
+    border-color: #94a3b833;
+}
+
+/* -------- 3) «Очки» в топе — сделать читаемыми на светлом -------- */
+[data-theme="light"] .score {
+    background: #bbf7d0; /* монолитная светло-зелёная, без градиента */
+    color: #065f46; /* тёмный текст для контраста */
+    border: 1px solid #34d399;
+    text-shadow: none;
+}
+
+/* -------- 4) Нейтральные элементы (серые) чуть темнее -------- */
+[data-theme="light"] .badge {
+    background: #eef2f7;
+    color: #0b1220;
+    border-color: #cbd5e1;
+}
+[data-theme="light"] .board {
+    border-color: #e5e7eb;
+}
+[data-theme="light"] .row {
+    border-top-color: #e5e7eb;
+}
+/* Кнопка-плитка "Все турниры" — аккуратный вид */
+.card--all {
+    display: flex;
+    justify-content: right;
+    position: relative;
+    display: grid;
+    place-items: center; /* запас справа под стрелку */
+    min-height: 200px; /* как у обычных карточек */
+    width: 244px;
+    padding-right: 80px;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: radial-gradient(
+            120% 120% at 0% 0%,
+            rgba(255, 255, 255, 0.18),
+            transparent 38%
+        ),
+        linear-gradient(
+            135deg,
+            var(--accent-from) 0%,
+            #f97316 60%,
+            var(--accent-to) 100%
+        );
+    color: #0b1220;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+.card--all .card__topbar {
+    display: none;
+}
+.card--all .label {
+    font-weight: 900;
+    font-size: clamp(18px, 2.6vw, 22px);
+    letter-spacing: 0.01em;
+}
+.card--all .arrow {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b1220;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+.card--all:hover {
+    transform: translateY(-2px);
+}
+.card--all:hover .arrow {
+    transform: translate(2px, -50%);
+}
+.card--all:active {
+    transform: translateY(0);
+    filter: saturate(0.98);
+}
+
+/* корректировки для тёмной/светлой темы */
+:root[data-theme="light"] .card--all {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+:root:not([data-theme="light"]) .card--all {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+:root {
+    --btn-float: 2px; /* подъём при hover */
+    --btn-press-bright: 0.98; /* затемнение при active */
+    --btn-press-sat: 0.98;
+}
+
+/* Какие элементы считаем кнопками */
+.btn,
+.topbar-btn,
+.drawer__link,
+.drawer__close,
+.modal__close,
+#burger,
+#drawerClose,
+#modalClose {
+    position: relative;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease,
+        background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    will-change: transform, filter;
+}
+
+/* Подъём и усиление тени при hover */
+.btn:hover,
+.topbar-btn:hover,
+.drawer__link:hover,
+.drawer__close:hover,
+.modal__close:hover,
+#burger:hover,
+#drawerClose:hover,
+#modalClose:hover {
+    transform: translateY(calc(-1 * var(--btn-float)));
+}
+
+/* Акцентным добавим чуть более заметную тень при hover */
+.btn--accent:hover {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+    filter: saturate(1.05);
+}
+
+/* «Мутным» — лёгкое подсветление фона при hover */
+.btn--muted:hover,
+.drawer__link:hover,
+.topbar-btn:hover {
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+    filter: brightness(1.03);
+}
+
+/* Икон-кнопки — микро-масштаб, чтобы не «прыгали» слишком */
+.btn--icon-only:hover,
+.drawer__close:hover,
+.modal__close:hover,
+#burger:hover {
+    transform: translateY(calc(-0.6 * var(--btn-float))) scale(1.02);
+}
+
+/* Состояние active (нажатие) — опускаем обратно и немного приглушаем */
+.btn:active,
+.topbar-btn:active,
+.drawer__link:active,
+.drawer__close:active,
+.modal__close:active,
+#burger:active,
+#drawerClose:active,
+#modalClose:active {
+    transform: translateY(0) scale(0.99);
+    filter: brightness(var(--btn-press-bright)) saturate(var(--btn-press-sat));
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Фокус-кольцо для клавиатуры */
+.btn:focus-visible,
+.topbar-btn:focus-visible,
+.drawer__link:focus-visible,
+.drawer__close:focus-visible,
+.modal__close:focus-visible,
+#burger:focus-visible,
+#drawerClose:focus-visible,
+#modalClose:focus-visible {
+    outline: 3px solid color-mix(in oklab, #fff 75%, var(--accent-to));
+    outline-offset: 2px;
+    border-color: transparent;
+}
+
+/* Уважение prefers-reduced-motion — делаем движения мягче */
+@media (prefers-reduced-motion: reduce) {
+    .btn,
+    .topbar-btn,
+    .drawer__link,
+    .drawer__close,
+    .modal__close,
+    #burger,
+    #drawerClose,
+    #modalClose {
+        transition-duration: 0.05s;
+    }
+    .btn:hover,
+    .topbar-btn:hover,
+    .drawer__link:hover,
+    .drawer__close:hover,
+    .modal__close:hover,
+    #burger:hover,
+    #drawerClose:hover,
+    #modalClose:hover {
+        transform: translateY(-1px);
+    }
+}
+/* герой-зона занимает экран МИНУС фиксированный хэдэр */
+.hero__stage {
+    position: sticky; /* можно оставить sticky */
+    top: 0;
+    min-height: 100svh;
+    margin-top: -55px;
+    display: grid;
+    place-items: center; /* центр по горизонтали и вертикали */
+    padding: 0; /* убираем лишние отступы сверху/снизу */
+}
+
+/* внутренний контейнер — компактные отступы и центр текста */
+.hero__inner {
+    display: grid;
+    gap: 16px;
+    justify-items: center;
+    text-align: center;
+    padding: clamp(12px, 3vw, 24px);
+    margin: 0 auto;
+    max-width: min(1100px, 100% - 32px);
+}
+/* hero-кнопка: сочный градиент, мягкая тень, блик */
+.btn--hero {
+    position: relative;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 900;
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #0b1220;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.btn--hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.28),
+        transparent 42%
+    );
+    pointer-events: none;
+}
+
+/* ховер/актив — как у плитки "Все турниры" */
+.btn--hero:hover {
+    transform: translateY(-2px);
+    filter: saturate(1.05);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+}
+.btn--hero:active {
+    transform: translateY(0) scale(0.99);
+    filter: brightness(0.98);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+}
+
+/* фокус-кольцо */
+.btn--hero:focus-visible {
+    outline: 3px solid color-mix(in oklab, #fff 75%, var(--accent-to));
+    outline-offset: 3px;
+}
+@media (max-width: 640px) {
+    .hero__inner {
+        gap: 12px;
+    }
+}
+/* ===== Drawer 2.0 ===== */
+.drawer__panel {
+    background: color-mix(in oklab, var(--bg-1) 92%, transparent);
+}
+/* верхняя плашка с мягкой линией */
+.drawer__top {
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg-1) 96%, transparent);
+}
+
+/* usercard c градиентным кольцом */
+.drawer__usercard {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+}
+.avatar--ring {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--muted);
+}
+.avatar--ring::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: conic-gradient(
+        from 180deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    padding: 2px;
+}
+.user-meta {
+    display: grid;
+    line-height: 1.2;
+}
+.user-name {
+    font-weight: 800;
+    color: var(--fg-strong);
+}
+.user-role {
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
+/* группы меню */
+.drawer__group {
+    padding: 10px 16px;
+}
+.drawer__label {
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin: 0 0 8px 2px;
+}
+
+/* пункт меню как мини-карточка */
+.drawer__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    transition: transform 0.14s ease, background 0.14s ease,
+        box-shadow 0.14s ease;
+}
+.drawer__item + .drawer__item {
+    margin-top: 10px;
+}
+.drawer__item:hover {
+    transform: translateY(-2px);
+    background: var(--muted-2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+}
+.drawer__item:active {
+    transform: translateY(0) scale(0.99);
+}
+.drawer__item .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.drawer__item .ico {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    color: #0b1220;
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.5);
+}
+.drawer__item .chev {
+    opacity: 0.7;
+}
+
+/* нижние экшены */
+.drawer__actions {
+    padding: 8px 16px 16px;
+    display: grid;
+    gap: 10px;
+    margin: auto 0;
+}
+.btn--block {
+    width: 100%;
+    justify-content: center;
+}
+
+/* тоньше скролл у панели, без полос на iOS */
+.drawer__panel {
+    overscroll-behavior: contain;
+}
+/* 1) Панель без прокрутки и полос */
+.drawer__panel {
+    height: 100svh;
+    max-height: 100svh;
+    overflow: hidden; /* убираем скролл внутри панели */
+    scrollbar-width: none;
+}
+.drawer__panel::-webkit-scrollbar {
+    display: none;
+}
+
+/* 2) Топ меню: юзер слева, иконки справа */
+.drawer__top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in oklab, var(--bg-1) 96%, transparent);
+}
+.drawer__usercard {
+    flex: 1;
+    padding: 0;
+} /* тянем влево */
+.drawer__right {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 3) Прячем «Навигация» */
+.drawer__label {
+    display: none;
+}
+
+/* 4) Иконка темы как в хедере */
+#themeToggleDrawerIcon svg {
+    display: block;
+}
+#themeToggleDrawerIcon .sun {
+    display: none;
+}
+[data-theme="light"] #themeToggleDrawerIcon .sun {
+    display: block;
+}
+[data-theme="light"] #themeToggleDrawerIcon .moon {
+    display: none;
+}
+
+/* 5) На всякий случай — убрать скролл у самого списка */
+.drawer__nav {
+    overflow: hidden;
+}
+
+/* (необязательно) если оставалась нижняя кнопка темы — скрыть */
+.drawer__actions [data-role="theme-btn"] {
+    display: none;
+}
+/* Тюним открытие/закрытие */
+:root {
+    --tr-open: cubic-bezier(0.22, 1, 0.36, 1);
+    --tr-close: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.drawer__panel {
+    transform: translateX(102%);
+    transition: transform 0.34s var(--tr-open), opacity 0.2s ease;
+}
+.drawer__backdrop {
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+
+/* открыто */
+.drawer--open .drawer__panel {
+    transform: translateX(0);
+    opacity: 1;
+}
+.drawer--open .drawer__backdrop {
+    opacity: 1;
+}
+
+/* плавное закрытие (отдельный тайминг) */
+.drawer--closing .drawer__panel {
+    transform: translateX(102%);
+    transition: transform 0.3s var(--tr-close), opacity 0.2s ease;
+}
+.drawer--closing .drawer__backdrop {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .drawer__panel,
+    .drawer__backdrop {
+        transition: none !important;
+    }
+}
+@media (max-width: 400px) {
+    h2.section__title.in {
+        width: 200px;
+    }
+}
+/* CTA-строка "Ещё" внизу таблицы рейтинга */
+.row--cta {
+    display: grid;
+    grid-template-columns: 1fr auto; /* текст слева, стрелка справа */
+    align-items: center;
+    padding: 12px 14px; /* как у .row */
+    min-height: calc(44px + 24px); /* высота как у ряда с rankchip 44px */
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #0b1220;
+    font-weight: 900;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+.row--cta .label {
+    font-size: 16px;
+    letter-spacing: 0.01em;
+    margin-bottom: 2px;
+}
+.row--cta .arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.18);
+}
+:root:not([data-theme="light"]) .row--cta .arrow {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b1220;
+}
+:root[data-theme="light"] .row--cta .arrow {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b1220;
+}
+
+/* ховер/нажатие как у остальных кнопок */
+.row--cta:hover {
+    filter: saturate(1.05);
+    transform: translateY(-2px);
+}
+.row--cta:active {
+    filter: brightness(0.98);
+    transform: translateY(0) scale(0.99);
+}
+/* прячем верхнюю кнопку "Полный рейтинг" в секции #top */
+#top .topbar-btn {
+    display: none;
+}
+/* CTA внизу рейтинга — в стилистике списка */
+.row--cta {
+    /* как обычная строка */
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+    gap: 0;
+    padding: 12px 14px; /* как у .row */
+    min-height: 72px; /* ~высота строки с бейджами */
+    border-top: 1px solid var(--border);
+    background: transparent; /* без заливки-полосы */
+    max-height: 81px;
+}
+
+/* внутренняя "кнопка" */
+.row--cta .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #0b1220;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* кружок со стрелкой — как у "Все турниры" */
+.row--cta .arrow {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        0 2px 8px rgba(0, 0, 0, 0.18);
+}
+:root:not([data-theme="light"]) .row--cta .arrow {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b1220;
+}
+:root[data-theme="light"] .row--cta .arrow {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0b1220;
+}
+
+/* ховер/нажатие — такие же жесты, как у остальных кнопок */
+.row--cta:hover .chip {
+    transform: translateY(-2px);
+    filter: saturate(1.05);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.row--cta:active .chip {
+    transform: translateY(0) scale(0.99);
+    filter: brightness(0.98);
+}
+
+/* безопасность для маленьких экранов — пусть "пилюля" не выходит за края */
+@media (max-width: 480px) {
+    .row--cta .chip {
+        width: 100%;
+        justify-content: center;
+    }
+}
+/* не двигаем всю строку CTA */
+.row--cta,
+.row--cta:hover,
+.row--cta:active {
+    transform: none !important;
+}
+
+/* анимация только у самой кнопки внутри */
+.row--cta .chip {
+    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+    will-change: transform;
+}
+.row--cta:hover .chip {
+    transform: translateY(-2px);
+    filter: saturate(1.05);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.row--cta:active .chip {
+    transform: translateY(0) scale(0.99);
+    filter: brightness(0.98);
+}
+
+/* ===== Qubit extras: modals/forms/checkbox/links/disabled/eyes & drawer flash fix ===== */
+:root {
+    --field-bg-dark: rgba(255, 255, 255, 0.08);
+    --field-bg-light: rgba(255, 255, 255, 0.78);
+    --field-br: 12px;
+    --ring: color-mix(in oklab, #fff 75%, var(--accent-to));
+}
+
+/* Drawer flash fix: overlay below panel, panel no fade */
+.drawer__backdrop {
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+.drawer__panel {
+    z-index: 2;
+    opacity: 1;
+    transition: transform 0.34s var(--tr-open, ease);
+}
+.drawer--open .drawer__backdrop {
+    opacity: 0.5;
+}
+.drawer--open .drawer__panel {
+    transform: translateX(0);
+}
+
+/* Modal panel: only slide, no initial dim */
+.modal__panel {
+    opacity: 1;
+    transition: transform 0.28s var(--tr-open, ease);
+}
+.modal .modal__panel {
+    transform: translateY(16px);
+}
+.modal--open .modal__panel {
+    transform: translateY(0);
+}
+
+/* Forms */
+.modal__form {
+    display: grid;
+    gap: 12px;
+}
+.field {
+    display: grid;
+    gap: 6px;
+}
+.field label {
+    font-size: 13px;
+    color: var(--fg-muted);
+}
+.input,
+.textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--field-br);
+    border: 1px solid var(--border);
+    color: var(--fg);
+    background: var(--field-bg-dark);
+    outline: none;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease,
+        background 0.15s ease;
+}
+:root[data-theme="light"] .input,
+:root[data-theme="light"] .textarea {
+    background: var(--field-bg-light);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+.input::placeholder {
+    color: color-mix(in oklab, var(--fg), #fff 30%);
+    opacity: 0.85;
+}
+:root[data-theme="light"] .input::placeholder {
+    color: color-mix(in oklab, var(--fg), #000 20%);
+}
+.input:focus {
+    box-shadow: 0 0 0 3px var(--ring);
+    border-color: transparent;
+}
+.error {
+    font-size: 12px;
+    color: #fecaca;
+    min-height: 1em;
+}
+:root[data-theme="light"] .error {
+    color: #b91c1c;
+}
+
+/* Checkbox with gradient */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--fg);
+}
+.checkbox input {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--muted);
+    display: grid;
+    place-items: center;
+    outline: none;
+    cursor: pointer;
+    transition: filter 0.15s ease, border-color 0.15s ease,
+        background 0.15s ease, transform 0.15s ease;
+}
+.checkbox input:active {
+    transform: scale(0.98);
+}
+.checkbox input:checked {
+    border-color: transparent;
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.checkbox input:checked::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.18);
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>')
+        center/contain no-repeat;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>')
+        center/contain no-repeat;
+}
+
+/* Buttons disabled (grey) until valid */
+.btn.is-disabled,
+.btn:disabled {
+    filter: none;
+    background: var(--muted) !important;
+    color: color-mix(in oklab, var(--fg), #000 15%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
+    cursor: not-allowed;
+}
+
+/* Links row — компактные текстовые */
+.form__links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.form__links a {
+    color: color-mix(in oklab, var(--fg), #fff 8%);
+    text-decoration: none;
+}
+.form__links a:hover {
+    color: var(--fg-strong);
+    text-decoration: underline;
+}
+
+/* Password visibility toggle */
+.input-group {
+    position: relative;
+}
+.input-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--fg);
+}
+.input-toggle svg {
+    display: block;
+}
+.input-toggle:hover {
+    filter: brightness(1.05);
+}
+.input-toggle:active {
+    transform: translateY(-50%) scale(0.98);
+}
+
+/* Code inputs 8x (XXXX-XXXX) */
+.code-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 42px) 24px repeat(4, 42px);
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+.code-cell {
+    width: 42px;
+    height: 48px;
+    text-align: center;
+    font: 800 20px/48px system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    letter-spacing: 0.02em;
+}
+.code-sep {
+    text-align: center;
+    color: var(--fg-muted);
+    user-select: none;
+}
+@media (max-width: 420px) {
+    .code-grid {
+        grid-template-columns: repeat(4, 36px) 18px repeat(4, 36px);
+        gap: 6px;
+    }
+    .code-cell {
+        width: 36px;
+        height: 44px;
+        line-height: 44px;
+    }
+}
+/* ===== PATCH • 2025-10-05 ===== */
+
+/* (A) Стрелка в градиентных кнопках (например, "Полный рейтинг") — всегда белая */
+.btn--accent svg,
+.btn--accent svg path {
+    color: #fff;
+    stroke: #fff;
+    fill: #fff;
+}
+
+/* (B) Меню/модалки: панель не мерцает, появляется яркой сразу */
+.drawer__backdrop {
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+.drawer__panel {
+    z-index: 2;
+    opacity: 1;
+    transition: transform 0.34s ease;
+}
+.drawer--open .drawer__backdrop {
+    opacity: 0.5;
+}
+.drawer--open .drawer__panel {
+    transform: translateX(0);
+}
+
+.modal__panel {
+    box-sizing: border-box;
+    padding: 16px 18px;
+    max-width: min(560px, 96vw);
+}
+#codeModal .modal__panel {
+    max-width: min(600px, 96vw);
+}
+.modal .modal__panel {
+    transform: translateY(16px);
+}
+.modal--open .modal__panel {
+    transform: translateY(0);
+}
+
+/* (C) Выровнять "глаз" у полей пароля + зарезервировать место */
+.field.input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+}
+.field.input-group label {
+    grid-column: 1 / -1;
+}
+.field.input-group .input {
+    grid-row: 2;
+    grid-column: 1;
+    padding-right: 10px;
+}
+.field.input-group .input-toggle {
+    grid-row: 2;
+    grid-column: 2;
+    position: static;
+    transform: none;
+    margin-left: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--fg);
+}
+.input-toggle:hover {
+    filter: brightness(1.05);
+}
+.input-toggle:active {
+    transform: scale(0.98);
+}
+/* Состояние "закрыт" — добавляем диагональную черту */
+.input-toggle.line::after {
+    content: "";
+    width: 18px;
+    height: 2px;
+    background: currentColor;
+    transform: rotate(-32deg);
+}
+
+/* (D) Пояснения об ошибках под полями паролей */
+.field [data-error-for="pass"],
+.field [data-error-for="pass2"] {
+    margin-top: 4px;
+}
+
+/* (E) Код: решаем паддинг справа и мобильную адаптацию */
+.code-grid {
+    justify-content: center;
+} /* центрируем весь набор */
+@media (max-width: 420px) {
+    .code-grid {
+        grid-template-columns: repeat(4, 36px) 18px repeat(4, 36px);
+        gap: 6px;
+    }
+    .code-cell {
+        width: 36px;
+        height: 44px;
+        line-height: 44px;
+    }
+}
+@media (max-width: 370px) {
+    .modal__panel {
+        width: 94vw;
+        padding: 14px;
+    } /* симметричные отступы на узких экранах */
+    .code-grid {
+        grid-template-columns: repeat(4, 34px) 14px repeat(4, 34px);
+        gap: 6px;
+    }
+    .code-cell {
+        width: 34px;
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+/* (F) Кнопки по умолчанию серые (когда disabled) */
+.btn.is-disabled,
+.btn:disabled {
+    filter: none;
+    background: var(--muted) !important;
+    color: color-mix(in oklab, var(--fg), #000 15%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
+    cursor: not-allowed;
+}
+
+/* (G) Ссылки под формами — меньше и аккуратнее */
+.form__links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.form__links a {
+    color: color-mix(in oklab, var(--fg), #fff 8%);
+    text-decoration: none;
+}
+.form__links a:hover {
+    color: var(--fg-strong);
+    text-decoration: underline;
+}
+/* ===== PATCH • 2025-10-05 ===== */
+
+/* Стрелка в градиентных кнопках (например, “Полный рейтинг”) — белая */
+.btn--accent svg,
+.btn--accent svg path {
+    color: #fff;
+    stroke: #fff;
+    fill: #fff;
+}
+
+/* Панель меню/модалок — появляется яркой сразу, без тёмной вспышки */
+.drawer__backdrop {
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.22s ease;
+}
+.drawer__panel {
+    z-index: 2;
+    opacity: 1;
+    transition: transform 0.34s ease;
+}
+.drawer--open .drawer__backdrop {
+    opacity: 0.5;
+}
+.drawer--open .drawer__panel {
+    transform: translateX(0);
+}
+.modal__panel {
+    box-sizing: border-box;
+    padding: 16px 18px;
+    max-width: min(560px, 96vw);
+}
+#codeModal .modal__panel {
+    max-width: min(600px, 96vw);
+}
+.modal .modal__panel {
+    transform: translateY(16px);
+}
+.modal--open .modal__panel {
+    transform: translateY(0);
+}
+
+/* Выровненный глаз + место под него */
+.field.input-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+}
+.field.input-group label {
+    grid-column: 1 / -1;
+}
+.field.input-group .input {
+    grid-row: 2;
+    grid-column: 1;
+    padding-right: 10px;
+}
+.field.input-group .input-toggle {
+    grid-row: 2;
+    grid-column: 2;
+    position: static;
+    transform: none;
+    margin-left: 8px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--fg);
+}
+.input-toggle svg {
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+.input-toggle:hover {
+    filter: brightness(1.05);
+}
+.input-toggle:active {
+    transform: scale(0.98);
+}
+
+/* Сообщения об ошибках под паролями */
+.field [data-error-for="pass"],
+.field [data-error-for="pass2"] {
+    margin-top: 4px;
+}
+
+/* Код: центрирование + мобильная адаптация (350px ок) */
+.code-grid {
+    justify-content: center;
+}
+@media (max-width: 420px) {
+    .code-grid {
+        grid-template-columns: repeat(4, 36px) 18px repeat(4, 36px);
+        gap: 6px;
+    }
+    .code-cell {
+        width: 36px;
+        height: 44px;
+        line-height: 44px;
+    }
+}
+@media (max-width: 370px) {
+    .modal__panel {
+        width: 94vw;
+        padding: 14px;
+    }
+    .code-grid {
+        grid-template-columns: repeat(4, 34px) 14px repeat(4, 34px);
+        gap: 6px;
+    }
+    .code-cell {
+        width: 34px;
+        height: 40px;
+        line-height: 40px;
+    }
+}
+
+/* Кнопки неактивны (серые), пока форма не валидна */
+.btn.is-disabled,
+.btn:disabled {
+    filter: none;
+    background: var(--muted) !important;
+    color: color-mix(in oklab, var(--fg), #000 15%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
+    cursor: not-allowed;
+}
+
+/* Компактные ссылки под формами */
+.form__links {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 13px;
+}
+.form__links a {
+    color: color-mix(in oklab, var(--fg), #fff 8%);
+    text-decoration: none;
+}
+.form__links a:hover {
+    color: var(--fg-strong);
+    text-decoration: underline;
+}
+
+
+/* ===== FIX v3 — 2025‑10‑05 ===== */
+
+/* Белая стрелка внутри любых градиентных кнопок */
+.btn--accent svg, .btn--accent svg path { color:#fff; stroke:#fff; fill:#fff; }
+
+/* Глазик в одной сетке с полем — не «едет», легко кликается */
+.field.input-group{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  align-items:center;
+}
+.field.input-group label{ grid-column:1 / -1; }
+.field.input-group .input{ grid-row:2; grid-column:1; padding-right:12px; }
+.field.input-group .input-toggle{
+  grid-row:2; grid-column:2;
+  position:static; transform:none;
+  margin-left:8px;
+  width:34px; height:34px; border-radius:10px;
+  display:grid; place-items:center;
+  background: var(--muted); border:1px solid var(--border); color:var(--fg);
+}
+.input-toggle svg{ display:block; transition:transform .12s ease, opacity .12s ease; }
+.input-toggle:hover{ filter:brightness(1.05); }
+.input-toggle:active{ transform:scale(.98); }
+
+/* Подписи об ошибках под паролями */
+.field [data-error-for="pass"], .field [data-error-for="pass2"]{ margin-top:4px; min-height:1em; }
+
+/* Кнопки по умолчанию серые (disabled) */
+.btn.is-disabled, .btn:disabled{
+  filter:none; background:var(--muted) !important;
+  color: color-mix(in oklab, var(--fg), #000 15%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 0 0 transparent !important;
+  cursor:not-allowed;
+}
+
+/* Модалки: панель без «вспышки» затемнения, только слайд */
+.modal .modal__panel{ transform:translateY(14px); opacity:1; }
+.modal--open .modal__panel{ transform:translateY(0); }
+
+/* Вход по коду — не вылезает ни текст, ни кнопка */
+#codeModal .modal__panel{ max-width:min(600px,96vw); padding:16px 18px; }
+.code-grid{ justify-content:center; }
+@media (max-width: 400px){
+  #codeModal .modal__panel{ width:96vw; padding:12px; }
+  .code-grid{ grid-template-columns: repeat(4,32px) 12px repeat(4,32px); gap:6px; }
+  .code-cell{ width:32px; height:38px; line-height:38px; font-size:18px; }
+}
+@media (max-width: 350px){
+  #codeModal .modal__panel{ width:96vw; padding:10px; }
+  .code-grid{ grid-template-columns: repeat(4,30px) 10px repeat(4,30px); gap:5px; }
+  .code-cell{ width:30px; height:36px; line-height:36px; font-size:17px; }
+}
+
+/* Drag‑scroll для карусели + без выделения текста при перетаскивании */
+.hscroll{ cursor:grab; user-select:none; -webkit-user-drag:none; }
+.hscroll.dragging{ cursor:grabbing; }
+.hscroll *{ user-select:none; -webkit-user-drag:none; }
+
+/* --- User-fix 2025‑10‑05 ---
+   Убедимся, что кнопка "Войти" на главном экране всегда реагирует на клики,
+   даже когда в DOM остаются скрытые модальные окна. Повышаем z-index и
+   явно включаем pointer-events. */
+#openLogin {
+    position: relative;
+    z-index: 10;
+    pointer-events: auto;
+}

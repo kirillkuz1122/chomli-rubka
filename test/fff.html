@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            body {
+                background-color: #020617;
+            }
+            .btn--icon-only {
+                -webkit-font-smoothing: antialiased;
+                box-sizing: border-box;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 15px;
+                cursor: pointer;
+                color: #e2e8f0;
+                padding: 10px;
+                width: 40px;
+                height: 40px;
+                justify-content: center;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                background: rgba(255, 255, 255, 0.06);
+                position: relative;
+                transition: transform 0.15s ease, box-shadow 0.15s ease,
+                    filter 0.15s ease, background-color 0.15s ease,
+                    border-color 0.15s ease, color 0.15s ease;
+                will-change: transform, filter;
+            }
+        </style>
+    </head>
+    <body>
+        <button
+            class="btn btn--icon-only"
+            id="themeToggle"
+            aria-label="Сменить тему"
+            aria-pressed="false"
+            title="Тема"
+        >
+            <!-- луна (тёмная) -->
+            <svg class="moon" width="20" height="20" viewBox="0 0 24 24">
+                <path
+                    d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                    fill="currentColor"
+                ></path>
+            </svg>
+        </button>
+    </body>
+</html>

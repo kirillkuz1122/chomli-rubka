@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="dark" lang="ru"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Qubit - Профиль</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f59e0b",
+                        "highlight": "#f59e0b",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#111115",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #111115;
+            background-image:
+                linear-gradient(rgba(42, 42, 48, 0.5) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42, 42, 48, 0.5) 1px, transparent 1px);
+            background-size: 2rem 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.1), transparent 60%);
+            filter: blur(100px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            right: -30%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(244, 63, 94, 0.1), transparent 60%);
+            filter: blur(120px);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+        .icon-gradient-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#1A1A1E, #1A1A1E) padding-box,
+                        linear-gradient(to bottom right, #F43F5E, #F59E0B) border-box;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-[#EAEAEA]">
+<div class="relative flex min-h-screen w-full">
+<aside class="flex w-64 flex-col gap-8 border-r border-white/10 bg-black/30 p-6 backdrop-blur-lg">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-amber-500">
+<svg aria-label="Qubit logo" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"></circle><line stroke="currentColor" stroke-linecap="round" stroke-width="2" x1="14" x2="18" y1="14" y2="18"></line></svg>
+</div>
+<h1 class="text-[#EAEAEA] text-xl font-bold">Qubit</h1>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group" href="#">
+<div class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">home</span>
+</div>
+<p class="text-sm font-medium">Главная</p>
+</a>
+<a class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group" href="#">
+<div class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">emoji_events</span>
+</div>
+<p class="text-sm font-medium">Турниры</p>
+</a>
+<a class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group" href="#">
+<div class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">groups</span>
+</div>
+<p class="text-sm font-medium">Команда</p>
+</a>
+<a class="flex items-center gap-4 rounded-lg bg-primary/10 px-4 py-2.5 text-primary transition-colors group" href="#">
+<div class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-primary">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+<p class="text-sm font-bold">Профиль</p>
+</a>
+</nav>
+</aside>
+<main class="flex flex-1 justify-center p-8">
+<div class="w-full max-w-4xl">
+<div class="flex flex-col gap-8">
+<div>
+<h2 class="text-[#EAEAEA] text-4xl font-bold leading-tight tracking-tight">Профиль</h2>
+</div>
+<div class="border-b border-[#2A2A30]">
+<div class="flex gap-8">
+<a class="flex items-center justify-center gap-2 border-b-[3px] border-b-primary pb-3" href="#">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+<p class="text-primary text-sm font-bold tracking-wide">Личные данные</p>
+</a>
+<a class="flex items-center justify-center gap-2 border-b-[3px] border-b-transparent text-[#888899] pb-3 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined text-[#888899] text-xl group-hover:text-white transition-colors">lock</span>
+<p class="text-sm font-bold tracking-wide">Безопасность</p>
+</a>
+</div>
+</div>
+<div class="flex flex-col gap-8">
+<div class="flex w-full flex-col gap-6 @container md:flex-row md:items-center md:justify-between">
+<div class="flex items-center gap-5">
+<div class="relative group">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-24 w-24" data-alt="User's profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLNFskeozTbdP0wVkcbwn9_6FrRWijxunX2-_UcI0S1wfHnoJ4Qfw00DG0susXgE9TiN-JM3JDBrAq1C_SOvg6xGPzVOz9x2BrAJqkG4NTzVdfCIiFA_BsHp2dKzo0nUB6yNvnAA5mecyklCq82z-gVuYVmDrf1vzlkPL9wtDaSOK4HKl1UzPfKc6kYoVzixxkvTX1VE8qIzG1LXZqZxRHce7ejs0Wfqsa5_0v4E6pfjyxERDknQoLcJPCN3MoXYKpb-dd2wmIcW2J");'></div>
+<div class="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white text-3xl">edit</span>
+</div>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-[#EAEAEA] text-2xl font-bold">Иван Иванов</p>
+<p class="text-[#888899] text-base">UID: 12345</p>
+</div>
+</div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-5 bg-[#2A2A30] text-[#EAEAEA] text-sm font-bold transition-colors hover:bg-[#3f3f46] w-full @[480px]:w-auto">
+<span class="truncate">Загрузить фото</span>
+</button>
+</div>
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-6 rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 p-6">
+<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Фамилия</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="Иванов"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Имя</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="Иван"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Отчество</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="Иванович"/>
+</label>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Логин</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="ivan.ivanov"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Email</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="ivan.ivanov@example.com"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Телефон</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="+7 (999) 123-45-67"/>
+</label>
+</div>
+<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Город</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="Москва"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Учреждение</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="Школа №123"/>
+</label>
+<label class="flex flex-col">
+<p class="text-[#888899] text-sm font-medium pb-2">Класс</p>
+<input class="form-input flex w-full rounded-lg text-[#EAEAEA] focus:outline-none focus:ring-2 focus:ring-primary border border-[#2A2A30] bg-[#1a1a1e] h-12 placeholder:text-[#888899] px-4 text-base font-normal" value="10"/>
+</label>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-4">
+<button class="flex items-center justify-center rounded-lg h-11 px-6 bg-gradient-to-br from-rose-500 to-amber-500 text-white text-sm font-bold disabled:bg-[#2A2A30] disabled:text-[#888899] disabled:cursor-not-allowed transition-all hover:opacity-90 active:scale-95">
+                                Сохранить изменения
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

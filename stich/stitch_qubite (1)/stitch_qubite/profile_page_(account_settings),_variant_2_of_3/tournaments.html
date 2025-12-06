@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html class="dark" lang="ru">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Qubit - Турниры</title>
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <link href="https://fonts.googleapis.com" rel="preconnect" />
+        <link
+            crossorigin=""
+            href="https://fonts.gstatic.com"
+            rel="preconnect"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+            rel="stylesheet"
+        />
+        <script>
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#f59e0b",
+                            highlight: "#f59e0b",
+                            "background-light": "#f8f5f6",
+                            "background-dark": "#111115",
+                        },
+                        fontFamily: {
+                            display: ["Space Grotesk", "sans-serif"],
+                        },
+                        borderRadius: {
+                            DEFAULT: "0.5rem",
+                            lg: "1rem",
+                            xl: "1.5rem",
+                            full: "9999px",
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            body {
+                background-color: #111115;
+                background-image: linear-gradient(
+                        rgba(42, 42, 48, 0.5) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(42, 42, 48, 0.5) 1px,
+                        transparent 1px
+                    );
+                background-size: 2rem 2rem;
+                position: relative;
+                overflow-x: hidden;
+            }
+            body::before {
+                content: "";
+                position: fixed;
+                top: -20%;
+                left: -20%;
+                width: 80%;
+                height: 80%;
+                background: radial-gradient(
+                    circle,
+                    rgba(244, 63, 94, 0.1),
+                    transparent 60%
+                );
+                filter: blur(100px);
+                z-index: -1;
+                pointer-events: none;
+            }
+            body::after {
+                content: "";
+                position: fixed;
+                bottom: -30%;
+                right: -30%;
+                width: 80%;
+                height: 80%;
+                background: radial-gradient(
+                    circle,
+                    rgba(245, 158, 11, 0.1),
+                    transparent 60%
+                );
+                filter: blur(120px);
+                z-index: -1;
+                pointer-events: none;
+            }
+            .material-symbols-outlined {
+                font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0,
+                    "opsz" 24;
+            }
+            .icon-gradient-border {
+                border: 1px solid transparent;
+                background: linear-gradient(#1a1a1e, #1a1a1e) padding-box,
+                    linear-gradient(to bottom right, #f43f5e, #f59e0b)
+                        border-box;
+            }
+        </style>
+    </head>
+    <body
+        class="font-display bg-background-light dark:bg-background-dark text-[#EAEAEA]"
+    >
+        <div class="relative flex min-h-screen w-full">
+            <aside
+                class="flex w-64 flex-col gap-8 border-r border-white/10 bg-black/30 p-6 backdrop-blur-lg"
+            >
+                <div class="flex items-center gap-3">
+                    <div
+                        class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-amber-500"
+                    >
+                        <svg
+                            aria-label="Qubit logo"
+                            class="h-6 w-6 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            ></circle>
+                            <line
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-width="2"
+                                x1="14"
+                                x2="18"
+                                y1="14"
+                                y2="18"
+                            ></line>
+                        </svg>
+                    </div>
+                    <h1 class="text-[#EAEAEA] text-xl font-bold">Qubit</h1>
+                </div>
+                <nav class="flex flex-col gap-2">
+                    <a
+                        class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group"
+                        href="#"
+                    >
+                        <div
+                            class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors"
+                        >
+                            <span class="material-symbols-outlined text-xl"
+                                >home</span
+                            >
+                        </div>
+                        <p class="text-sm font-medium">Главная</p>
+                    </a>
+                    <a
+                        class="flex items-center gap-4 rounded-lg bg-primary/10 px-4 py-2.5 text-primary transition-colors group"
+                        href="#"
+                    >
+                        <div
+                            class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-primary"
+                        >
+                            <span
+                                class="material-symbols-outlined text-xl"
+                                style="font-variation-settings: 'FILL' 1"
+                                >emoji_events</span
+                            >
+                        </div>
+                        <p class="text-sm font-bold">Турниры</p>
+                    </a>
+                    <a
+                        class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group"
+                        href="#"
+                    >
+                        <div
+                            class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors"
+                        >
+                            <span class="material-symbols-outlined text-xl"
+                                >groups</span
+                            >
+                        </div>
+                        <p class="text-sm font-medium">Команда</p>
+                    </a>
+                    <a
+                        class="flex items-center gap-4 rounded-lg px-4 py-2.5 text-[#888899] hover:bg-white/5 transition-colors group"
+                        href="#"
+                    >
+                        <div
+                            class="icon-gradient-border flex h-8 w-8 items-center justify-center rounded-md text-[#888899] group-hover:text-primary transition-colors"
+                        >
+                            <span class="material-symbols-outlined text-xl"
+                                >person</span
+                            >
+                        </div>
+                        <p class="text-sm font-medium">Профиль</p>
+                    </a>
+                </nav>
+            </aside>
+            <main class="flex-1 p-8" x-data="{ activeTab: 'all' }">
+                <div class="mx-auto flex w-full max-w-7xl flex-col gap-8">
+                    <header
+                        class="flex flex-wrap items-center justify-between gap-4"
+                    >
+                        <h2
+                            class="text-[#EAEAEA] text-4xl font-bold leading-tight tracking-tight"
+                        >
+                            Турниры
+                        </h2>
+                        <div class="relative w-full max-w-sm">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[#888899]"
+                                >search</span
+                            >
+                            <input
+                                class="form-input w-full rounded-lg border border-[#2A2A30] bg-[#1a1a1e] h-12 pl-11 pr-4 text-base text-[#EAEAEA] placeholder:text-[#888899] focus:outline-none focus:ring-2 focus:ring-primary"
+                                placeholder="Поиск турниров..."
+                                type="text"
+                            />
+                        </div>
+                    </header>
+                    <div class="flex flex-col gap-6">
+                        <div class="border-b border-[#2A2A30]">
+                            <nav aria-label="Tabs" class="-mb-px flex gap-8">
+                                <button
+                                    :class="{ 'border-b-primary text-primary': activeTab === 'all', 'border-b-transparent text-[#888899] hover:text-white': activeTab !== 'all' }"
+                                    @click="activeTab = 'all'"
+                                    class="group inline-flex shrink-0 items-center justify-center gap-2 border-b-[3px] p-1 pb-3 text-sm font-bold tracking-wide transition-colors"
+                                >
+                                    <span>Все</span>
+                                </button>
+                                <button
+                                    :class="{ 'border-b-primary text-primary': activeTab === 'current', 'border-b-transparent text-[#888899] hover:text-white': activeTab !== 'current' }"
+                                    @click="activeTab = 'current'"
+                                    class="group inline-flex shrink-0 items-center justify-center gap-2 border-b-[3px] p-1 pb-3 text-sm font-bold tracking-wide transition-colors"
+                                >
+                                    <span>Текущие</span>
+                                </button>
+                                <button
+                                    :class="{ 'border-b-primary text-primary': activeTab === 'upcoming', 'border-b-transparent text-[#888899] hover:text-white': activeTab !== 'upcoming' }"
+                                    @click="activeTab = 'upcoming'"
+                                    class="group inline-flex shrink-0 items-center justify-center gap-2 border-b-[3px] p-1 pb-3 text-sm font-bold tracking-wide transition-colors"
+                                >
+                                    <span>Ближайшие</span>
+                                </button>
+                                <button
+                                    :class="{ 'border-b-primary text-primary': activeTab === 'past', 'border-b-transparent text-[#888899] hover:text-white': activeTab !== 'past' }"
+                                    @click="activeTab = 'past'"
+                                    class="group inline-flex shrink-0 items-center justify-center gap-2 border-b-[3px] p-1 pb-3 text-sm font-bold tracking-wide transition-colors"
+                                >
+                                    <span>Прошедшие</span>
+                                </button>
+                            </nav>
+                        </div>
+                        <div
+                            class="flex flex-wrap items-center justify-between gap-4"
+                        >
+                            <div class="flex flex-wrap items-center gap-3">
+                                <button
+                                    class="rounded-full bg-gradient-to-br from-rose-500 to-amber-500 px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90"
+                                >
+                                    Все
+                                </button>
+                                <button
+                                    class="rounded-full border border-[#2A2A30] bg-[#1A1A1E] px-4 py-2 text-sm font-medium text-[#888899] hover:border-primary/50 hover:text-white transition-colors"
+                                >
+                                    Алгоритмы
+                                </button>
+                                <button
+                                    class="rounded-full border border-[#2A2A30] bg-[#1A1A1E] px-4 py-2 text-sm font-medium text-[#888899] hover:border-primary/50 hover:text-white transition-colors"
+                                >
+                                    Командные
+                                </button>
+                                <button
+                                    class="rounded-full border border-[#2A2A30] bg-[#1A1A1E] px-4 py-2 text-sm font-medium text-[#888899] hover:border-primary/50 hover:text-white transition-colors"
+                                >
+                                    Машинное обучение
+                                </button>
+                                <button
+                                    class="rounded-full border border-[#2A2A30] bg-[#1A1A1E] px-4 py-2 text-sm font-medium text-[#888899] hover:border-primary/50 hover:text-white transition-colors"
+                                >
+                                    Марафон
+                                </button>
+                                <button
+                                    class="rounded-full border border-[#2A2A30] bg-[#1A1A1E] px-4 py-2 text-sm font-medium text-[#888899] hover:border-primary/50 hover:text-white transition-colors"
+                                >
+                                    Все темы
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button
+                                    class="flex h-11 w-11 items-center justify-center rounded-lg border border-[#2A2A30] bg-[#1A1A1E] text-[#888899] transition-colors hover:border-primary/50 hover:text-white"
+                                >
+                                    <span
+                                        class="material-symbols-outlined text-xl"
+                                        >swap_vert</span
+                                    >
+                                </button>
+                                <button
+                                    class="flex h-11 items-center justify-center gap-2 rounded-lg border border-[#2A2A30] bg-[#1A1A1E] px-4 text-[#888899] transition-colors hover:border-primary/50 hover:text-white"
+                                >
+                                    <span
+                                        class="material-symbols-outlined text-xl"
+                                        >calendar_today</span
+                                    >
+                                    <span class="text-sm font-medium"
+                                        >Ближайшие</span
+                                    >
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        x-show="activeTab === 'all' || activeTab === 'current' || activeTab === 'upcoming'"
+                        x-transition:enter="transition-opacity ease-linear duration-300"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:enter-start="opacity-0"
+                    >
+                        <div
+                            class="grid grid-cols-1 gap-6 @[50rem]:grid-cols-2 @[75rem]:grid-cols-3"
+                        >
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-green-500"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-green-400"
+                                                >Идет сейчас</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >345 участников</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Зимний Кубок Qubit 2024
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        Ежегодный турнир для опытных
+                                        программистов с призовым фондом.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >schedule</span
+                                            >
+                                            <span>Осталось 2ч 15м</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-rose-500 to-amber-500 px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 active:scale-95"
+                                            href="#"
+                                        >
+                                            <span>Присоединиться</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >login</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-primary"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-primary"
+                                                >Скоро начнется</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >128 участников</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Марафон по алгоритмам
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        24-часовой марафон для проверки вашей
+                                        выносливости и навыков.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >event</span
+                                            >
+                                            <span>Начало через 3 дня</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg border border-amber-400 bg-amber-400/10 px-4 py-2 text-sm font-bold text-amber-300 transition-colors hover:bg-amber-400/20 active:scale-95"
+                                            href="#"
+                                        >
+                                            <span>Открыть</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >arrow_forward</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-primary"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-primary"
+                                                >Скоро начнется</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >76 участников</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Data Science Challenge
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        Решайте задачи по машинному обучению и
+                                        анализу данных.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >event</span
+                                            >
+                                            <span>Начало через 5 дней</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg border border-amber-400 bg-amber-400/10 px-4 py-2 text-sm font-bold text-amber-300 transition-colors hover:bg-amber-400/20 active:scale-95"
+                                            href="#"
+                                        >
+                                            <span>Открыть</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >arrow_forward_IOS</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        x-show="activeTab === 'all' || activeTab === 'past'"
+                        x-transition:enter="transition-opacity ease-linear duration-300"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:enter-start="opacity-0"
+                    >
+                        <div
+                            class="grid grid-cols-1 gap-6 @[50rem]:grid-cols-2 @[75rem]:grid-cols-3"
+                        >
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-red-500"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-red-400"
+                                                >Завершен</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >210 участников</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Осенний спринт
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        Быстрые задачи на скорость и точность
+                                        для всех уровней.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >event_available</span
+                                            >
+                                            <span>Завершился 1 нед. назад</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg border border-[#2A2A30] bg-[#1a1a1e] px-4 py-2 text-sm font-bold text-[#EAEAEA] transition-colors hover:border-primary/50"
+                                            href="#"
+                                        >
+                                            <span>Результаты</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >bar_chart</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-red-500"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-red-400"
+                                                >Завершен</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >154 участника</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Командное первенство
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        Соревнования для команд из 3 человек.
+                                        Проверьте свою синергию.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >event_available</span
+                                            >
+                                            <span>Завершился 1 мес. назад</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg border border-[#2A2A30] bg-[#1a1a1e] px-4 py-2 text-sm font-bold text-[#EAEAEA] transition-colors hover:border-primary/50"
+                                            href="#"
+                                        >
+                                            <span>Результаты</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >bar_chart</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="group flex flex-col rounded-xl border border-[#2A2A30] bg-[#1A1A1E]/50 transition-all hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/10"
+                            >
+                                <div class="flex flex-col p-6">
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="h-2 w-2 rounded-full bg-red-500"
+                                            ></div>
+                                            <span
+                                                class="text-sm font-medium text-red-400"
+                                                >Завершен</span
+                                            >
+                                        </div>
+                                        <span class="text-sm text-[#888899]"
+                                            >402 участника</span
+                                        >
+                                    </div>
+                                    <h3
+                                        class="mt-4 text-xl font-bold text-white"
+                                    >
+                                        Летний чемпионат Qubit
+                                    </h3>
+                                    <p class="mt-2 text-sm text-[#888899]">
+                                        Крупнейший турнир года с несколькими
+                                        отборочными этапами.
+                                    </p>
+                                </div>
+                                <div
+                                    class="mt-auto border-t border-[#2A2A30] px-6 py-4"
+                                >
+                                    <div
+                                        class="flex items-center justify-between"
+                                    >
+                                        <div
+                                            class="flex items-center gap-2 text-sm text-[#888899]"
+                                        >
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >event_available</span
+                                            >
+                                            <span>Завершился 3 мес. назад</span>
+                                        </div>
+                                        <a
+                                            class="flex items-center justify-center gap-2 rounded-lg border border-[#2A2A30] bg-[#1a1a1e] px-4 py-2 text-sm font-bold text-[#EAEAEA] transition-colors hover:border-primary/50"
+                                            href="#"
+                                        >
+                                            <span>Результаты</span>
+                                            <span
+                                                class="material-symbols-outlined text-lg"
+                                                >bar_chart</span
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <script
+            defer=""
+            src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+        ></script>
+    </body>
+</html>
