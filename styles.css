@@ -205,9 +205,12 @@ a {
 }
 .nav__link {
     font-size: 14px;
+    transition: color 0.2s ease;
 }
-.nav__link:hover {
-    color: var(--fg-strong);
+@media (hover: hover) {
+    .nav__link:hover {
+        color: var(--fg-strong);
+    }
 }
 @media (min-width: 992px) {
     .nav {
@@ -229,13 +232,16 @@ a {
     border: 1px solid transparent;
     cursor: pointer;
     color: var(--fg);
+    transition: all 0.2s ease;
 }
 .btn--muted {
     background: var(--muted);
     border-color: var(--border);
 }
-.btn--muted:hover {
-    background: var(--muted-2);
+@media (hover: hover) {
+    .btn--muted:hover {
+        background: var(--muted-2);
+    }
 }
 .btn--accent {
     background-image: linear-gradient(
@@ -248,6 +254,7 @@ a {
     border: none;
     display: flex;
     justify-content: center;
+    padding-bottom: 13px;
 }
 .btn--icon-only {
     padding: 10px;
@@ -350,8 +357,10 @@ a {
     background: var(--muted);
     border: 1px solid var(--border);
 }
-.drawer__link:hover {
-    background: var(--muted-2);
+@media (hover: hover) {
+    .drawer__link:hover {
+        background: var(--muted-2);
+    }
 }
 
 /* SIDE DOTS */
@@ -366,7 +375,7 @@ a {
     gap: 12px;
     align-items: center;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1400px) {
     .side-nav {
         display: flex;
         right: 24px;
@@ -383,8 +392,10 @@ a {
     background: var(--muted);
     transition: transform 0.2s, background 0.2s;
 }
-.side-nav__dot:hover {
-    transform: scale(1.1);
+@media (hover: hover) {
+    .side-nav__dot:hover {
+        transform: scale(1.1);
+    }
 }
 .side-nav__dot.active {
     background-image: linear-gradient(
@@ -465,8 +476,11 @@ a {
 .card--all svg {
     display: block;
 }
-.card--all:hover {
-    filter: brightness(1.05);
+@media (hover: hover) {
+    .card--all:hover {
+        filter: brightness(1.05);
+        color: #fff;
+    }
 }
 .word {
     font-weight: 1000;
@@ -1146,11 +1160,16 @@ a {
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
     transition: transform 0.15s ease, background 0.15s ease;
 }
-.card--all:hover {
-    transform: translateY(-2px);
-}
-.card--all:hover .arrow {
-    transform: translate(2px, -50%);
+@media (hover: hover) {
+    .card--all:hover {
+        transform: translateY(-2px);
+    }
+    .card--all:hover .arrow {
+        transform: translate(2px, -50%);
+    }
+    .chip:hover .arrow {
+        transform: translateX(2px);
+    }
 }
 .card--all:active {
     transform: translateY(0);
@@ -1186,37 +1205,51 @@ a {
 }
 
 /* Подъём и усиление тени при hover */
-.btn:hover,
-.topbar-btn:hover,
-.drawer__link:hover,
-.drawer__close:hover,
-.modal__close:hover,
-#burger:hover,
-#drawerClose:hover,
-#modalClose:hover {
-    transform: translateY(calc(-1 * var(--btn-float)));
+@media (hover: hover) {
+    .btn:hover,
+    .topbar-btn:hover,
+    .drawer__link:hover,
+    .drawer__close:hover,
+    .modal__close:hover,
+    #burger:hover,
+    #drawerClose:hover,
+    #modalClose:hover {
+        transform: translateY(calc(-1 * var(--btn-float)));
+        color: #fff;
+        background-image: linear-gradient(
+            90deg,
+            var(--accent-from),
+            var(--accent-to)
+        );
+    }
 }
 
 /* Акцентным добавим чуть более заметную тень при hover */
-.btn--accent:hover {
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
-    filter: saturate(1.05);
+@media (hover: hover) {
+    .btn--accent:hover {
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+        filter: saturate(1.05);
+    }
 }
 
 /* «Мутным» — лёгкое подсветление фона при hover */
-.btn--muted:hover,
-.drawer__link:hover,
-.topbar-btn:hover {
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
-    filter: brightness(1.03);
+@media (hover: hover) {
+    .btn--muted:hover,
+    .drawer__link:hover,
+    .topbar-btn:hover {
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+        filter: brightness(1.03);
+    }
 }
 
 /* Икон-кнопки — микро-масштаб, чтобы не «прыгали» слишком */
-.btn--icon-only:hover,
-.drawer__close:hover,
-.modal__close:hover,
-#burger:hover {
-    transform: translateY(calc(-0.6 * var(--btn-float))) scale(1.02);
+@media (hover: hover) {
+    .btn--icon-only:hover,
+    .drawer__close:hover,
+    .modal__close:hover,
+    #burger:hover {
+        transform: translateY(calc(-0.6 * var(--btn-float))) scale(1.02);
+    }
 }
 
 /* Состояние active (нажатие) — опускаем обратно и немного приглушаем */
@@ -1271,8 +1304,10 @@ a {
     }
 }
 
-.modal__close:hover {
-    background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
+@media (hover: hover) {
+    .modal__close:hover {
+        background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
+    }
 }
 
 /* герой-зона занимает экран МИНУС фиксированный хэдэр */
@@ -1311,6 +1346,7 @@ a {
     color: #0b1220;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
     transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    margin-top: 20px;
 }
 .btn--hero::after {
     content: "";
@@ -1326,10 +1362,12 @@ a {
 }
 
 /* ховер/актив — как у плитки "Все турниры" */
-.btn--hero:hover {
-    transform: translateY(-2px);
-    filter: saturate(1.05);
-    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+@media (hover: hover) {
+    .btn--hero:hover {
+        transform: translateY(-2px);
+        filter: saturate(1.05);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
+    }
 }
 .btn--hero:active {
     transform: translateY(0) scale(0.99);
@@ -1428,10 +1466,15 @@ a {
 .drawer__item + .drawer__item {
     margin-top: 10px;
 }
-.drawer__item:hover {
-    transform: translateY(-2px);
-    background: var(--muted-2);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+@media (hover: hover) {
+    .drawer__item:hover {
+        transform: translateY(-2px);
+        background: var(--muted-2);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.14);
+    }
+    .drawer__item:hover .chev {
+        transform: translateX(2px);
+    }
 }
 .drawer__item:active {
     transform: translateY(0) scale(0.99);
@@ -1580,55 +1623,7 @@ a {
         width: 200px;
     }
 }
-/* CTA-строка "Ещё" внизу таблицы рейтинга */
-.row--cta {
-    display: grid;
-    grid-template-columns: 1fr auto; /* текст слева, стрелка справа */
-    align-items: center;
-    padding: 12px 14px; /* как у .row */
-    min-height: calc(44px + 24px); /* высота как у ряда с rankchip 44px */
-    background-image: linear-gradient(
-        135deg,
-        var(--accent-from),
-        var(--accent-to)
-    );
-    color: #0b1220;
-    font-weight: 900;
-    border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-.row--cta .label {
-    font-size: 16px;
-    letter-spacing: 0.01em;
-    margin-bottom: 2px;
-}
-.row--cta .arrow {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    flex: 0 0 auto;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
-        0 2px 8px rgba(0, 0, 0, 0.18);
-}
-:root:not([data-theme="light"]) .row--cta .arrow {
-    background: rgba(255, 255, 255, 0.92);
-    color: #0b1220;
-}
-:root[data-theme="light"] .row--cta .arrow {
-    background: rgba(255, 255, 255, 0.92);
-    color: #0b1220;
-}
 
-/* ховер/нажатие как у остальных кнопок */
-.row--cta:hover {
-    filter: saturate(1.05);
-    transform: translateY(-2px);
-}
-.row--cta:active {
-    filter: brightness(0.98);
-    transform: translateY(0) scale(0.99);
-}
 /* прячем верхнюю кнопку "Полный рейтинг" в секции #top */
 #top .topbar-btn {
     display: none;
@@ -1694,6 +1689,7 @@ a {
     filter: saturate(1.05);
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    color: #fff;
 }
 .row--cta:active .chip {
     transform: translateY(0) scale(0.99);
@@ -2341,13 +2337,6 @@ a {
 
 /* 1. HOVER (Любое состояние) - Яркий фон, белая иконка */
 
-.input-toggle:hover span {
-    background: none;
-    -webkit-text-fill-color: currentColor;
-    color: #fff;
-    transform: scale(1.05);
-}
-
 /* 2. ACTIVE (Открыт, покой) - Прозрачный центр, яркая рамка */
 .input-toggle.is-active {
     background: linear-gradient(
@@ -2361,11 +2350,30 @@ a {
     color: transparent; /* Текст градиентный через span */
 }
 
-.input-toggle:hover {
-    border-color: transparent;
+/* FIX: На мобиле при клике (active) цвет не должен слетать */
+.input-toggle.is-active:active span,
+.input-toggle.is-active:focus span {
     background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
-    box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
-    color: #fff !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: transparent !important;
+}
+
+@media (hover: hover) {
+    /* 1. HOVER (Любое состояние) - Яркий фон, белая иконка */
+    .input-toggle:hover {
+        border-color: transparent;
+        background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
+        box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
+        color: #fff !important;
+    }
+    .input-toggle:hover span {
+        background: none !important;
+        -webkit-text-fill-color: #fff !important;
+        color: #fff !important;
+        transform: scale(1.05);
+    }
 }
 
 /* Рамка через псевдо-элемент */
@@ -2479,4 +2487,100 @@ a {
 
 .modal__panel--code {
     width: auto;
+}
+
+.btn-nav {
+    background-image: linear-gradient(
+        135deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    margin-top: 20px !important;
+}
+
+@media (hover: hover) {
+    .btn-nav:hover {
+        background-image: linear-gradient(
+            135deg,
+            var(--accent-from),
+            var(--accent-to)
+        );
+        color: #fff;
+    }
+}
+
+/* =========================================
+   6. RESEND BUTTON & MOBILE FIXES (325px)
+   ========================================= */
+
+.btn--resend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: not-allowed;
+    transition: all 0.2s ease;
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+
+.btn--resend.is-active {
+    background-image: linear-gradient(
+        90deg,
+        var(--accent-from),
+        var(--accent-to)
+    );
+    color: #fff;
+    cursor: pointer;
+    border: none;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+@media (max-width: 350px) {
+    /* Адаптация сетки кода под узкие экраны */
+    .code-grid {
+        gap: 3px !important;
+        grid-template-columns: repeat(4, 1fr) 8px repeat(4, 1fr) !important;
+    }
+    .code-cell {
+        width: auto !important; /* тянемся */
+        min-width: 24px;
+        height: 36px;
+        font-size: 16px;
+        padding: 0;
+    }
+    #codeModal .modal__panel,
+    #verifyModal .modal__panel {
+        padding: 12px 10px;
+    }
+    .modal__panel {
+        width: 95vw !important;
+    }
+    /* Кнопки тоже чуть компактнее */
+    .btn {
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+    .brand__text {
+        display: none; /* Скрываем текст бренда если совсем узко, оставляем лого */
+    }
+    .header__actions {
+        gap: 8px;
+    }
+    .section__title {
+        font-size: 20px;
+    }
+}
+
+.verify__note {
+    margin-top: 0 !important;
+}
+
+.hscroll > * {
+    scroll-snap-align: center; /* Центрируем, чтобы не было жесткой привязки к левому краю */
 }

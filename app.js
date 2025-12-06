@@ -269,13 +269,101 @@ const DYNAMIC_MODALS_HTML = `
       </form>
     </div>
   </div>
+  <!-- Подтверждение почты (Verify) -->
+  <div id="verifyModal" class="modal" hidden>
+    <div class="modal__backdrop" data-close="verifyModal"></div>
+    <div class="modal__panel modal__panel--code" role="dialog" aria-modal="true" aria-labelledby="verifyTitle">
+      <div class="modal__head">
+        <div id="verifyTitle" class="modal__title">Подтверждение</div>
+        <button class="modal__close" data-close="verifyModal" aria-label="Закрыть">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button></div>
+      <form class="modal__form" id="verifyForm" novalidate>
+        <div class="code-grid">
+          ${Array(8)
+              .fill(
+                  '<input class="input code-cell" maxlength="1" pattern="[A-Za-z0-9]" autocomplete="off">'
+              )
+              .map((el, i) =>
+                  i === 4 ? '<div class="code-sep">—</div>' + el : el
+              )
+              .join("")}
+        </div>
+        <input type="hidden" name="code" value="">
+        <button type="button" id="resendBtn" class="btn btn--resend is-disabled" disabled style="width:100%">
+            <span>Отправить код повторно</span>
+            <span id="resendTimer">00:59</span>
+        </button>
+        <button class="btn btn--accent btn--block is-disabled" type="submit" disabled>Подтвердить</button>
+        <div class="modal__note verify__note" style="text-align:center; color: var(--fg-muted); font-size: 13px;">Код отправлен на вашу почту</div>
+      </form>
+    </div>
+  </div>
+  <!-- Смена пароля (New Password) -->
+  <div id="newPassModal" class="modal" hidden>
+    <div class="modal__backdrop" data-close="newPassModal"></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="newPassTitle">
+      <div class="modal__head">
+        <div id="newPassTitle" class="modal__title">Новый пароль</div>
+        <button class="modal__close" data-close="newPassModal" aria-label="Закрыть">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button></div>
+      <form class="modal__form" id="newPassForm" novalidate>
+        <div class="field input-group"><label>Новый пароль</label><input class="input" type="password" name="pass" placeholder="********" minlength="8" data-required data-type="passrule"><button type="button" class="input-toggle" aria-label="Показать пароль"></button><div class="error" data-error-for="pass"></div></div>
+        <div class="field input-group"><label>Повторите пароль</label><input class="input" type="password" name="pass2" placeholder="********" data-required data-type="match:pass"><button type="button" class="input-toggle" aria-label="Показать пароль"></button><div class="error" data-error-for="pass2"></div></div>
+        <button class="btn btn--accent btn--block is-disabled" type="submit" disabled>Изменить пароль</button>
+      </form>
+    </div>
+  </div>
 `;
+
+// Храним, откуда пришли на Verify (чтобы знать, куда редиректить)
+let verifySource = null;
 
 function mountModals() {
     if (document.getElementById("regModal")) return; // Уже есть
     const wrap = document.createElement("div");
     wrap.innerHTML = DYNAMIC_MODALS_HTML;
     document.body.appendChild(wrap);
+}
+
+// Timer Logic
+let timerInterval = null;
+function startResendTimer() {
+    const btn = document.getElementById("resendBtn");
+    const timerDisplay = document.getElementById("resendTimer");
+    if (!btn || !timerDisplay) return;
+
+    let seconds = 59; // 60 usually starts at 59 visually
+
+    // Disable button
+    btn.disabled = true;
+    btn.classList.add("is-disabled");
+    btn.classList.remove("is-active");
+
+    const updateDisplay = () => {
+        const m = Math.floor(seconds / 60)
+            .toString()
+            .padStart(2, "0");
+        const s = (seconds % 60).toString().padStart(2, "0");
+        timerDisplay.textContent = `${m}:${s}`;
+    };
+
+    updateDisplay();
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        seconds--;
+        if (seconds < 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = "00:00";
+            // Enable button (make it active gradient)
+            btn.disabled = false;
+            btn.classList.remove("is-disabled");
+            btn.classList.add("is-active");
+            return;
+        }
+        updateDisplay();
+    }, 1000);
 }
 
 // Управление состоянием модалок
@@ -313,6 +401,11 @@ function openModal(id) {
     // Фокус на первом элементе
     const firstInput = el.querySelector("input, button");
     if (firstInput) firstInput.focus();
+
+    // Запуск таймера, если это verifyModal
+    if (id === "verifyModal") {
+        startResendTimer();
+    }
 }
 
 function closeModal(id, immediate = false) {
@@ -492,8 +585,8 @@ function setupForm(form) {
             if (!el.checked) isValid = false;
         });
 
-        // 8-значный код
-        if (form.id === "codeForm") {
+        // 8-значный код (Login Code или Verify)
+        if (form.id === "codeForm" || form.id === "verifyForm") {
             const codeCells = Array.from(form.querySelectorAll(".code-cell"));
             const fullCode = codeCells.map((c) => c.value).join("");
             if (fullCode.length < 8) isValid = false;
@@ -521,12 +614,50 @@ function setupForm(form) {
         // Здесь можно добавить отправку данных
         if (form.id === "regForm") {
             e.preventDefault();
-            openModal("profileModal"); // Переход к профилю после регистрации
+            verifySource = "reg";
+            openModal("verifyModal");
+        } else if (form.id === "forgotForm") {
+            e.preventDefault();
+            verifySource = "forgot";
+            openModal("verifyModal");
+        } else if (form.id === "verifyForm") {
+            e.preventDefault();
+            if (verifySource === "forgot") {
+                openModal("newPassModal");
+            } else {
+                openModal("profileModal"); // defualt for reg
+            }
+        } else if (form.id === "newPassForm") {
+            e.preventDefault();
+            // Пароль изменен -> авторизация или успех
+            closeAnyModal(); // Или открыть authModal
+            alert("Пароль успешно изменен");
         }
     });
 
+    // --- 3.1 Блокировка кириллицы (live replace) ---
+    // Для логина (допустим, латиница + цифры + _)
+    const loginInput = form.querySelector('input[name="login"]');
+    if (loginInput) {
+        loginInput.addEventListener("input", (e) => {
+            // Убираем все кроме a-z, A-Z, 0-9, _
+            e.target.value = e.target.value.replace(/[^a-zA-Z0-9_]/g, "");
+            validate();
+        });
+    }
+    // Для пароля (латиница + символы)
+    const passInputs = form.querySelectorAll('input[type="password"]');
+    passInputs.forEach((p) => {
+        p.addEventListener("input", (e) => {
+            // Убираем кириллицу [а-яА-ЯёЁ]
+            // Можно жестче: replace(/[^a-zA-Z0-9!@#$%^&*()]/g, "") - но пока только блок ру
+            e.target.value = e.target.value.replace(/[а-яА-ЯёЁ]/g, "");
+            validate();
+        });
+    });
+
     // --- 4. Код (8 ячеек) ---
-    if (form.id === "codeForm") {
+    if (form.id === "codeForm" || form.id === "verifyForm") {
         const cells = form.querySelectorAll(".code-cell");
         cells.forEach((cell, idx) => {
             cell.addEventListener("input", (e) => {
@@ -573,18 +704,25 @@ function initDragScroll() {
     let scrollLeft;
     let moved = false;
 
+    const stop = () => {
+        isDown = false;
+        slider.style.cursor = "grab";
+        slider.classList.remove("dragging");
+        slider.style.removeProperty("scroll-behavior");
+        slider.style.removeProperty("scroll-snap-type"); // Re-enable snap
+    };
+
     slider.addEventListener("mousedown", (e) => {
         isDown = true;
-        slider.classList.add("dragging"); // CSS class can set cursor: grabbing
+        slider.classList.add("dragging");
+        slider.style.cursor = "grabbing";
+        slider.style.scrollBehavior = "auto"; // Instant updates
+        slider.style.scrollSnapType = "none"; // Disable snap while dragging
         startX = e.pageX - slider.offsetLeft;
         scrollLeft = slider.scrollLeft;
         moved = false;
     });
 
-    const stop = () => {
-        isDown = false;
-        slider.classList.remove("dragging");
-    };
     slider.addEventListener("mouseleave", stop);
     slider.addEventListener("mouseup", stop);
 
@@ -617,6 +755,35 @@ function initDragScroll() {
     );
     btnRight?.addEventListener("click", () =>
         slider.scrollBy({ left: 300, behavior: "smooth" })
+    );
+
+    // Поддержка колесика мыши (вертикальный скролл -> горизонтальный)
+    // Нюанс: обычный wheel дает дельту, мы хотим плавность.
+    // Но браузерная плавность лучше всего работает на native scroll.
+    // Мы просто транслируем deltaY в scrollLeft.
+    slider.addEventListener(
+        "wheel",
+        (e) => {
+            if (e.deltaY === 0) return;
+            // Блокируем стандартный вертикальный скролл страницы, если крутим над слайдером
+            e.preventDefault();
+
+            // Отключаем snap на время скролла колесом, чтобы не дергалось
+            slider.style.scrollBehavior = "auto";
+            slider.style.scrollSnapType = "none";
+
+            slider.scrollLeft += e.deltaY;
+
+            // Вернуть snap можно через debounce, но проще оставить как есть,
+            // пока мышь над элементом, или принимать рывки.
+            // Попробуем возвращать snap через таймер:
+            clearTimeout(slider.snapTimeout);
+            slider.snapTimeout = setTimeout(() => {
+                slider.style.removeProperty("scroll-snap-type");
+                slider.style.removeProperty("scroll-behavior");
+            }, 150);
+        },
+        { passive: false }
     );
 }
 
@@ -678,4 +845,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. Скролл
     initDragScroll();
+
+    // 4. Ресенд
+    document.getElementById("resendBtn")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        // Тут логика отправки кода на бэк...
+        startResendTimer();
+    });
+
+    // 5. Scroll Logic fix
+    const s = document.getElementById("hscroll");
+    if (s) {
+        let wheelTimer;
+        s.addEventListener(
+            "wheel",
+            (e) => {
+                if (e.deltaY === 0) return;
+                // НЕ блокируем стандартный скролл (e.preventDefault), чтобы страница крутилась.
+                // Но мы всё равно перехватываем движение для нашего слайдера.
+
+                // Если слайдер может крутиться в эту сторону - крутим его.
+                // Если нет (дошли до края) - пусть крутится страница.
+                // Упрощенно: просто крутим слайдер, если он под мышкой,
+                // но при этом страница тоже поедет.
+                // Чтобы страница НЕ ехала, когда мы крутим слайдер - нужно preventDefault.
+                // В вашем запросе: "привязки вообще не было".
+                // Я уберу preventDefault и snap.
+
+                // Отключаем snap
+                s.style.scrollBehavior = "auto";
+                s.style.scrollSnapType = "none";
+
+                // Если нужно, чтобы страница скроллилась ТОЖЕ - убираем preventDefault.
+                // Если нужно только слайдер - оставляем.
+                // Вы просили "если я кручу колесиком привязки вообще не было".
+                // Я сделаю так: слайдер крутится, страница крутится (стандартное поведение), snap выключен.
+
+                s.scrollLeft += e.deltaY;
+
+                clearTimeout(wheelTimer);
+                wheelTimer = setTimeout(() => {
+                    // Возвращаем snap, чтобы потом пальцем было удобно
+                    // НО "если я отпустил то он докручивается до след блока"
+
+                    const cardWidth =
+                        s.firstElementChild.getBoundingClientRect().width + 16;
+                    const currentScroll = s.scrollLeft;
+                    const index = Math.round(currentScroll / cardWidth);
+                    const target = index * cardWidth;
+
+                    s.style.scrollBehavior = "smooth";
+                    s.scrollTo({ left: target });
+
+                    setTimeout(() => {
+                        s.style.scrollSnapType = "x mandatory";
+                        s.style.removeProperty("scroll-behavior");
+                    }, 400);
+                }, 60);
+
+                // Чтобы страница не скакала, если мы "внутри" слайдера активно крутим:
+                // обычно хорошая практика - если слайдер скроллится, блокируем страницу.
+                // Если уперлись в край - пускаем страницу.
+                const maxScroll = s.scrollWidth - s.clientWidth;
+                if (
+                    (s.scrollLeft > 0 && e.deltaY < 0) ||
+                    (s.scrollLeft < maxScroll && e.deltaY > 0)
+                ) {
+                    e.preventDefault(); // Блокируем верт. скролл СТРАНИЦЫ, пока есть куда крутить слайдер.
+                }
+            },
+            { passive: false }
+        );
+    }
 });
