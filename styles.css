@@ -1270,6 +1270,11 @@ a {
         transform: translateY(-1px);
     }
 }
+
+.modal__close:hover {
+    background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
+}
+
 /* герой-зона занимает экран МИНУС фиксированный хэдэр */
 .hero__stage {
     position: sticky; /* можно оставить sticky */
@@ -1912,6 +1917,11 @@ a {
 }
 .input-toggle:hover {
     filter: brightness(1.05);
+    border-color: linear-gradient(
+        176.35deg,
+        rgba(244, 63, 94, 0.1),
+        rgba(245, 158, 11, 0.1) 100%
+    );
 }
 .input-toggle:active {
     transform: translateY(-50%) scale(0.98);
@@ -2287,27 +2297,103 @@ a {
 .field.input-group .input-toggle {
     grid-row: 2;
     grid-column: 2;
-    position: static;
+    position: relative; /* Для ::before */
+    z-index: 0; /* Контекст наложения */
+    top: auto; /* Сброс top: 50% */
+    right: auto; /* Сброс right: 10px */
     transform: none;
-    margin-left: 8px;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
+    margin-left: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     display: grid;
     place-items: center;
+
+    /* Base style (Inactive) */
     background: var(--muted);
     border: 1px solid var(--border);
-    color: var(--fg);
+    color: var(--fg-muted);
+    cursor: pointer;
+
+    /* Material Symbols font settings */
+    font-family: "Material Symbols Outlined";
+    font-weight: 300;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+    transition: all 0.2s ease;
 }
-.input-toggle svg {
-    display: block;
-    transition: transform 0.12s ease, opacity 0.12s ease;
+
+/* Span внутри toggle для градиентного текста */
+.input-toggle span {
+    display: inline-block;
+    color: currentColor;
+    transition: color 0.2s ease;
 }
+
+/* --- STATES --- */
+
+/* 1. HOVER (Любое состояние) - Яркий фон, белая иконка */
+
+.input-toggle:hover span {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+/* 2. ACTIVE (Открыт, покой) - Прозрачный центр, яркая рамка */
+.input-toggle.is-active {
+    background: linear-gradient(
+            176.35deg,
+            rgba(244, 63, 94, 0.1),
+            rgba(245, 158, 11, 0.1)
+        )
+        padding-box !important;
+    border: 1px solid transparent;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.25);
+    color: transparent; /* Текст градиентный через span */
+}
+
 .input-toggle:hover {
-    filter: brightness(1.05);
+    border-color: transparent;
+    background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
+    box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
+    color: #fff !important;
 }
+
+/* Рамка через псевдо-элемент */
+.input-toggle.is-active::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(176.35deg, #f43f5e, #f59e0b);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Градиентный текст иконки (только в покое) */
+.input-toggle.is-active:not(:hover) span {
+    background: linear-gradient(176.35deg, #f43f5e, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .input-toggle:active {
-    transform: scale(0.98);
+    transform: scale(0.96);
 }
 
 /* Подписи об ошибках под паролями */
