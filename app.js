@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <!-- Вход по коду — 8 ячеек -->
       <div id="codeModal" class="modal" hidden>
         <div class="modal__backdrop" data-close="codeModal"></div>
-        <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
+        <div class="modal__panel modal__panel--code" role="dialog" aria-modal="true" aria-labelledby="codeTitle">
           <div class="modal__head">
             <div id="codeTitle" class="modal__title">Вход по коду</div>
             <button class="modal__close" data-close="codeModal" aria-label="Закрыть">
