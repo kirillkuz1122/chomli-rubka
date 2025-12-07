@@ -703,6 +703,7 @@ function initDragScroll() {
     let startX;
     let scrollLeft;
     let moved = false;
+    let wheelTimer;
 
     const stop = () => {
         isDown = false;
@@ -757,31 +758,48 @@ function initDragScroll() {
         slider.scrollBy({ left: 300, behavior: "smooth" })
     );
 
-    // Поддержка колесика мыши (вертикальный скролл -> горизонтальный)
-    // Нюанс: обычный wheel дает дельту, мы хотим плавность.
-    // Но браузерная плавность лучше всего работает на native scroll.
-    // Мы просто транслируем deltaY в scrollLeft.
+    // Поддержка колесика мыши (Advanced Logic with Smart Snap)
     slider.addEventListener(
         "wheel",
         (e) => {
             if (e.deltaY === 0) return;
-            // Блокируем стандартный вертикальный скролл страницы, если крутим над слайдером
-            e.preventDefault();
 
-            // Отключаем snap на время скролла колесом, чтобы не дергалось
+            // Отключаем snap на время скролла
             slider.style.scrollBehavior = "auto";
             slider.style.scrollSnapType = "none";
 
             slider.scrollLeft += e.deltaY;
 
-            // Вернуть snap можно через debounce, но проще оставить как есть,
-            // пока мышь над элементом, или принимать рывки.
-            // Попробуем возвращать snap через таймер:
-            clearTimeout(slider.snapTimeout);
-            slider.snapTimeout = setTimeout(() => {
-                slider.style.removeProperty("scroll-snap-type");
-                slider.style.removeProperty("scroll-behavior");
-            }, 150);
+            // Логика авто-доводки (debounce)
+            clearTimeout(wheelTimer);
+            wheelTimer = setTimeout(() => {
+                // Если элемент карточки существует
+                if (slider.firstElementChild) {
+                    const cardWidth =
+                        slider.firstElementChild.getBoundingClientRect().width +
+                        16; // 16 = gap
+                    const currentScroll = slider.scrollLeft;
+                    const index = Math.round(currentScroll / cardWidth);
+                    const target = index * cardWidth;
+
+                    slider.style.scrollBehavior = "smooth";
+                    slider.scrollTo({ left: target });
+
+                    setTimeout(() => {
+                        slider.style.scrollSnapType = "x mandatory";
+                        slider.style.removeProperty("scroll-behavior");
+                    }, 400);
+                }
+            }, 60);
+
+            // Блокируем вертикальный скролл страницы, пока слайдер крутится (не уперся в край)
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+            if (
+                (slider.scrollLeft > 0 && e.deltaY < 0) ||
+                (slider.scrollLeft < maxScroll && e.deltaY > 0)
+            ) {
+                e.preventDefault();
+            }
         },
         { passive: false }
     );
@@ -853,68 +871,5 @@ document.addEventListener("DOMContentLoaded", () => {
         startResendTimer();
     });
 
-    // 5. Scroll Logic fix
-    const s = document.getElementById("hscroll");
-    if (s) {
-        let wheelTimer;
-        s.addEventListener(
-            "wheel",
-            (e) => {
-                if (e.deltaY === 0) return;
-                // НЕ блокируем стандартный скролл (e.preventDefault), чтобы страница крутилась.
-                // Но мы всё равно перехватываем движение для нашего слайдера.
-
-                // Если слайдер может крутиться в эту сторону - крутим его.
-                // Если нет (дошли до края) - пусть крутится страница.
-                // Упрощенно: просто крутим слайдер, если он под мышкой,
-                // но при этом страница тоже поедет.
-                // Чтобы страница НЕ ехала, когда мы крутим слайдер - нужно preventDefault.
-                // В вашем запросе: "привязки вообще не было".
-                // Я уберу preventDefault и snap.
-
-                // Отключаем snap
-                s.style.scrollBehavior = "auto";
-                s.style.scrollSnapType = "none";
-
-                // Если нужно, чтобы страница скроллилась ТОЖЕ - убираем preventDefault.
-                // Если нужно только слайдер - оставляем.
-                // Вы просили "если я кручу колесиком привязки вообще не было".
-                // Я сделаю так: слайдер крутится, страница крутится (стандартное поведение), snap выключен.
-
-                s.scrollLeft += e.deltaY;
-
-                clearTimeout(wheelTimer);
-                wheelTimer = setTimeout(() => {
-                    // Возвращаем snap, чтобы потом пальцем было удобно
-                    // НО "если я отпустил то он докручивается до след блока"
-
-                    const cardWidth =
-                        s.firstElementChild.getBoundingClientRect().width + 16;
-                    const currentScroll = s.scrollLeft;
-                    const index = Math.round(currentScroll / cardWidth);
-                    const target = index * cardWidth;
-
-                    s.style.scrollBehavior = "smooth";
-                    s.scrollTo({ left: target });
-
-                    setTimeout(() => {
-                        s.style.scrollSnapType = "x mandatory";
-                        s.style.removeProperty("scroll-behavior");
-                    }, 400);
-                }, 60);
-
-                // Чтобы страница не скакала, если мы "внутри" слайдера активно крутим:
-                // обычно хорошая практика - если слайдер скроллится, блокируем страницу.
-                // Если уперлись в край - пускаем страницу.
-                const maxScroll = s.scrollWidth - s.clientWidth;
-                if (
-                    (s.scrollLeft > 0 && e.deltaY < 0) ||
-                    (s.scrollLeft < maxScroll && e.deltaY > 0)
-                ) {
-                    e.preventDefault(); // Блокируем верт. скролл СТРАНИЦЫ, пока есть куда крутить слайдер.
-                }
-            },
-            { passive: false }
-        );
-    }
+    // 5. Scroll Logic fix - Moved to initDragScroll to avoid Duplication
 });
