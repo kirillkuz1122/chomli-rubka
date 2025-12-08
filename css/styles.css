@@ -1855,7 +1855,7 @@ a {
     width: 12px;
     height: 12px;
     border-radius: 3px;
-    background: rgba(0, 0, 0, 0.18);
+    background: rgba(255, 255, 255, 1);
     -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>')
         center/contain no-repeat;
     mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>')
@@ -2350,6 +2350,16 @@ a {
     color: transparent; /* Текст градиентный через span */
 }
 
+:root[data-theme="light"] .input-toggle.is-active {
+    background: linear-gradient(
+            176.35deg,
+            rgba(244, 63, 94, 0.2),
+            rgba(245, 158, 11, 0.2)
+        )
+        padding-box !important;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.35);
+}
+
 /* FIX: На мобиле при клике (active) цвет не должен слетать */
 .input-toggle.is-active:active span,
 .input-toggle.is-active:focus span {
@@ -2362,13 +2372,17 @@ a {
 
 @media (hover: hover) {
     /* 1. HOVER (Любое состояние) - Яркий фон, белая иконка */
-    .input-toggle:hover {
+    .input-toggle:hover,
+    .input-toggle.is-active:hover,
+    .input-toggle:focus:hover {
         border-color: transparent;
         background: linear-gradient(176.35deg, #f43f5e, #f59e0b) !important;
         box-shadow: 0 0 16px rgba(244, 63, 94, 0.4);
         color: #fff !important;
     }
-    .input-toggle:hover span {
+    .input-toggle:hover span,
+    .input-toggle.is-active:hover span,
+    .input-toggle:focus:hover span {
         background: none !important;
         -webkit-text-fill-color: #fff !important;
         color: #fff !important;
@@ -2583,4 +2597,51 @@ a {
 
 .hscroll > * {
     scroll-snap-align: center; /* Центрируем, чтобы не было жесткой привязки к левому краю */
+}
+
+/* Valid input glowing state (matches .input-toggle.is-active) */
+.input.is-valid {
+    border: 1px solid transparent !important;
+    background: linear-gradient(
+                176.35deg,
+                rgba(244, 63, 94, 0.1),
+                rgba(245, 158, 11, 0.1)
+            )
+            padding-box,
+        linear-gradient(var(--bg-1), var(--bg-1)) padding-box,
+        linear-gradient(176.35deg, #f43f5e, #f59e0b) border-box !important;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.25);
+    background-origin: border-box;
+}
+
+/* Fix for light mode (shadow visibility) */
+:root[data-theme="light"] .input.is-valid {
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.35);
+    background: linear-gradient(
+                176.35deg,
+                rgba(244, 63, 94, 0.2),
+                rgba(245, 158, 11, 0.2)
+            )
+            padding-box,
+        linear-gradient(var(--bg-1), var(--bg-1)) padding-box,
+        linear-gradient(176.35deg, #f43f5e, #f59e0b) border-box !important;
+}
+
+.reg-link {
+    text-decoration: none;
+    border-bottom: 1px solid;
+    border-image: linear-gradient(
+            176.35deg,
+            rgba(244, 63, 94, 1),
+            rgba(245, 158, 11, 1)
+        )
+        1;
+    background-image: linear-gradient(
+        176.35deg,
+        rgba(244, 63, 94, 1),
+        rgba(245, 158, 11, 1)
+    ) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
 }

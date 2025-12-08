@@ -179,7 +179,7 @@ const DYNAMIC_MODALS_HTML = `
         <div class="field"><label>Почта</label><input class="input" type="email" name="email" data-required data-type="email"><div class="error" data-error-for="email"></div></div>
         <div class="field input-group"><label>Пароль</label><input class="input" type="password" name="pass" placeholder="********" minlength="8" data-required data-type="passrule"><button type="button" class="input-toggle" aria-label="Показать пароль"></button><div class="error" data-error-for="pass"></div></div>
         <div class="field input-group"><label>Повторите пароль</label><input class="input" type="password" name="pass2" placeholder="********" data-required data-type="match:pass"><button type="button" class="input-toggle" aria-label="Показать пароль"></button><div class="error" data-error-for="pass2"></div></div>
-        <label class="checkbox"><input type="checkbox" name="agree" data-required-check><span>Принимаю условия соглашения</span></label>
+        <label class="checkbox"><input type="checkbox" name="agree" data-required-check><span>Принимаю <a href="#" class="reg-link">условия соглашения</a></span></label>
         <button class="btn btn--accent btn--block is-disabled" type="submit" disabled>Зарегистрироваться</button>
         <div class="form__links"><a href="#" data-open="authModal">Уже есть аккаунт? Войти</a></div>
       </form>
@@ -372,7 +372,11 @@ let activeModal = null;
 function resetForm(form) {
     if (!form) return;
     form.reset();
-    form.querySelectorAll(".code-cell").forEach((i) => (i.value = ""));
+    form.querySelectorAll(".input").forEach((i) => {
+        i.classList.remove("is-valid");
+        // Also clear code values explicitly just in case
+        if (i.classList.contains("code-cell")) i.value = "";
+    });
     form.querySelectorAll(".error").forEach((e) => (e.textContent = ""));
     const btn = form.querySelector('button[type="submit"]');
     if (btn) {
@@ -537,18 +541,73 @@ function setupForm(form) {
 
     // --- 2. Логика валидации ---
     const validate = () => {
-        let isValid = true;
+        let isFormValid = true;
 
+        // Определяем валидность конкретного поля (для подсветки)
+        // Правила: не пустое, проходит свои проверки.
+        // Если поле необязательное и пустое – оно "ок", но не "выполнено", поэтому не светится.
+        const setValid = (el, valid) => {
+            el.classList.toggle("is-valid", valid);
+        };
+
+        const inputs = form.querySelectorAll(".input");
+        inputs.forEach((el) => {
+            let isValidField = true;
+            const val = el.value.trim();
+            const type = el.dataset.type;
+
+            // Если пустое
+            if (!val) {
+                // Если обязательное - ошибка поля
+                if (el.hasAttribute("data-required")) {
+                    isValidField = false;
+                } else {
+                    // Пустое и необязательное -> не ошибка, но и не "valid" для подсветки
+                    isValidField = false;
+                }
+            }
+
+            // Email
+            if (isValidField && type === "email" && !validators.email(val)) {
+                isValidField = false;
+            }
+
+            // Passrule
+            if (isValidField && type === "passrule" && !validators.pass(val)) {
+                isValidField = false;
+            }
+
+            // Match
+            if (isValidField && type && type.startsWith("match:")) {
+                const targetName = type.split(":")[1];
+                const target = form.elements[targetName];
+                if (target && val !== target.value) isValidField = false;
+            }
+
+            // Code cells (pattern check mainly implicitly via input mask, but check length/exist)
+            if (el.classList.contains("code-cell") && !val) {
+                isValidField = false;
+            }
+
+            // Применяем класс, если поле заполнено и корректно
+            if (val && isValidField) {
+                setValid(el, true);
+            } else {
+                setValid(el, false);
+            }
+        });
+
+        // Глобальная проверка формы (блокировка кнопки)
         // Обязательные поля
         form.querySelectorAll("[data-required]").forEach((el) => {
-            if (!el.value.trim()) isValid = false;
+            if (!el.value.trim()) isFormValid = false;
         });
 
         // Email
         form.querySelectorAll('[data-type="email"]').forEach((el) => {
             const err = form.querySelector(`[data-error-for="${el.name}"]`);
             if (el.value && !validators.email(el.value)) {
-                isValid = false;
+                isFormValid = false;
                 if (err) err.textContent = "Некорректный E-mail";
             } else if (err) {
                 err.textContent = "";
@@ -559,7 +618,7 @@ function setupForm(form) {
         form.querySelectorAll('[data-type="passrule"]').forEach((el) => {
             const err = form.querySelector(`[data-error-for="${el.name}"]`);
             if (el.value && !validators.pass(el.value)) {
-                isValid = false;
+                isFormValid = false;
                 if (err) err.textContent = "Мин. 8 символов, латиница";
             } else if (err) {
                 err.textContent = "";
@@ -573,7 +632,7 @@ function setupForm(form) {
             const err = form.querySelector(`[data-error-for="${el.name}"]`);
 
             if (target && el.value !== target.value) {
-                isValid = false;
+                isFormValid = false;
                 if (err) err.textContent = "Пароли не совпадают";
             } else if (err) {
                 err.textContent = "";
@@ -582,22 +641,22 @@ function setupForm(form) {
 
         // Чекбоксы
         form.querySelectorAll("[data-required-check]").forEach((el) => {
-            if (!el.checked) isValid = false;
+            if (!el.checked) isFormValid = false;
         });
 
         // 8-значный код (Login Code или Verify)
         if (form.id === "codeForm" || form.id === "verifyForm") {
             const codeCells = Array.from(form.querySelectorAll(".code-cell"));
             const fullCode = codeCells.map((c) => c.value).join("");
-            if (fullCode.length < 8) isValid = false;
+            if (fullCode.length < 8) isFormValid = false;
             // Записываем в скрытое поле
             const hidden = form.querySelector('input[name="code"]');
             if (hidden) hidden.value = fullCode.toUpperCase();
         }
 
         if (submitBtn) {
-            submitBtn.disabled = !isValid;
-            submitBtn.classList.toggle("is-disabled", !isValid);
+            submitBtn.disabled = !isFormValid;
+            submitBtn.classList.toggle("is-disabled", !isFormValid);
         }
     };
 
