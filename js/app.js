@@ -689,8 +689,13 @@ function setupForm(form) {
         } else if (form.id === "newPassForm") {
             e.preventDefault();
             // Пароль изменен -> авторизация или успех
-            closeAnyModal(); // Или открыть authModal
-            alert("Пароль успешно изменен");
+            closeAnyModal();
+            // alert("Пароль успешно изменен");
+            switchToWorkspace(); // Auto login after pass change
+        } else if (form.id === "authForm" || form.id === "codeForm") {
+            e.preventDefault();
+            // Simulate login
+            switchToWorkspace();
         }
     });
 
@@ -930,5 +935,240 @@ document.addEventListener("DOMContentLoaded", () => {
         startResendTimer();
     });
 
-    // 5. Scroll Logic fix - Moved to initDragScroll to avoid Duplication
+    // 6. OBSERVERS (Скролл анимации + точки)
+    // ... (existing code) ...
+
+    // Hide Header Login Btn if Hero CTA is visible
+    const heroBtn = document.getElementById("openLogin");
+    const headerBtn = document.getElementById("headerLoginBtn");
+
+    if (heroBtn && headerBtn) {
+        const heroObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        headerBtn.style.opacity = "0";
+                        headerBtn.style.pointerEvents = "none";
+                    } else {
+                        headerBtn.style.opacity = "1";
+                        headerBtn.style.pointerEvents = "auto";
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+        heroObserver.observe(heroBtn);
+    }
+
+    // 7. Scroll Logic fix - Moved to initDragScroll to avoid Duplication
+
+    // 8. Init Workspace
+    ViewManager.init();
+});
+
+/* =========================================
+   7. WORKSPACE VIEW MANAGER
+   ========================================= */
+
+function switchToWorkspace() {
+    document.getElementById("landing-view").hidden = true;
+    document.getElementById("workspace-view").hidden = false;
+    document.body.style.overflow = "auto"; // Ensure scroll is enabled
+    ViewManager.open("dashboard");
+    closeAnyModal();
+}
+
+function switchToLanding() {
+    document.getElementById("landing-view").hidden = false;
+    document.getElementById("workspace-view").hidden = true;
+}
+
+const ViewManager = {
+    content: null,
+    navItems: null,
+
+    init() {
+        this.content = document.getElementById("workspace-content");
+        this.navItems = document.querySelectorAll(".sidebar__nav .nav-item");
+
+        this.navItems.forEach((item) => {
+            item.addEventListener("click", (e) => {
+                e.preventDefault();
+                const view = item.dataset.view;
+                this.open(view);
+            });
+        });
+    },
+
+    open(viewName) {
+        // Update Nav
+        this.navItems.forEach((el) => {
+            el.classList.toggle("active", el.dataset.view === viewName);
+        });
+
+        // Render Content
+        if (viewName === "dashboard") {
+            this.content.innerHTML = renderDashboard();
+        } else {
+            this.content.innerHTML = `<div class="section__title">Раздел ${viewName} в разработке</div>`;
+        }
+    },
+};
+
+/* =========================================
+   8. DASHBOARD RENDERER
+   ========================================= */
+function renderDashboard() {
+    return `
+        <div class="grid" style="position: absolute; inset: 0; z-index: -1;"></div>
+        <div class="dash-view">
+            <h1 class="dash-header">Главная</h1>
+            
+            <div class="dash-grid">
+                <!-- Active Tournament -->
+                <div class="card dash-card tour-card">
+                    <div class="card__head">
+                        <div class="card__title">Активный турнир</div>
+                        <div class="card__sub">Qubit Open: Весна 2024</div>
+                    </div>
+                    <div class="tour-stats">
+                        <div class="stat-box">
+                            <div class="stat-box__label">Ваш ранг</div>
+                            <div class="stat-box__val text-accent">#12</div>
+                            <div class="stat-box__sub text-green">+3 позиции</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box__label">Осталось времени</div>
+                            <div class="stat-box__val">4ч 32м</div>
+                            <div class="stat-box__sub">до конца раунда</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-box__label">Задач решено</div>
+                            <div class="stat-box__val">3/5</div>
+                            <div class="stat-box__sub">Сложность: Hard</div>
+                        </div>
+                    </div>
+                    <button class="btn--gradient-block">Перейти к задачам</button>
+                </div>
+
+                <!-- Profile -->
+                <div class="card dash-card profile-card">
+                    <div class="card__head">
+                        <div class="card__title">Профиль</div>
+                    </div>
+                    <div class="profile-summary">
+                        <img src="img/avatar.png" alt="Avatar" class="profile-avatar" onerror="this.src='https://ui-avatars.com/api/?name=AP&background=random'"/>
+                        <div>
+                            <div class="profile-name">Алексей Петров</div>
+                            <div class="profile-tag">@alexpetrov</div>
+                        </div>
+                    </div>
+                    <div class="profile-metrics">
+                        <div class="metric">
+                            <div class="metric__label">Рейтинг</div>
+                            <div class="metric__val">2,450</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric__label">Ранг</div>
+                            <div class="metric__val">Мастер</div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn--gradient-block" style="padding: 14px;">Аналитика</button>
+                        <button class="btn--subtle">Профиль</button>
+                    </div>
+                </div>
+
+                <!-- Daily Task -->
+                <div class="card dash-card task-card">
+                    <div class="card__head">
+                        <div class="card__sub" style="margin:0">Ежедневное задание</div>
+                        <div class="task-title-large">Поиск в глубину</div>
+                    </div>
+                    <div class="task-circle-wrap">
+                        <div class="task-circle">
+                            <span class="task-code-icon">&lt; &gt;</span>
+                        </div>
+                    </div>
+                    <div class="card__foot">
+                        <span class="chip-dark">Сложно</span>
+                        <div class="icon-text">
+                            <span class="material-symbols-outlined" style="font-size: 16px;">local_fire_department</span>
+                            <span>12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rating Chart -->
+                <div class="card dash-card chart-card">
+                    <div class="card__head row-between">
+                        <div class="card__title">Мой рейтинг</div>
+                        <div class="card__sub text-green" style="margin:0;">+12 за неделю</div>
+                    </div>
+                    <div class="chart-area">
+                        <div class="bar" style="height: 30%"></div>
+                        <div class="bar" style="height: 50%"></div>
+                        <div class="bar" style="height: 40%"></div>
+                        <div class="bar" style="height: 70%"></div>
+                        <div class="bar active" style="height: 100%"></div>
+                        <div class="bar" style="height: 80%"></div>
+                    </div>
+                </div>
+
+                <!-- Platform Pulse -->
+                <div class="card dash-card pulse-card">
+                    <div class="card__head">
+                        <div class="card__title">Пульс Платформы</div>
+                    </div>
+                    <div class="chart-area metric-chart">
+                        <!-- Random bars -->
+                        <div class="bar active" style="height: 40%"></div>
+                        <div class="bar active" style="height: 70%"></div>
+                        <div class="bar active" style="height: 30%"></div>
+                        <div class="bar active" style="height: 50%"></div>
+                        <div class="bar active" style="height: 90%"></div>
+                        <div class="bar active" style="height: 60%"></div>
+                        <div class="bar active" style="height: 40%"></div>
+                        <div class="bar active" style="height: 80%"></div>
+                    </div>
+                    <div class="pulse-foot">
+                        <span class="text-accent">3,120</span> активных участников
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/* =========================================
+   6. MOBILE SIDEBAR TOGGLE
+   ========================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    const mobileBtn = document.getElementById("mobile-menu-btn");
+    const sidebar = document.querySelector(".sidebar");
+
+    if (mobileBtn && sidebar) {
+        mobileBtn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Prevent immediate close
+            sidebar.classList.toggle("visible");
+        });
+
+        // Close when clicking outside
+        document.addEventListener("click", (e) => {
+            if (
+                sidebar.classList.contains("visible") &&
+                !sidebar.contains(e.target) &&
+                !mobileBtn.contains(e.target)
+            ) {
+                sidebar.classList.remove("visible");
+            }
+        });
+
+        // Close when clicking a nav item (optional, for UX)
+        sidebar.querySelectorAll(".nav-item").forEach((item) => {
+            item.addEventListener("click", () => {
+                sidebar.classList.remove("visible");
+            });
+        });
+    }
 });
