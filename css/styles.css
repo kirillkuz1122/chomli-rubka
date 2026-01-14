@@ -2105,6 +2105,7 @@ a {
         grid-column: auto;
     }
 }
+
 /* Drawer flash fix: overlay below panel, panel no fade */
 .drawer__backdrop {
     z-index: 1;
@@ -3526,13 +3527,15 @@ a {
 
 /* MOBILE HEADER */
 .workspace-mobile-header {
-    display: none !important; /* Force hide on desktop */
+    display: none; /* Force hide on desktop */
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
-    background: var(--bg-1);
+    backdrop-filter: saturate(1.1) blur(8px);
+    background: color-mix(in oklab, var(--bg-2) 75%, transparent);
     border-bottom: 1px solid var(--border);
     width: 100%; /* Ensure full width */
+    height: var(--header-height);
 }
 .workspace-mobile-header .brand__text {
     display: block !important;
@@ -3563,16 +3566,56 @@ a {
         margin-left: 80px;
         padding: 24px;
     }
+    .sidebar__nav {
+        padding: 0 13.6px;
+    }
+    .sidebar__brand {
+        flex-direction: column;
+    }
+    .sidebar__brand .brand {
+        margin-bottom: 12px;
+    }
 }
 
 @media (max-width: 768px) {
+    .sidebar__brand .brand__text,
+    .sidebar__nav span:last-child {
+        display: inline-block;
+    }
+    .sidebar__nav .nav-item {
+        justify-content: start;
+        padding: 0;
+    }
+    .nav-item {
+        padding: 10px 16px !important;
+    }
+    .sidebar__nav {
+        padding: 0 24px;
+    }
+    .sidebar__brand {
+        flex-direction: row;
+    }
+    .sidebar__brand .brand {
+        margin-bottom: 0;
+    }
+
     .workspace-mobile-header {
-        display: flex !important; /* Show on mobile */
+        display: flex; /* Show on mobile */
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: 56px;
+    }
+    #workspace-view {
+        display: inline !important;
+        padding-top: var(--header-height) !important;
     }
 
     .workspace__content {
         margin-left: 0 !important; /* FORCE RESET MARGIN */
-        padding: 16px 16px 80px 16px; /* Add bottom padding for scroll */
+        padding-top: 72px; /* Add bottom padding for scroll */
         width: 100%;
     }
     .dash-view {
@@ -3595,7 +3638,10 @@ a {
         transform: translateX(0);
         box-shadow: 10px 0 50px rgba(0, 0, 0, 0.5);
     }
-
+    .workspace__content:has(.sidebar.visible) {
+        /* затемнение */
+        filter: blur(2px);
+    }
     .dash-grid {
         display: flex;
         flex-direction: column;
