@@ -779,8 +779,9 @@ a {
 }
 .card__head {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     margin-bottom: 12px;
 }
@@ -1237,7 +1238,7 @@ a {
             90deg,
             var(--accent-from),
             var(--accent-to)
-        );
+        ) !important;
     }
 }
 
@@ -2072,7 +2073,7 @@ a {
     margin-top: auto;
 }
 .bar {
-    flex: 1;
+    /* flex: 1; */
     background: var(--muted);
     border-radius: 4px 4px 0 0;
     min-height: 4px;
@@ -3089,19 +3090,26 @@ a {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
-.card__head {
-    margin-bottom: 20px;
+.tour-card .card__head {
+    margin-bottom: 16px;
+    height: 48px;
+    gap: 0;
 }
-.card__title {
+.tour-card .card__title {
     font-family: "Space Grotesk", sans-serif;
-    font-size: 16px; /* Smaller, cleaner */
+    font-size: 18px; /* Smaller, cleaner */
     font-weight: 400;
-    color: var(--fg-muted);
+    color: white;
 }
-.card__sub {
-    font-size: 13px;
+
+:root[data-theme="light"] .tour-card .card__title {
+    color: black;
+}
+
+.tour-card .card__sub {
+    font-size: 14px;
     color: var(--fg-muted);
-    margin-top: 4px;
+    margin-top: 0px;
 }
 .text-accent {
     color: #fff;
@@ -3111,7 +3119,7 @@ a {
     font-weight: 700;
 }
 .text-green {
-    color: #10b981;
+    color: #10b981 !important;
 }
 .row-between {
     display: flex;
@@ -3122,26 +3130,24 @@ a {
 /* 1. Active Tournament */
 .tour-card {
     grid-column: span 2;
-    background: radial-gradient(
-            circle at top right,
-            rgba(244, 63, 94, 0.05),
-            transparent 60%
-        ),
-        #11141d;
+    background: linear-gradient(
+        169.22deg,
+        rgba(244, 63, 94, 0.2),
+        rgba(245, 158, 11, 0.2) 100%
+    );
 }
 :root[data-theme="light"] .tour-card {
-    background: radial-gradient(
-            circle at top right,
-            rgba(244, 63, 94, 0.05),
-            transparent 60%
-        ),
-        #ffffff;
+    background: linear-gradient(
+        169.22deg,
+        rgba(244, 63, 94, 0.2),
+        rgba(245, 158, 11, 0.2) 100%
+    );
 }
 .tour-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 32px; /* More space before button */
+    margin-bottom: 16px; /* More space before button */
     flex: 1;
 }
 .stat-box {
@@ -3153,7 +3159,7 @@ a {
     justify-content: center;
     align-items: center;
     text-align: center;
-    height: 140px; /* Taller */
+    height: auto; /* Taller */
 }
 :root[data-theme="light"] .stat-box {
     background: rgba(0, 0, 0, 0.03);
@@ -3246,19 +3252,26 @@ a {
     border-radius: 14px;
     cursor: pointer;
     transition: all 0.2s;
+    justify-content: center;
 }
 :root[data-theme="light"] .btn--subtle {
     background: rgba(0, 0, 0, 0.05);
-}
-.btn--subtle:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--fg-strong);
 }
 
 /* 3. Daily Task */
 .task-card {
     grid-column: span 1;
 }
+
+.task-card .card__head {
+    height: 56px;
+    gap: 4px;
+}
+
+.task-card .card__sub {
+    color: rgba(136, 136, 153, 255);
+}
+
 .task-title-large {
     font-family: "Space Grotesk", sans-serif;
     font-size: 24px;
@@ -3274,16 +3287,28 @@ a {
     justify-content: center;
     padding: 24px 0;
 }
-.task-circle {
-    width: 80px;
-    height: 80px;
+.dash-card .task-circle {
+    width: 128px;
+    height: 128px;
     border-radius: 50%;
-    background: #1e1e24; /* Darker inner circle */
-    border: 1px solid rgba(244, 63, 94, 0.1);
+    background: linear-gradient(
+        135deg,
+        rgba(244, 63, 94, 0.1),
+        rgba(245, 158, 11, 0.1)
+    );
+    border: 0;
     display: grid;
     place-items: center;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
     position: relative;
+}
+:root[data-theme="light"] .task-circle {
+    background: linear-gradient(
+        135deg,
+        ortend rgba(244, 63, 94, 0.2),
+        rgba(245, 158, 11, 0.2)
+    );
+    box-shadow: 0 10px 40px rgba(244, 63, 94, 0.15);
 }
 .task-circle::after {
     content: "";
@@ -3298,12 +3323,50 @@ a {
     z-index: -1;
     opacity: 0.5;
 }
+:root[data-theme="light"] .task-circle::after {
+    display: none;
+}
 .task-code-icon {
-    font-family: "Space Grotesk", monospace; /* Use text for < > */
-    font-size: 32px;
-    color: #f43f5e;
-    font-weight: 700;
-    letter-spacing: -2px;
+    background: linear-gradient(
+        135deg,
+        rgba(244, 63, 94, 1),
+        rgba(245, 158, 11, 1)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 60px;
+    font-weight: 300;
+    line-height: 60px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effects for Task Card */
+.task-card:hover .task-circle {
+    transform: translateY(-8px);
+    background: linear-gradient(
+        135deg,
+        rgba(244, 63, 94, 1),
+        rgba(245, 158, 11, 1)
+    );
+    box-shadow: 0 12px 30px rgba(244, 63, 94, 0.4);
+}
+
+.task-card:hover .task-code-icon {
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.task-card {
+    transition: border-color 0.3s ease;
+}
+
+.task-card:hover {
+    border-color: rgba(244, 63, 94, 0.3);
+}
+
+.task-circle {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .task-foot {
     display: flex;
@@ -3319,7 +3382,12 @@ a {
     font-size: 12px;
     font-weight: 500;
 }
+:root[data-theme="light"] .chip-dark {
+    background: rgba(244, 63, 94, 0.1);
+    border: none;
+}
 
+/* 4. Rating Chart */
 /* 4. Rating Chart */
 .chart-card {
     grid-column: span 1;
@@ -3327,22 +3395,119 @@ a {
 .chart-area {
     display: flex;
     align-items: flex-end;
-    gap: 12px;
-    height: 140px;
+    gap: 10px;
+    height: 190px;
     margin-top: auto;
+    padding: 40px 0 10px;
 }
-.bar {
+.chart-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
     flex: 1;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 4px 4px 0 0;
-    transition: height 0.5s ease;
+    height: 100%;
+    min-width: 0;
+    position: relative;
+    cursor: pointer;
 }
-:root[data-theme="light"] .bar {
-    background: rgba(0, 0, 0, 0.05);
+.bar-val {
+    font-size: 13px;
+    font-weight: 800;
+    font-family: "Space Grotesk", sans-serif;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 0;
+    transform: translateY(10px);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    display: grid;
+    place-items: center;
+    min-height: 18px;
+    pointer-events: none; /* Чтобы не мешало ховеру на баре */
 }
-.bar.active {
-    background: linear-gradient(to top, #f43f5e, #f59e0b);
-    box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
+
+.bar-val span {
+    grid-area: 1/1; /* Stack them */
+    background: linear-gradient(135deg, #f43f5e, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.bar-val .val-secondary {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.chart-col:hover .bar-val.has-toggle .val-primary {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+.chart-col:hover .bar-val.has-toggle .val-secondary {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.bar-lbl {
+    font-size: 11px;
+    color: var(--fg-muted);
+    margin-top: 8px;
+    font-weight: 600;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bar {
+    width: 100%;
+    /* 20% opaque base */
+    background: linear-gradient(
+        180deg,
+        rgba(244, 63, 94, 0.2) 0%,
+        rgba(245, 158, 11, 0.05) 100%
+    );
+    border-radius: 8px;
+    transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+/* Active / Hover State */
+.chart-col.is-active .bar-val,
+.chart-col:hover .bar-val {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.chart-col.is-active .bar {
+    /* 100% opaque for active */
+    background: linear-gradient(
+        180deg,
+        rgba(244, 63, 94, 1) 0%,
+        rgba(245, 158, 11, 1) 100%
+    );
+    box-shadow: 0 10px 25px rgba(244, 63, 94, 0.2);
+}
+
+.chart-col:not(.is-active):hover .bar {
+    /* Slightly more on hover */
+    background: linear-gradient(
+        180deg,
+        rgba(244, 63, 94, 0.4) 0%,
+        rgba(245, 158, 11, 0.1) 100%
+    );
+}
+
+/* Light theme overrides */
+:root[data-theme="light"] .chart-col:not(.is-active) .bar {
+    background: linear-gradient(
+        180deg,
+        rgba(244, 63, 94, 0.2),
+        rgba(245, 158, 11, 0.05)
+    );
 }
 
 /* 5. Pulse Chart */
@@ -3469,4 +3634,122 @@ a {
     .stat-box__label {
         margin-bottom: 0;
     }
+}
+
+.card__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card__foot .icon-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.card__foot .icon-text .span:last-child {
+    color: rgba(255, 255, 255, 255);
+    font-family: Roboto;
+    font-style: Light;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 28px;
+    letter-spacing: 0px;
+}
+.card__foot .icon-text .fire {
+    color: transparent;
+    background: linear-gradient(
+        176.35deg,
+        rgba(244, 63, 94, 1),
+        rgba(245, 158, 11, 1)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: Regular;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 28px;
+    letter-spacing: 0px;
+}
+
+/* =========================================
+   ANIMATIONS & TOOLTIPS
+   ========================================= */
+
+/* Custom Tooltip disabled (using bar-val instead) */
+.chart-col {
+    position: relative;
+    cursor: pointer;
+}
+.chart-col:hover .bar {
+    filter: brightness(1.2);
+}
+
+/* Animations */
+@keyframes growBar {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.chart-col .bar {
+    animation: growBar 1s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+/* Stagger animations for bars */
+.chart-col:nth-child(1) .bar {
+    animation-delay: 0.1s;
+}
+.chart-col:nth-child(2) .bar {
+    animation-delay: 0.15s;
+}
+.chart-col:nth-child(3) .bar {
+    animation-delay: 0.2s;
+}
+.chart-col:nth-child(4) .bar {
+    animation-delay: 0.25s;
+}
+.chart-col:nth-child(5) .bar {
+    animation-delay: 0.3s;
+}
+.chart-col:nth-child(6) .bar {
+    animation-delay: 0.35s;
+}
+.chart-col:nth-child(7) .bar {
+    animation-delay: 0.4s;
+}
+.chart-col:nth-child(8) .bar {
+    animation-delay: 0.45s;
+}
+
+/* Pulse Breath Animation */
+@keyframes pulseBreath {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scaleY(0.95);
+    }
+}
+.metric-chart .chart-col.is-active .bar {
+    animation: growBar 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards,
+        pulseBreath 3s infinite ease-in-out 1s; /* Start breathing after grow */
+}
+
+/* Dashboard Entry Animations */
+[data-view-anim] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+[data-view-anim].in {
+    opacity: 1;
+    transform: translateY(0);
 }

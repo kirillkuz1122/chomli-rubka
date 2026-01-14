@@ -974,6 +974,7 @@ function switchToWorkspace() {
     document.getElementById("landing-view").hidden = true;
     document.getElementById("workspace-view").hidden = false;
     document.body.style.overflow = "auto"; // Ensure scroll is enabled
+    document.body.style.paddingTop = "0";
     ViewManager.open("dashboard");
     closeAnyModal();
 }
@@ -1009,8 +1010,19 @@ const ViewManager = {
         // Render Content
         if (viewName === "dashboard") {
             this.content.innerHTML = renderDashboard();
+            // Re-attach observers to new elements
+            requestAnimationFrame(() => {
+                const newBobs =
+                    this.content.querySelectorAll("[data-view-anim]");
+                // Reuse existing global observer 'revealObserver' (it uses .in class)
+                newBobs.forEach((el) => revealObserver.observe(el));
+            });
         } else {
-            this.content.innerHTML = `<div class="section__title">Раздел ${viewName} в разработке</div>`;
+            this.content.innerHTML = `<div class="section__title" data-view-anim>Раздел ${viewName} в разработке</div>`;
+            requestAnimationFrame(() => {
+                const el = this.content.querySelector("[data-view-anim]");
+                if (el) revealObserver.observe(el);
+            });
         }
     },
 };
@@ -1022,11 +1034,11 @@ function renderDashboard() {
     return `
         <div class="grid" style="position: absolute; inset: 0; z-index: -1;"></div>
         <div class="dash-view">
-            <h1 class="dash-header">Главная</h1>
+            <h1 class="dash-header" data-view-anim>Главная</h1>
             
             <div class="dash-grid">
                 <!-- Active Tournament -->
-                <div class="card dash-card tour-card">
+                <div class="card dash-card tour-card" data-view-anim style="transition-delay: 0.1s">
                     <div class="card__head">
                         <div class="card__title">Активный турнир</div>
                         <div class="card__sub">Qubit Open: Весна 2024</div>
@@ -1034,7 +1046,7 @@ function renderDashboard() {
                     <div class="tour-stats">
                         <div class="stat-box">
                             <div class="stat-box__label">Ваш ранг</div>
-                            <div class="stat-box__val text-accent">#12</div>
+                            <div class="stat-box__val">#12</div>
                             <div class="stat-box__sub text-green">+3 позиции</div>
                         </div>
                         <div class="stat-box">
@@ -1052,7 +1064,7 @@ function renderDashboard() {
                 </div>
 
                 <!-- Profile -->
-                <div class="card dash-card profile-card">
+                <div class="card dash-card profile-card" data-view-anim style="transition-delay: 0.2s">
                     <div class="card__head">
                         <div class="card__title">Профиль</div>
                     </div>
@@ -1075,61 +1087,101 @@ function renderDashboard() {
                     </div>
                     <div class="profile-actions">
                         <button class="btn--gradient-block" style="padding: 14px;">Аналитика</button>
-                        <button class="btn--subtle">Профиль</button>
+                        <button class="btn btn--subtle">Профиль</button>
                     </div>
                 </div>
 
                 <!-- Daily Task -->
-                <div class="card dash-card task-card">
+                <a href="#" class="card dash-card task-card" data-view-anim style="transition-delay: 0.3s">
                     <div class="card__head">
                         <div class="card__sub" style="margin:0">Ежедневное задание</div>
                         <div class="task-title-large">Поиск в глубину</div>
                     </div>
                     <div class="task-circle-wrap">
                         <div class="task-circle">
-                            <span class="task-code-icon">&lt; &gt;</span>
+                            <span class="material-symbols-outlined task-code-icon">code</span>
                         </div>
                     </div>
                     <div class="card__foot">
                         <span class="chip-dark">Сложно</span>
                         <div class="icon-text">
-                            <span class="material-symbols-outlined" style="font-size: 16px;">local_fire_department</span>
+                            <span class="material-symbols-outlined fire">local_fire_department</span>
                             <span>12</span>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Rating Chart -->
-                <div class="card dash-card chart-card">
+                <div class="card dash-card chart-card" data-view-anim style="transition-delay: 0.4s">
                     <div class="card__head row-between">
                         <div class="card__title">Мой рейтинг</div>
                         <div class="card__sub text-green" style="margin:0;">+12 за неделю</div>
                     </div>
                     <div class="chart-area">
-                        <div class="bar" style="height: 30%"></div>
-                        <div class="bar" style="height: 50%"></div>
-                        <div class="bar" style="height: 40%"></div>
-                        <div class="bar" style="height: 70%"></div>
-                        <div class="bar active" style="height: 100%"></div>
-                        <div class="bar" style="height: 80%"></div>
+                        ${[
+                            { v: 1650, h: 30, l: "Пн" },
+                            { v: 1720, h: 55, l: "Вт" },
+                            { v: 1680, h: 42, l: "Ср" },
+                            { v: 1890, h: 72, l: "Чт" },
+                            { v: 1980, h: 100, l: "Пт", a: true, d: "+45" },
+                            { v: 1910, h: 80, l: "Сб" },
+                        ]
+                            .map(
+                                (i) => `
+                            <div class="chart-col ${i.a ? "is-active" : ""}">
+                                <div class="bar" style="height: ${
+                                    i.h
+                                }% !important;">
+                                    <div class="bar-val ${
+                                        i.a ? "has-toggle" : ""
+                                    }">
+                                        ${
+                                            i.a
+                                                ? `<span class="val-primary">${i.d}</span>
+                                                   <span class="val-secondary">${i.v}</span>`
+                                                : `<span>${i.v}</span>`
+                                        }
+                                    </div>
+                                </div>
+                                <div class="bar-lbl">${i.l}</div>
+                            </div>
+                        `
+                            )
+                            .join("")}
                     </div>
                 </div>
 
                 <!-- Platform Pulse -->
-                <div class="card dash-card pulse-card">
+                <div class="card dash-card pulse-card" data-view-anim style="transition-delay: 0.5s">
                     <div class="card__head">
                         <div class="card__title">Пульс Платформы</div>
                     </div>
                     <div class="chart-area metric-chart">
-                        <!-- Random bars -->
-                        <div class="bar active" style="height: 40%"></div>
-                        <div class="bar active" style="height: 70%"></div>
-                        <div class="bar active" style="height: 30%"></div>
-                        <div class="bar active" style="height: 50%"></div>
-                        <div class="bar active" style="height: 90%"></div>
-                        <div class="bar active" style="height: 60%"></div>
-                        <div class="bar active" style="height: 40%"></div>
-                        <div class="bar active" style="height: 80%"></div>
+                         ${[
+                             { v: 210, h: 35, l: "00" },
+                             { v: 350, h: 75, l: "04", a: true },
+                             { v: 180, h: 25, l: "08" },
+                             { v: 290, h: 45, l: "12" },
+                             { v: 520, h: 100, l: "16", a: true },
+                             { v: 410, h: 65, l: "18" },
+                             { v: 300, h: 40, l: "20" },
+                             { v: 480, h: 92, l: "22", a: true },
+                         ]
+                             .map(
+                                 (i) => `
+                            <div class="chart-col ${i.a ? "is-active" : ""}">
+                                <div class="bar" style="height: ${
+                                    i.h
+                                }% !important;">
+                                    <div class="bar-val"><span>${
+                                        i.v
+                                    }</span></div>
+                                </div>
+                                <div class="bar-lbl">${i.l}</div>
+                            </div>
+                        `
+                             )
+                             .join("")}
                     </div>
                     <div class="pulse-foot">
                         <span class="text-accent">3,120</span> активных участников
