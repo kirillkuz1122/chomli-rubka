@@ -3527,7 +3527,7 @@ a {
 
 /* MOBILE HEADER */
 .workspace-mobile-header {
-    display: none; /* Force hide on desktop */
+    display: none !important; /* Force hide on desktop */
     align-items: center;
     justify-content: space-between;
     padding: 16px 24px;
@@ -3600,7 +3600,7 @@ a {
     }
 
     .workspace-mobile-header {
-        display: flex; /* Show on mobile */
+        display: flex !important; /* Show on mobile */
         position: fixed;
         top: 0;
         left: 0;
@@ -3798,4 +3798,8 @@ a {
 [data-view-anim].in {
     opacity: 1;
     transform: translateY(0);
+}
+
+#workspace-view[hidden] .workspace-mobile-header {
+    display: none !important;
 }
