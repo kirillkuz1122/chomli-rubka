@@ -13,6 +13,148 @@ const themeToggle = document.getElementById("themeToggle");
 const themeToggleDrawer = document.getElementById("themeToggleDrawer");
 const themeToggleDrawerIcon = document.getElementById("themeToggleDrawerIcon");
 
+/**
+ * МЕГА-ПОИСК (Helper)
+ * Исправляет раскладку, транслитерирует и делает нечеткий поиск
+ */
+const MegaSearch = {
+    layoutMap: {
+        q: "й",
+        w: "ц",
+        e: "у",
+        r: "к",
+        t: "е",
+        y: "н",
+        u: "г",
+        i: "ш",
+        o: "щ",
+        p: "з",
+        "[": "х",
+        "]": "ъ",
+        a: "ф",
+        s: "ы",
+        d: "в",
+        f: "а",
+        g: "п",
+        h: "р",
+        j: "о",
+        k: "л",
+        l: "д",
+        ";": "ж",
+        "'": "э",
+        z: "я",
+        x: "ч",
+        c: "с",
+        v: "м",
+        b: "и",
+        n: "т",
+        m: "ь",
+        ",": "б",
+        ".": "ю",
+        "/": ".",
+    },
+    translitMap: {
+        a: "а",
+        b: "б",
+        v: "в",
+        g: "г",
+        d: "д",
+        e: "е",
+        yo: "ё",
+        zh: "ж",
+        z: "з",
+        i: "и",
+        j: "й",
+        k: "к",
+        l: "л",
+        m: "м",
+        n: "н",
+        o: "о",
+        p: "п",
+        r: "р",
+        s: "с",
+        t: "т",
+        u: "у",
+        f: "ф",
+        h: "х",
+        c: "ц",
+        ch: "ч",
+        sh: "ш",
+        sch: "щ",
+        y: "ы",
+        ye: "е",
+        yu: "ю",
+        ya: "я",
+    },
+
+    // Исправление раскладки (pbvybq -> зимний)
+    fixLayout(str) {
+        return str
+            .split("")
+            .map((char) => this.layoutMap[char.toLowerCase()] || char)
+            .join("");
+    },
+
+    // Простая транслитерация (fast -> фаст)
+    translit(str) {
+        // Упрощенно для поиска
+        let res = str
+            .toLowerCase()
+            .replace(/sh/g, "ш")
+            .replace(/ch/g, "ч")
+            .replace(/ya/g, "я")
+            .replace(/yu/g, "ю");
+        return res
+            .split("")
+            .map((c) => this.translitMap[c] || c)
+            .join("");
+    },
+
+    // Расстояние Левенштейна (для опечаток)
+    getDistance(s1, s2) {
+        if (s1 === s2) return 0;
+        if (s1.length === 0) return s2.length;
+        if (s2.length === 0) return s1.length;
+        let prevRow = Array.from({ length: s2.length + 1 }, (_, i) => i);
+        for (let i = 0; i < s1.length; i++) {
+            let currRow = [i + 1];
+            for (let j = 0; j < s2.length; j++) {
+                let cost = s1[i] === s2[j] ? 0 : 1;
+                currRow.push(
+                    Math.min(
+                        currRow[j] + 1,
+                        prevRow[j + 1] + 1,
+                        prevRow[j] + cost
+                    )
+                );
+            }
+            prevRow = currRow;
+        }
+        return prevRow[s2.length];
+    },
+
+    match(query, target) {
+        query = query.toLowerCase().trim();
+        target = target.toLowerCase().trim();
+        if (!query) return true;
+        if (target.includes(query)) return true;
+
+        const fixed = this.fixLayout(query);
+        if (target.includes(fixed)) return true;
+
+        const translited = this.translit(query);
+        if (target.includes(translited)) return true;
+
+        // Нечеткое совпадение для коротких слов
+        const words = target.split(/\s+/);
+        return words.some(
+            (w) =>
+                this.getDistance(query, w) <= 1 ||
+                this.getDistance(fixed, w) <= 1
+        );
+    },
+};
+
 function getPreferredTheme() {
     const saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") return saved;
@@ -1010,20 +1152,31 @@ const ViewManager = {
         // Render Content
         if (viewName === "dashboard") {
             this.content.innerHTML = renderDashboard();
-            // Re-attach observers to new elements
-            requestAnimationFrame(() => {
-                const newBobs =
-                    this.content.querySelectorAll("[data-view-anim]");
-                // Reuse existing global observer 'revealObserver' (it uses .in class)
-                newBobs.forEach((el) => revealObserver.observe(el));
-            });
+        } else if (viewName === "tournaments") {
+            // Начальное состояние фильтров
+            this.tourFilters = {
+                status: "all",
+                categories: [], // Массив для мультивыбора
+                search: "",
+                sort: "none",
+                selectedDate: null,
+            };
+            this.content.innerHTML = renderTournaments();
+            initTournamentsInteractions(this.content);
         } else {
             this.content.innerHTML = `<div class="section__title" data-view-anim>Раздел ${viewName} в разработке</div>`;
-            requestAnimationFrame(() => {
-                const el = this.content.querySelector("[data-view-anim]");
-                if (el) revealObserver.observe(el);
-            });
         }
+
+        // Re-attach observers and scroll to top
+        window.scrollTo(0, 0);
+        requestAnimationFrame(() => {
+            const newBobs = this.content.querySelectorAll("[data-view-anim]");
+            newBobs.forEach((el) => {
+                if (typeof revealObserver !== "undefined") {
+                    revealObserver.observe(el);
+                }
+            });
+        });
     },
 };
 
@@ -1193,7 +1346,595 @@ function renderDashboard() {
 }
 
 /* =========================================
-   6. MOBILE SIDEBAR TOGGLE
+   9. TOURNAMENTS RENDERER
+   ========================================= */
+
+const TOURNAMENTS_DATA = [
+    {
+        id: 1,
+        title: "Зимний Кубок Qubit 2024",
+        desc: "Ежегодный турнир для опытных программистов с призовым фондом.",
+        status: "live",
+        statusText: "Идет сейчас",
+        participants: 345,
+        time: "Осталось 2ч 15м",
+        icon: "timer",
+        action: "Присоединиться",
+        actionType: "join",
+        delay: "0.1s",
+        category: "c++",
+        date: 15,
+    },
+    {
+        id: 2,
+        title: "Марафон по алгоритмам",
+        desc: "24-часовой марафон для проверки вашей выносливости и навыков.",
+        status: "upcoming",
+        statusText: "Скоро начнется",
+        participants: 128,
+        time: "Сегодня в 18:00",
+        icon: "calendar_today",
+        action: "Открыть",
+        actionType: "outline",
+        delay: "0.2s",
+        category: "algorithms",
+        date: 10,
+    },
+    {
+        id: 3,
+        title: "Data Science Challenge",
+        desc: "Решите задачи по машинному обучению и анализу данных.",
+        status: "upcoming",
+        statusText: "Скоро начнется",
+        participants: 78,
+        time: "Начало через 3 дня",
+        icon: "schedule",
+        action: "Открыть",
+        actionType: "outline",
+        delay: "0.3s",
+        category: "data-science",
+        date: 20,
+    },
+    {
+        id: 4,
+        title: "Осенний спринт",
+        desc: "Быстрые задачи на скорость и точность для всех уровней.",
+        status: "ended",
+        statusText: "Завершен",
+        participants: 210,
+        time: "Завершился 1 нед. назад",
+        icon: "history",
+        action: "Результаты",
+        actionType: "muted",
+        delay: "0.4s",
+        category: "python",
+        date: 5,
+    },
+    {
+        id: 5,
+        title: "Командное первенство",
+        desc: "Соревнования для команд из 3 человек. Покажите свою синергию.",
+        status: "ended",
+        statusText: "Завершен",
+        participants: 154,
+        time: "Завершился 1 мес. назад",
+        icon: "history",
+        action: "Результаты",
+        actionType: "muted",
+        delay: "0.5s",
+        category: "team",
+        date: 1,
+    },
+];
+
+function renderTournaments() {
+    return `
+        <div class="tour-view">
+            <div class="tour-head-row" data-view-anim>
+                <h1 class="dash-header" style="margin:0">Турниры</h1>
+                <div class="search-wrap">
+                    <span class="material-symbols-outlined search-icon">search</span>
+                    <input type="text" class="search-input" placeholder="Поиск турниров...">
+                </div>
+            </div>
+
+            <div class="tour-filters-area" data-view-anim style="transition-delay: 0.1s">
+                <div class="tabs-nav">
+                    <div class="tab-item active" data-slug="all">Все</div>
+                    <div class="tab-item" data-slug="live">Текущие</div>
+                    <div class="tab-item" data-slug="upcoming">Ближайшие</div>
+                    <div class="tab-item" data-slug="ended">Прошедшие</div>
+                </div>
+                
+                <div class="chips-row">
+                    <div class="chips-list">
+                        <button class="chip-btn active" data-slug="all">Все</button>
+                        <button class="chip-btn" data-slug="algo">Алгоритмы</button>
+                        <button class="chip-btn" data-slug="team">Командные</button>
+                        <button class="chip-btn" data-slug="ml">Машинное обучение</button>
+                        <button class="chip-btn" data-slug="marathon">Марафон</button>
+                        <button class="chip-btn" data-slug="other">Еще</button>
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn btn--icon-only" data-slug="sort" title="Сортировка">
+                            <span class="material-symbols-outlined">swap_vert</span>
+                        </button>
+                        <button class="btn btn--icon-only" data-slug="date" title="Календарь">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tour-list" id="tournaments-list-container">
+                ${renderTournamentList(TOURNAMENTS_DATA)}
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Рендерит только список карточек
+ */
+function renderTournamentList(data) {
+    if (data.length === 0) {
+        return `<div class="card dash-card" style="text-align:center; padding: 40px; color: var(--fg-muted);">Турниров не найдено</div>`;
+    }
+    return data
+        .map(
+            (t, idx) => `
+        <div class="tournament-card" data-view-anim style="transition-delay: ${
+            0.1 * (idx + 1)
+        }s">
+            <div class="tour-card__top">
+                <div class="status-tag status--${t.status}">
+                    <div class="status-dot"></div>
+                    <span>${t.statusText}</span>
+                </div>
+                <div class="participants-count">${
+                    t.participants
+                } участников</div>
+            </div>
+            <div class="tour-card__content">
+                <div class="tour-card__title">${t.title}</div>
+                <div class="tour-card__desc">${t.desc}</div>
+            </div>
+            <div class="tour-card__divider"></div>
+            <div class="tour-card__bottom">
+                <div class="tour-meta-item">
+                    <span class="material-symbols-outlined">${t.icon}</span>
+                    <span>${t.time}</span>
+                </div>
+                <button class="btn ${
+                    t.actionType === "join"
+                        ? "btn--join"
+                        : t.actionType === "outline"
+                        ? "btn--outline-tour"
+                        : "btn--muted-tour"
+                }">
+                    <span>${t.action}</span>
+                    ${
+                        t.actionType === "join"
+                            ? '<span class="material-symbols-outlined">logout</span>'
+                            : t.actionType === "outline"
+                            ? '<span class="material-symbols-outlined">chevron_right</span>'
+                            : '<span class="material-symbols-outlined">bar_chart</span>'
+                    }
+                </button>
+            </div>
+        </div>
+    `
+        )
+        .join("");
+}
+
+/**
+ * Инициализация интерактивности раздела турниров
+ */
+function initTournamentsInteractions(container) {
+    if (!container) return;
+
+    const listContainer = container.querySelector(
+        "#tournaments-list-container"
+    );
+    const filters = ViewManager.tourFilters;
+
+    // --- Логика фильтрации и нечеткого поиска ---
+    const updateList = () => {
+        let filtered = TOURNAMENTS_DATA.filter((t) => {
+            const matchesStatus =
+                filters.status === "all" || t.status === filters.status;
+
+            // Продвинутый поиск (MegaSearch)
+            const query = filters.search.toLowerCase().trim();
+            const matchesSearch = MegaSearch.match(
+                query,
+                t.title + " " + t.desc
+            );
+
+            // Несколько категорий
+            const matchesCategory =
+                filters.categories.length === 0 ||
+                (t.category && filters.categories.includes(t.category));
+
+            // Фильтр по дате (тестово: если дата выбрана, показываем только этот день)
+            const matchesDate =
+                !filters.selectedDate ||
+                (t.date && t.date === filters.selectedDate);
+
+            return (
+                matchesStatus && matchesSearch && matchesCategory && matchesDate
+            );
+        });
+
+        // Сортировка
+        if (filters.sort === "participants") {
+            filtered.sort((a, b) => b.participants - a.participants);
+        } else if (filters.sort === "name") {
+            filtered.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (filters.sort === "newest") {
+            filtered.sort((a, b) => b.id - a.id);
+        }
+
+        listContainer.innerHTML = renderTournamentList(filtered);
+        const newItems = listContainer.querySelectorAll("[data-view-anim]");
+        newItems.forEach((el) => revealObserver.observe(el));
+    };
+
+    // --- Поповеры ---
+    const closeAllPopovers = () => {
+        container
+            .querySelectorAll(".tour-popover")
+            .forEach((p) => p.classList.remove("visible"));
+    };
+
+    document.addEventListener("click", closeAllPopovers);
+
+    const setupPopover = (btnSelector, popoverHtml, onSelect) => {
+        const btn = container.querySelector(btnSelector);
+        if (!btn) return;
+
+        const popover = document.createElement("div");
+        popover.className = "tour-popover";
+        if (btnSelector.includes("sort") || btnSelector.includes("date"))
+            popover.classList.add("tour-popover--right");
+        else popover.classList.add("tour-popover--left");
+
+        popover.innerHTML = popoverHtml;
+        btn.parentElement.style.position = "relative";
+        btn.parentElement.appendChild(popover);
+
+        btn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const isVisible = popover.classList.contains("visible");
+            closeAllPopovers();
+            if (!isVisible) popover.classList.add("visible");
+        });
+
+        popover.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const item = e.target.closest(".popover-item");
+            if (item) {
+                onSelect(item.dataset.slug, item);
+                closeAllPopovers();
+            }
+        });
+    };
+
+    // 1. Поповер Сортировки
+    setupPopover(
+        '[data-slug="sort"]',
+        `
+        <div class="popover-title">Сортировка</div>
+        <div class="popover-list">
+            <div class="popover-item ${
+                filters.sort === "none" ? "active" : ""
+            }" data-slug="none">По умолчанию</div>
+            <div class="popover-item ${
+                filters.sort === "participants" ? "active" : ""
+            }" data-slug="participants">По участникам</div>
+            <div class="popover-item ${
+                filters.sort === "name" ? "active" : ""
+            }" data-slug="name">По названию (А-Я)</div>
+            <div class="popover-item ${
+                filters.sort === "newest" ? "active" : ""
+            }" data-slug="newest">Сначала новые</div>
+        </div>
+    `,
+        (slug, el) => {
+            filters.sort = slug;
+            // Убираем активный класс у ВСЕХ элементов внутри ЭТОГО поповера
+            el.closest(".popover-list")
+                .querySelectorAll(".popover-item")
+                .forEach((i) => i.classList.remove("active"));
+            el.classList.add("active");
+            updateList();
+        }
+    );
+
+    // 2. Поповер Календаря
+    const renderCalendar = () => `
+        <div class="popover-title">Выбрать дату</div>
+        <div class="calendar-popover" style="display:block; border:none; box-shadow:none; padding:0; position:static;">
+            <div style="font-size: 14px; font-weight: 500; text-align: center; margin-bottom: 12px;">Январь 2024</div>
+            <div class="cal-grid">
+                ${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+                    .map((d) => `<div class="cal-day-label">${d}</div>`)
+                    .join("")}
+                ${Array.from({ length: 31 }, (_, i) => {
+                    const day = i + 1;
+                    const isActive = filters.selectedDate === day;
+                    return `<div class="cal-day ${
+                        isActive ? "active" : ""
+                    }" data-day="${day}">${day}</div>`;
+                }).join("")}
+            </div>
+        </div>
+        <div class="popover-footer">
+            <button class="btn-reset-link" id="cal-reset">Сбросить</button>
+        </div>
+    `;
+
+    const dateBtn = container.querySelector('[data-slug="date"]');
+    if (dateBtn) {
+        const popover = document.createElement("div");
+        popover.className = "tour-popover tour-popover--right";
+        popover.innerHTML = renderCalendar();
+        dateBtn.parentElement.style.position = "relative";
+        dateBtn.parentElement.appendChild(popover);
+
+        dateBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const vis = popover.classList.contains("visible");
+            closeAllPopovers();
+            if (!vis) popover.classList.add("visible");
+        });
+
+        popover.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const dayEl = e.target.closest(".cal-day");
+            const resetBtn = e.target.closest("#cal-reset");
+
+            if (dayEl) {
+                const day = parseInt(dayEl.dataset.day);
+                filters.selectedDate =
+                    filters.selectedDate === day ? null : day;
+                popover.innerHTML = renderCalendar();
+                updateList();
+                if (filters.selectedDate) closeAllPopovers();
+            }
+
+            if (resetBtn) {
+                filters.selectedDate = null;
+                popover.innerHTML = renderCalendar();
+                updateList();
+                closeAllPopovers();
+            }
+        });
+    }
+
+    // 3. Поповер "Еще" Категории (Мультивыбор + Поиск + Сброс)
+    const categoryNames = [
+        "Python",
+        "JavaScript",
+        "C++",
+        "Java",
+        "Go",
+        "Rust",
+        "Swift",
+        "Kotlin",
+        "React",
+        "Vue",
+        "Angular",
+        "Node.js",
+        "Django",
+        "FastAPI",
+        "Spring",
+        "SQL",
+        "NoSQL",
+        "Docker",
+        "Kubernetes",
+        "AWS",
+        "Azure",
+        "DevOps",
+        "Machine Learning",
+        "Neural Networks",
+        "Data Science",
+        "Cybersecurity",
+        "Blockchain",
+        "GameDev",
+        "Unity",
+        "Unreal Engine",
+        "Mobile Dev",
+        "Web3",
+    ];
+
+    const chips = container.querySelectorAll(
+        ".chip-btn:not([data-slug='other'])"
+    );
+    const otherBtn = container.querySelector('[data-slug="other"]');
+
+    const syncCategoryUI = () => {
+        // 1. Состояние кнопки "Все" и быстрых чипсов
+        const isAll = filters.categories.length === 0;
+        const allBtn = container.querySelector('.chip-btn[data-slug="all"]');
+        if (allBtn) allBtn.classList.toggle("active", isAll);
+
+        chips.forEach((c) => {
+            const slug = c.dataset.slug;
+            if (slug !== "all") {
+                c.classList.toggle("active", filters.categories.includes(slug));
+            }
+        });
+
+        // 2. Состояние кнопки "Еще"
+        if (otherBtn) {
+            otherBtn.classList.toggle("active", filters.categories.length > 0);
+        }
+
+        // 3. Состояние элементов внутри поповера (если открыт)
+        const popover = container.querySelector(".tour-popover--left.visible");
+        if (popover && popover.querySelector(".popover-grid")) {
+            const query = popover.querySelector(".popover-search")?.value || "";
+            const filtered = categoryNames.filter((n) =>
+                n.toLowerCase().includes(query.toLowerCase())
+            );
+            popover.querySelector(".popover-grid").innerHTML = filtered
+                .map((name) => {
+                    const slug = name.toLowerCase().replace(/\s+/g, "-");
+                    const isActive = filters.categories.includes(slug);
+                    return `<div class="popover-item ${
+                        isActive ? "active" : ""
+                    }" data-slug="${slug}">${name}</div>`;
+                })
+                .join("");
+        }
+    };
+
+    // --- Поповер "Еще" ---
+    if (otherBtn) {
+        const popover = document.createElement("div");
+        popover.className = "tour-popover tour-popover--left";
+
+        const renderCats = (searchQuery = "") => {
+            const filtered = categoryNames.filter((n) =>
+                n.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+            return `
+                <div class="popover-title">Все категории</div>
+                <div class="popover-search-wrap">
+                    <input type="text" class="popover-search" placeholder="Поиск..." value="${searchQuery}">
+                </div>
+                <div class="popover-grid">
+                    ${filtered
+                        .map((name) => {
+                            const slug = name
+                                .toLowerCase()
+                                .replace(/\s+/g, "-");
+                            const isActive = filters.categories.includes(slug);
+                            return `<div class="popover-item ${
+                                isActive ? "active" : ""
+                            }" data-slug="${slug}">${name}</div>`;
+                        })
+                        .join("")}
+                </div>
+                <div class="popover-footer">
+                    <button class="btn-reset-link" id="cats-reset">Сбросить все</button>
+                </div>
+            `;
+        };
+
+        popover.innerHTML = renderCats();
+        otherBtn.parentElement.style.position = "relative";
+        otherBtn.parentElement.appendChild(popover);
+
+        otherBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const vis = popover.classList.contains("visible");
+            closeAllPopovers();
+            if (!vis) {
+                popover.classList.add("visible");
+                // При открытии сбрасываем поиск и фокусимся
+                popover.innerHTML = renderCats();
+                setTimeout(
+                    () => popover.querySelector(".popover-search")?.focus(),
+                    10
+                );
+            }
+        });
+
+        popover.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const item = e.target.closest(".popover-item");
+            const resetBtn = e.target.closest("#cats-reset");
+
+            if (item) {
+                const slug = item.dataset.slug;
+                if (filters.categories.includes(slug)) {
+                    filters.categories = filters.categories.filter(
+                        (c) => c !== slug
+                    );
+                } else {
+                    filters.categories.push(slug);
+                }
+                syncCategoryUI();
+                updateList();
+            }
+
+            if (resetBtn) {
+                filters.categories = [];
+                syncCategoryUI();
+                updateList();
+                closeAllPopovers();
+            }
+        });
+
+        popover.addEventListener("input", (e) => {
+            if (e.target.classList.contains("popover-search")) {
+                const query = e.target.value.toLowerCase();
+                const filtered = categoryNames.filter((n) =>
+                    n.toLowerCase().includes(query)
+                );
+                popover.querySelector(".popover-grid").innerHTML = filtered
+                    .map((name) => {
+                        const slug = name.toLowerCase().replace(/\s+/g, "-");
+                        const isActive = filters.categories.includes(slug);
+                        return `<div class="popover-item ${
+                            isActive ? "active" : ""
+                        }" data-slug="${slug}">${name}</div>`;
+                    })
+                    .join("");
+            }
+        });
+    }
+
+    // --- Остальные обработчики ---
+
+    // Вкладки
+    const tabs = container.querySelectorAll(".tab-item");
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.classList.remove("active"));
+            tab.classList.add("active");
+            filters.status = tab.dataset.slug;
+            updateList();
+        });
+    });
+
+    // Чипсы
+    chips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+            const slug = chip.dataset.slug;
+            if (slug === "all") {
+                filters.categories = [];
+            } else {
+                // Если кликнули по уже активному быстрому чипсу - снимаем его
+                if (
+                    filters.categories.includes(slug) &&
+                    filters.categories.length === 1
+                ) {
+                    filters.categories = [];
+                } else {
+                    filters.categories = [slug];
+                }
+            }
+            syncCategoryUI();
+            updateList();
+        });
+    });
+
+    // Поиск
+    const searchInput = container.querySelector(".search-input");
+    if (searchInput) {
+        searchInput.addEventListener("input", (e) => {
+            filters.search = e.target.value;
+            updateList();
+        });
+    }
+}
+
+/* =========================================
+   10. MOBILE SIDEBAR TOGGLE
    ========================================= */
 document.addEventListener("DOMContentLoaded", () => {
     const mobileBtn = document.getElementById("mobile-menu-btn");
@@ -1203,7 +1944,8 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileBtn.addEventListener("click", (e) => {
             e.stopPropagation(); // Prevent immediate close
             sidebar.classList.toggle("visible");
-            document.querySelector(".workspace__content").style.filter = "blur(2px)";
+            document.querySelector(".workspace__content").style.filter =
+                "blur(2px)";
         });
 
         // Close when clicking outside
@@ -1214,7 +1956,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 !mobileBtn.contains(e.target)
             ) {
                 sidebar.classList.remove("visible");
-                document.querySelector(".workspace__content").style.filter = "blur(0px)";
+                document.querySelector(".workspace__content").style.filter =
+                    "blur(0px)";
             }
         });
 
@@ -1222,7 +1965,8 @@ document.addEventListener("DOMContentLoaded", () => {
         sidebar.querySelectorAll(".nav-item").forEach((item) => {
             item.addEventListener("click", () => {
                 sidebar.classList.remove("visible");
-                document.querySelector(".workspace__content").style.filter = "blur(0px)";
+                document.querySelector(".workspace__content").style.filter =
+                    "blur(0px)";
             });
         });
     }

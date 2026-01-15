@@ -2082,7 +2082,7 @@ a {
     background: linear-gradient(to top, var(--accent-from), var(--accent-to));
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1088px) {
     .sidebar {
         width: 80px;
     }
@@ -3542,7 +3542,7 @@ a {
 }
 
 /* RESPONSIVE */
-@media (max-width: 1024px) {
+@media (max-width: 1088px) {
     .dash-grid {
         grid-template-columns: 1fr 1fr;
     }
@@ -3660,26 +3660,625 @@ a {
     }
 }
 
-@media (max-width: 370px) {
-    .workspace__content {
-        padding: 12px;
+/* =========================================
+   TOURNAMENTS VIEW STYLES
+   ========================================= */
+
+.tour-view {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.tour-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.search-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+}
+
+.search-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px 16px 10px 40px;
+    color: var(--fg-strong);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #f43f5e;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.1);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--fg-muted);
+    font-size: 20px;
+}
+
+/* Tabs */
+.tour-filters-area {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    z-index: 1001; /* Выше чем карточки турниров */
+}
+
+.tabs-nav {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+}
+
+.tab-item {
+    font-size: 14px;
+    color: var(--fg-muted);
+    cursor: pointer;
+    position: relative;
+    padding-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.tab-item:hover:not(.active) {
+    color: var(--fg-strong);
+    opacity: 0.8;
+}
+
+.tab-item.active {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 500;
+}
+
+.tab-item.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.6);
+    border-radius: 10px 10px 0 0;
+}
+
+/* Chips Row */
+.chips-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.chips-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chip-btn {
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--fg-muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chip-btn.active {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+.chip-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.action-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.btn--icon-only {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--fg-muted);
+}
+
+.btn--icon-only:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--fg-strong);
+}
+
+/* Tournament Card List */
+.tour-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    z-index: 1; /* Базовый слой для карточек */
+}
+
+.tournament-card {
+    background: #11141d;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.tournament-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(244, 63, 94, 0.2);
+}
+
+.tournament-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    opacity: 0.8;
+}
+
+.tour-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+.status--live {
+    color: #10b981;
+}
+.status--live .status-dot {
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.status--upcoming {
+    color: #f59e0b;
+}
+.status--upcoming .status-dot {
+    background: #f59e0b;
+}
+
+.status--ended {
+    color: #f43f5e;
+}
+.status--ended .status-dot {
+    background: #f43f5e;
+}
+
+.participants-count {
+    font-size: 12px;
+    color: var(--fg-muted);
+}
+
+.tour-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tour-card__title {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--fg-strong);
+}
+
+.tour-card__desc {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+}
+
+.tour-card__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 4px 0;
+}
+
+.tour-card__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tour-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--fg-muted);
+    font-size: 13px;
+}
+
+.tour-meta-item .material-symbols-outlined {
+    font-size: 18px;
+}
+
+.btn--join {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn--join:hover {
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+    transform: scale(1.02);
+}
+
+.btn--outline-tour {
+    background: transparent;
+    border: 2px solid #f59e0b;
+    color: #f59e0b;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn--outline-tour:hover {
+    background: #f59e0b;
+    color: #11141d;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn--outline-tour .material-symbols-outlined {
+    font-size: 22px;
+}
+
+.btn--muted-tour {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--fg-muted);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn--muted-tour:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Light Theme Overrides */
+:root[data-theme="light"] .search-input {
+    background: #ffffff;
+    border-color: #e5e7eb;
+}
+:root[data-theme="light"] .search-input:focus {
+    border-color: #f43f5e;
+    background: #ffffff;
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.15);
+}
+:root[data-theme="light"] .tabs-nav {
+    border-color: #e5e7eb;
+}
+:root[data-theme="light"] .chip-btn {
+    background: #f5f5f7;
+    border-color: #e5e7eb;
+    color: #4b5563;
+}
+:root[data-theme="light"] .chip-btn.active {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    color: #ffffff;
+    border-color: transparent;
+}
+:root[data-theme="light"] .btn--icon-only {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    color: #4b5563;
+}
+:root[data-theme="light"] .btn--icon-only:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+:root[data-theme="light"] .tournament-card {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+:root[data-theme="light"] .tour-card__divider {
+    background: #e5e7eb;
+}
+:root[data-theme="light"] .btn--muted-tour {
+    background: #f5f5f7;
+    border-color: #e5e7eb;
+}
+
+@media (max-width: 768px) {
+    .tour-head-row {
+        flex-direction: column;
+        align-items: flex-start;
     }
-    .tour-stats {
-        grid-template-columns: 1fr;
+    .search-wrap {
+        max-width: 100%;
     }
-    .stat-box {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        min-height: 60px;
-        text-align: left;
+    .tour-card__title {
+        font-size: 18px;
     }
-    .stat-box__val {
-        margin-bottom: 0;
+    .tour-card__bottom {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
     }
-    .stat-box__label {
-        margin-bottom: 0;
+    .btn--join,
+    .btn--outline-tour,
+    .btn--muted-tour {
+        justify-content: center;
     }
+}
+
+/* Popover System */
+.tour-popover {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: #1a1e29;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    z-index: 1000;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    display: none;
+    animation: fadeInScale 0.2s ease-out;
+    min-width: 200px;
+}
+
+.tour-popover.visible {
+    display: block;
+}
+
+.tour-popover--left {
+    right: auto;
+    left: 0;
+}
+
+.popover-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-strong);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.popover-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.popover-item {
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--fg-muted);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.popover-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--fg-strong);
+}
+
+.popover-item.active {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b);
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
+}
+
+/* Internal search in popovers */
+.popover-search-wrap {
+    margin-bottom: 12px;
+}
+
+.popover-search {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--fg-strong);
+    outline: none;
+}
+
+.popover-search:focus {
+    border-color: #f43f5e;
+}
+
+.popover-footer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-reset-link {
+    background: none;
+    border: none;
+    color: #f43f5e;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px;
+    transition: opacity 0.2s;
+}
+
+.btn-reset-link:hover {
+    opacity: 0.8;
+}
+
+.popover-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.popover-grid::-webkit-scrollbar {
+    width: 4px;
+}
+.popover-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Calendar Styling */
+.calendar-popover {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 12px;
+    background: #1a1e29;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    width: 280px;
+}
+
+.calendar-popover.visible {
+    display: block;
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.cal-day-label {
+    font-size: 11px;
+    color: var(--fg-muted);
+    text-align: center;
+    padding-bottom: 8px;
+}
+
+.cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cal-day:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.cal-day.active {
+    background: linear-gradient(90deg, #f43f5e, #f59e0b) !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
+}
+.cal-day.today {
+    border: 1px solid rgba(244, 63, 94, 0.4);
+}
+
+:root[data-theme="light"] .calendar-popover {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+:root[data-theme="light"] .tour-popover {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+:root[data-theme="light"] .popover-item:hover {
+    background: #f5f5f7;
+}
+:root[data-theme="light"] .popover-title {
+    border-bottom-color: #e5e7eb;
 }
 
 .card__foot {
@@ -3802,4 +4401,14 @@ a {
 
 #workspace-view[hidden] .workspace-mobile-header {
     display: none !important;
+}
+
+@media (max-width: 600px) {
+    #workspace-content
+        > div.dash-view
+        > div
+        > div.card.dash-card.tour-card.in
+        > div.tour-stats {
+        grid-template-columns: 1fr;
+    }
 }
