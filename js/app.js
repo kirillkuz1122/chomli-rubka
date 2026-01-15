@@ -1156,10 +1156,12 @@ const ViewManager = {
             // Начальное состояние фильтров
             this.tourFilters = {
                 status: "all",
-                categories: [], // Массив для мультивыбора
+                categories: [],
                 search: "",
                 sort: "none",
                 selectedDate: null,
+                viewMonth: new Date().getMonth(), // Текущий месяц (0-11)
+                viewYear: new Date().getFullYear(), // Текущий год (2026)
             };
             this.content.innerHTML = renderTournaments();
             initTournamentsInteractions(this.content);
@@ -1653,27 +1655,71 @@ function initTournamentsInteractions(container) {
     );
 
     // 2. Поповер Календаря
-    const renderCalendar = () => `
-        <div class="popover-title">Выбрать дату</div>
-        <div class="calendar-popover" style="display:block; border:none; box-shadow:none; padding:0; position:static;">
-            <div style="font-size: 14px; font-weight: 500; text-align: center; margin-bottom: 12px;">Январь 2024</div>
-            <div class="cal-grid">
-                ${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
-                    .map((d) => `<div class="cal-day-label">${d}</div>`)
-                    .join("")}
-                ${Array.from({ length: 31 }, (_, i) => {
-                    const day = i + 1;
-                    const isActive = filters.selectedDate === day;
-                    return `<div class="cal-day ${
-                        isActive ? "active" : ""
-                    }" data-day="${day}">${day}</div>`;
-                }).join("")}
+    const renderCalendar = () => {
+        const monthNames = [
+            "Январь",
+            "Февраль",
+            "Март",
+            "Апрель",
+            "Май",
+            "Июнь",
+            "Июль",
+            "Август",
+            "Сентябрь",
+            "Октябрь",
+            "Ноябрь",
+            "Декабрь",
+        ];
+        const { viewMonth, viewYear, selectedDate } = filters;
+
+        // Расчет дней
+        const firstDay = new Date(viewYear, viewMonth, 1).getDay(); // 0 (Вс) - 6 (Сб)
+        const offset = firstDay === 0 ? 6 : firstDay - 1; // Пн=0, Вс=6
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+        return `
+            <div class="popover-title">Выбрать дату</div>
+            <div class="calendar-popover" style="display:block; border:none; box-shadow:none; padding:0; position:static;">
+                <div class="cal-header">
+                    <button class="cal-nav" data-cal-nav="prev">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <div class="cal-title">${
+                        monthNames[viewMonth]
+                    } ${viewYear}</div>
+                    <button class="cal-nav" data-cal-nav="next">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                </div>
+                <div class="cal-grid">
+                    ${["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+                        .map((d) => `<div class="cal-day-label">${d}</div>`)
+                        .join("")}
+                    ${Array(offset)
+                        .fill('<div class="cal-day empty"></div>')
+                        .join("")}
+                    ${Array.from({ length: daysInMonth }, (_, i) => {
+                        const day = i + 1;
+                        const isToday =
+                            new Date().getDate() === day &&
+                            new Date().getMonth() === viewMonth &&
+                            new Date().getFullYear() === viewYear;
+                        const isSel =
+                            selectedDate &&
+                            selectedDate.day === day &&
+                            selectedDate.month === viewMonth &&
+                            selectedDate.year === viewYear;
+                        return `<div class="cal-day ${isSel ? "active" : ""} ${
+                            isToday ? "today" : ""
+                        }" data-day="${day}">${day}</div>`;
+                    }).join("")}
+                </div>
             </div>
-        </div>
-        <div class="popover-footer">
-            <button class="btn-reset-link" id="cal-reset">Сбросить</button>
-        </div>
-    `;
+            <div class="popover-footer">
+                <button class="btn-reset-link" id="cal-reset">Сбросить</button>
+            </div>
+        `;
+    };
 
     const dateBtn = container.querySelector('[data-slug="date"]');
     if (dateBtn) {
@@ -1692,13 +1738,48 @@ function initTournamentsInteractions(container) {
 
         popover.addEventListener("click", (e) => {
             e.stopPropagation();
-            const dayEl = e.target.closest(".cal-day");
+            const dayEl = e.target.closest(".cal-day:not(.empty)");
+            const navBtn = e.target.closest("[data-cal-nav]");
             const resetBtn = e.target.closest("#cal-reset");
+
+            if (navBtn) {
+                const dir = navBtn.dataset.calNav;
+                if (dir === "prev") {
+                    filters.viewMonth--;
+                    if (filters.viewMonth < 0) {
+                        filters.viewMonth = 11;
+                        filters.viewYear--;
+                    }
+                } else {
+                    filters.viewMonth++;
+                    if (filters.viewMonth > 11) {
+                        filters.viewMonth = 0;
+                        filters.viewYear++;
+                    }
+                }
+                popover.innerHTML = renderCalendar();
+            }
 
             if (dayEl) {
                 const day = parseInt(dayEl.dataset.day);
-                filters.selectedDate =
-                    filters.selectedDate === day ? null : day;
+                const newDate = {
+                    day,
+                    month: filters.viewMonth,
+                    year: filters.viewYear,
+                };
+
+                // Toggle selection
+                if (
+                    filters.selectedDate &&
+                    filters.selectedDate.day === day &&
+                    filters.selectedDate.month === filters.viewMonth &&
+                    filters.selectedDate.year === filters.viewYear
+                ) {
+                    filters.selectedDate = null;
+                } else {
+                    filters.selectedDate = newDate;
+                }
+
                 popover.innerHTML = renderCalendar();
                 updateList();
                 if (filters.selectedDate) closeAllPopovers();
@@ -1706,6 +1787,9 @@ function initTournamentsInteractions(container) {
 
             if (resetBtn) {
                 filters.selectedDate = null;
+                // Опционально: сбросить просмотр на текущую дату
+                filters.viewMonth = new Date().getMonth();
+                filters.viewYear = new Date().getFullYear();
                 popover.innerHTML = renderCalendar();
                 updateList();
                 closeAllPopovers();

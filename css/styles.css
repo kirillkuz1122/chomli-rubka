@@ -2083,6 +2083,31 @@ a {
 }
 
 @media (max-width: 1088px) {
+    .tour-popover {
+        position: fixed !important;
+        /* bottom: 16px !important;
+        top: auto !important; */
+        left: 50% !important;
+        right: auto !important;
+        max-width: none !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        z-index: 2000;
+        border-radius: 20px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+        padding: 12px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .tour-popover * {
+        box-sizing: border-box !important;
+    }
+
+    .tour-popover--right,
+    .tour-popover--left {
+        left: 20px;
+        right: 20px;
+    }
     .sidebar {
         width: 80px;
     }
@@ -4073,6 +4098,116 @@ a {
     .btn--muted-tour {
         justify-content: center;
     }
+
+    /* Fix popovers on mobile */
+    .tour-popover {
+        position: fixed !important;
+        /* bottom: 16px !important;
+        top: auto !important; */
+        left: 50% !important;
+        right: auto !important;
+        width: 290px !important;
+        max-width: calc(100% - 20px) !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        z-index: 2000;
+        border-radius: 20px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
+        padding: 12px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .tour-popover * {
+        box-sizing: border-box !important;
+    }
+
+    .tour-popover--right,
+    .tour-popover--left {
+        left: 20px;
+        right: 20px;
+    }
+
+    .calendar-popover {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        position: static !important;
+    }
+
+    .cal-grid {
+        display: grid !important;
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        gap: 0px !important;
+        margin-top: 4px !important;
+        width: 100% !important;
+    }
+
+    .cal-day {
+        font-size: 11px !important;
+        height: 28px !important;
+        width: 100% !important;
+        aspect-ratio: auto !important;
+        border-radius: 6px;
+    }
+
+    .cal-day-label {
+        font-size: 10px !important;
+        padding-bottom: 2px !important;
+        font-weight: 500 !important;
+        opacity: 0.6;
+    }
+
+    .popover-title {
+        font-size: 13px !important;
+        padding-bottom: 6px !important;
+        margin-bottom: 6px !important;
+        font-weight: 600 !important;
+    }
+
+    .popover-item {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .popover-footer {
+        margin-top: 6px !important;
+        padding-top: 6px !important;
+    }
+
+    /* Календарный подзаголовок (Январь 2026) */
+    .cal-header {
+        margin-bottom: 12px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+    }
+
+    .cal-title {
+        font-size: 13px !important;
+        font-weight: 600 !important;
+    }
+
+    .cal-nav {
+        background: none !important;
+        border: none !important;
+        color: var(--fg-muted) !important;
+        cursor: pointer !important;
+        padding: 4px !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .cal-nav .material-symbols-outlined {
+        font-size: 18px !important;
+    }
+
+    .calendar-popover > div:first-child {
+        margin-bottom: 0px !important;
+    }
 }
 
 /* Popover System */
@@ -4260,8 +4395,48 @@ a {
     color: white !important;
     box-shadow: 0 4px 10px rgba(244, 63, 94, 0.3);
 }
+.cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.cal-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-strong);
+}
+
+.cal-nav {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: var(--fg-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    transition: all 0.2s;
+}
+
+.cal-nav:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--fg-strong);
+}
+
+.cal-nav .material-symbols-outlined {
+    font-size: 20px;
+}
+
+.cal-day.empty {
+    cursor: default;
+    pointer-events: none;
+}
+
 .cal-day.today {
-    border: 1px solid rgba(244, 63, 94, 0.4);
+    border: 1px solid #f43f5e;
+    color: #f43f5e;
 }
 
 :root[data-theme="light"] .calendar-popover {
