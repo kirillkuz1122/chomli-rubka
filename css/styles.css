@@ -4387,6 +4387,11 @@ a {
     gap: 10px;
     min-width: 0;
     position: relative; /* Для позиционирования подсказки */
+
+    /* Запрещаем выделение текста и вызов системного меню на мобилках */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 /* Подсказка при зажатии (Tooltip) */
@@ -4777,4 +4782,332 @@ a {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
+}
+
+/* =========================================
+   LOADER & 404 PAGE
+   ========================================= */
+
+/* Global Loader Overlay */
+.loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0b0d11;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader-overlay.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+#app {
+    transition: opacity 0.4s ease;
+}
+
+.loader-overlay[hidden] {
+    display: none; /* Fallback for legacy app logic */
+}
+
+/* Rolling Cube Animation */
+.cube-wrapper {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    perspective: 200px;
+}
+
+.cube {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+    background-size: 200% 200%;
+    box-shadow: 0 10px 30px rgba(244, 63, 94, 0.4);
+    animation: cubeRoll 1.2s infinite ease-in-out,
+        cubeShimmer 2s infinite linear;
+}
+
+@keyframes cubeRoll {
+    0% {
+        transform: rotate(0deg);
+        left: 0;
+    }
+    25% {
+        transform: rotate(90deg);
+        left: 20px;
+    }
+    50% {
+        transform: rotate(180deg);
+        left: 40px;
+    }
+    75% {
+        transform: rotate(270deg);
+        left: 20px;
+    }
+    100% {
+        transform: rotate(360deg);
+        left: 0;
+    }
+}
+
+@keyframes cubeShimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.loader-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--fg-strong);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    animation: pulseText 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseText {
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.98);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+/* 404 Page Styles */
+.error-page {
+    background: var(--bg);
+    color: var(--fg);
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.error-content {
+    max-width: 500px;
+    padding: 24px;
+    z-index: 10;
+}
+
+.error-cube-container {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 40px;
+    display: grid;
+    place-items: center;
+}
+
+.error-cube {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--accent-from), var(--accent-to));
+    border-radius: 24px;
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+    font-weight: 900;
+    color: #fff;
+    box-shadow: 0 20px 50px rgba(244, 63, 94, 0.3);
+    position: relative;
+    animation: glitchCube 3s infinite;
+}
+
+@keyframes glitchCube {
+    0%,
+    100% {
+        transform: rotate(0) scale(1);
+    }
+    30% {
+        transform: rotate(5deg) scale(1.05);
+        filter: hue-rotate(15deg);
+    }
+    35% {
+        transform: rotate(-3deg) scale(0.98);
+    }
+    70% {
+        transform: rotate(-5deg) scale(1.02);
+        filter: hue-rotate(-10deg);
+    }
+}
+
+.error-title {
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 900;
+    margin-bottom: 12px;
+    background: linear-gradient(to right, #fff, var(--fg-muted));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-subtitle {
+    font-size: 16px;
+    color: var(--fg-muted);
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.decor-cube {
+    position: absolute;
+    background: var(--muted);
+    border-radius: 8px;
+    opacity: 0.05;
+    z-index: 1;
+}
+
+.decor-1 {
+    width: 100px;
+    height: 100px;
+    top: 10%;
+    left: 10%;
+    transform: rotate(15deg);
+}
+.decor-2 {
+    width: 150px;
+    height: 150px;
+    bottom: 15%;
+    right: 10%;
+    transform: rotate(-10deg);
+}
+.decor-3 {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    left: 15%;
+    transform: rotate(45deg);
+}
+
+/* =========================================
+   TOAST NOTIFICATION SYSTEM
+   ========================================= */
+.toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    min-width: 280px;
+    max-width: 360px;
+    background: rgba(26, 30, 41, 0.9);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 4px solid var(--accent-from);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transform: translateX(120%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+    opacity: 0;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--accent-from);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.toast__content {
+    flex-grow: 1;
+}
+
+.toast__title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg-strong);
+    margin-bottom: 2px;
+}
+
+.toast__desc {
+    font-size: 12px;
+    color: var(--fg-muted);
+    line-height: 1.4;
+}
+
+/* Toast States */
+.toast--success {
+    border-left-color: #10b981;
+}
+.toast--success .toast__icon {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.toast--error {
+    border-left-color: #f43f5e;
+}
+.toast--error .toast__icon {
+    background: rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
+}
+
+.toast--info {
+    border-left-color: #3b82f6;
+}
+.toast--info .toast__icon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+@media (max-width: 480px) {
+    .toast-container {
+        top: auto;
+        bottom: 100px; /* Над мобильной навигацией */
+        left: 16px;
+        right: 16px;
+    }
+    .toast {
+        min-width: 0;
+        width: 100%;
+    }
 }

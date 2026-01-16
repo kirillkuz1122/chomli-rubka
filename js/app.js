@@ -14,6 +14,130 @@ const themeToggleDrawer = document.getElementById("themeToggleDrawer");
 const themeToggleDrawerIcon = document.getElementById("themeToggleDrawerIcon");
 
 /**
+ * ГЛОБАЛЬНЫЕ УТИЛИТЫ (Toasts, Haptic, Loader)
+ */
+const Loader = {
+    el: document.getElementById("site-loader"),
+    show() {
+        if (!this.el) return;
+        this.el.removeAttribute("hidden");
+        // Небольшая задержка, чтобы анимация opacity сработала после удаления hidden
+        requestAnimationFrame(() => {
+            this.el.classList.add("is-visible");
+        });
+    },
+    hide(delay = 500) {
+        if (!this.el) return;
+        this.el.classList.remove("is-visible");
+        setTimeout(() => {
+            if (!this.el.classList.contains("is-visible")) {
+                this.el.setAttribute("hidden", "");
+            }
+        }, delay);
+    },
+};
+
+// Авто-лоадер на старте убран. Используйте Loader.show() / Loader.hide() для ручного управления.
+const Toast = {
+    getContainer() {
+        let container = document.querySelector(".toast-container");
+        if (!container) {
+            container = document.createElement("div");
+            container.className = "toast-container";
+            document.body.appendChild(container);
+        }
+        return container;
+    },
+    show(title, desc, type = "success", duration = 4000) {
+        const container = this.getContainer();
+        const toast = document.createElement("div");
+        toast.className = `toast toast--${type}`;
+
+        const icons = {
+            success: "check_circle",
+            error: "error",
+            info: "info",
+        };
+
+        toast.innerHTML = `
+            <div class="toast__icon">
+                <span class="material-symbols-outlined">${icons[type]}</span>
+            </div>
+            <div class="toast__content">
+                <div class="toast__title">${title}</div>
+                <div class="toast__desc">${desc}</div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+        requestAnimationFrame(() => toast.classList.add("show"));
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 400);
+        }, duration);
+    },
+};
+
+const Haptic = {
+    vibrate(pattern = 10) {
+        if ("vibrate" in navigator) {
+            try {
+                navigator.vibrate(pattern);
+            } catch (e) {}
+        }
+    },
+};
+
+const Sound = {
+    ctx: null,
+    init() {
+        if (!this.ctx)
+            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    },
+    playClick() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(
+            100,
+            this.ctx.currentTime + 0.1
+        );
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+            0.01,
+            this.ctx.currentTime + 0.1
+        );
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.1);
+    },
+    playSwoosh() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(100, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(
+            400,
+            this.ctx.currentTime + 0.3
+        );
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.3);
+    },
+};
+
+// Скрываем лоадер при загрузке страницы
+window.addEventListener("load", () => Loader.hide(1000));
+
+/**
  * МЕГА-ПОИСК (Helper)
  * Исправляет раскладку, транслитерирует и делает нечеткий поиск
  */
@@ -1614,7 +1738,9 @@ function initTournamentsInteractions(container) {
             e.stopPropagation();
             const isVisible = popover.classList.contains("visible");
             closeAllPopovers();
-            if (!isVisible) popover.classList.add("visible");
+            if (!isVisible) {
+                popover.classList.add("visible");
+            }
         });
 
         popover.addEventListener("click", (e) => {
@@ -1941,6 +2067,7 @@ function initTournamentsInteractions(container) {
 
             if (item) {
                 const slug = item.dataset.slug;
+
                 if (filters.categories.includes(slug)) {
                     filters.categories = filters.categories.filter(
                         (c) => c !== slug
