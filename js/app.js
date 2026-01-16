@@ -1877,7 +1877,7 @@ function initTournamentsInteractions(container) {
                     const isActive = filters.categories.includes(slug);
                     return `<div class="popover-item ${
                         isActive ? "active" : ""
-                    }" data-slug="${slug}">${name}</div>`;
+                    }" data-slug="${slug}" data-full="${name}"><span>${name}</span></div>`;
                 })
                 .join("");
         }
@@ -1906,7 +1906,7 @@ function initTournamentsInteractions(container) {
                             const isActive = filters.categories.includes(slug);
                             return `<div class="popover-item ${
                                 isActive ? "active" : ""
-                            }" data-slug="${slug}">${name}</div>`;
+                            }" data-slug="${slug}" data-full="${name}"><span>${name}</span></div>`;
                         })
                         .join("")}
                 </div>
@@ -1926,7 +1926,6 @@ function initTournamentsInteractions(container) {
             closeAllPopovers();
             if (!vis) {
                 popover.classList.add("visible");
-                // При открытии сбрасываем поиск и фокусимся
                 popover.innerHTML = renderCats();
                 setTimeout(
                     () => popover.querySelector(".popover-search")?.focus(),
@@ -2000,14 +1999,12 @@ function initTournamentsInteractions(container) {
             if (slug === "all") {
                 filters.categories = [];
             } else {
-                // Если кликнули по уже активному быстрому чипсу - снимаем его
-                if (
-                    filters.categories.includes(slug) &&
-                    filters.categories.length === 1
-                ) {
-                    filters.categories = [];
+                if (filters.categories.includes(slug)) {
+                    filters.categories = filters.categories.filter(
+                        (c) => c !== slug
+                    );
                 } else {
-                    filters.categories = [slug];
+                    filters.categories.push(slug);
                 }
             }
             syncCategoryUI();

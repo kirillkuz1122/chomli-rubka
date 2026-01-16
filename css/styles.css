@@ -4385,6 +4385,47 @@ a {
     display: flex;
     align-items: center;
     gap: 10px;
+    min-width: 0;
+    position: relative; /* Для позиционирования подсказки */
+}
+
+/* Подсказка при зажатии (Tooltip) */
+.popover-item::after {
+    content: attr(data-full);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    background: #1e2533;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.popover-item:active::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px);
+}
+
+:root[data-theme="light"] .popover-item::after {
+    background: #ffffff;
+    color: #11141d;
+    border-color: #e5e7eb;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.popover-item span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 @media (hover: hover) {
@@ -4448,10 +4489,11 @@ a {
 
 .popover-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
     max-height: 300px;
     overflow-y: auto;
+    overflow-x: hidden; /* Убираем боковой скролл */
     padding-right: 8px;
 }
 
