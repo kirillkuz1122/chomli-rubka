@@ -1471,6 +1471,10 @@ function renderTournaments() {
             <div class="tour-list" id="tournaments-list-container">
                 ${renderTournamentList(TOURNAMENTS_DATA)}
             </div>
+
+            <div class="tour-more-action" data-view-anim style="transition-delay: 0.3s">
+                <button class="btn btn--muted-tour btn--more">Показать еще</button>
+            </div>
         </div>
     `;
 }
@@ -1853,7 +1857,11 @@ function initTournamentsInteractions(container) {
 
         // 2. Состояние кнопки "Еще"
         if (otherBtn) {
-            otherBtn.classList.toggle("active", filters.categories.length > 0);
+            const quickSlugs = ["algo", "team", "ml", "marathon"];
+            const hasOther = filters.categories.some(
+                (c) => !quickSlugs.includes(c)
+            );
+            otherBtn.classList.toggle("active", hasOther);
         }
 
         // 3. Состояние элементов внутри поповера (если открыт)
