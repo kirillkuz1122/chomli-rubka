@@ -70,7 +70,9 @@ body,
 .card,
 .drawer__panel,
 .modal__panel {
-    transition: background-color 0.25s ease, color 0.25s ease,
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
         border-color 0.25s ease;
 }
 /* Скрыть горизонтальный скролл у карусели */
@@ -113,9 +115,18 @@ body {
 }
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
-        Noto Sans, Helvetica, Arial;
-    background: radial-gradient(
+    font-family:
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Ubuntu,
+        Cantarell,
+        Noto Sans,
+        Helvetica,
+        Arial;
+    background:
+        radial-gradient(
             ellipse at top,
             rgba(244, 63, 94, 0.2),
             transparent 45%
@@ -146,11 +157,8 @@ a {
 /* GRID overlay */
 .grid {
     opacity: var(--grid-o);
-    background-image: linear-gradient(
-            to right,
-            var(--grid-color) 1px,
-            transparent 1px
-        ),
+    background-image:
+        linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
     background-size: var(--grid-size) var(--grid-size);
     pointer-events: none;
@@ -407,7 +415,9 @@ a {
     border-radius: 999px;
     border: 1px solid color-mix(in oklab, #fff 20%, transparent);
     background: var(--muted);
-    transition: transform 0.2s, background 0.2s;
+    transition:
+        transform 0.2s,
+        background 0.2s;
 }
 @media (hover: hover) {
     .side-nav__dot:hover {
@@ -436,7 +446,9 @@ a {
     opacity: 0;
     transform: translateX(6px);
     pointer-events: none;
-    transition: opacity 0.15s, transform 0.15s;
+    transition:
+        opacity 0.15s,
+        transform 0.15s;
 }
 .side-nav__dot:hover::after {
     opacity: 1;
@@ -516,7 +528,9 @@ a {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.35));
-    animation: breathe 4s ease-in-out infinite, gloss 3.5s ease-in-out infinite;
+    animation:
+        breathe 4s ease-in-out infinite,
+        gloss 3.5s ease-in-out infinite;
     white-space: nowrap;
     max-width: 100%;
 }
@@ -561,8 +575,9 @@ a {
 }
 .formulas span {
     position: absolute;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas,
-        "Liberation Mono", monospace;
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+        monospace;
     color: #fff;
     font-weight: 700;
     mix-blend-mode: overlay;
@@ -881,7 +896,8 @@ a {
     font-size: 18px;
     color: #0b1220;
     border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25),
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 .rankchip--1 {
@@ -1028,7 +1044,9 @@ a {
     padding: 16px;
     transform: translateY(10px);
     opacity: 0;
-    transition: transform 0.2s, opacity 0.2s;
+    transition:
+        transform 0.2s,
+        opacity 0.2s;
 }
 .modal--open .modal__backdrop {
     opacity: 1;
@@ -1071,7 +1089,9 @@ a {
 [data-reveal] {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 }
 [data-reveal].in {
     opacity: 1;
@@ -1140,7 +1160,8 @@ a {
     padding-right: 80px;
     border-radius: 24px;
     border: 1px solid rgba(0, 0, 0, 0.08);
-    background: radial-gradient(
+    background:
+        radial-gradient(
             120% 120% at 0% 0%,
             rgba(255, 255, 255, 0.18),
             transparent 38%
@@ -1152,7 +1173,9 @@ a {
             var(--accent-to) 100%
         );
     color: #0b1220;
-    transition: transform 0.15s ease, filter 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
 }
 .card--all .card__topbar {
     display: none;
@@ -1174,9 +1197,12 @@ a {
     place-items: center;
     background: rgba(255, 255, 255, 0.92);
     color: #0b1220;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18),
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.18),
         inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    transition: transform 0.15s ease, background 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
 }
 @media (hover: hover) {
     .card--all:hover {
@@ -1215,8 +1241,13 @@ a {
 #drawerClose,
 #modalClose {
     position: relative;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease,
-        background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease,
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
     will-change: transform, filter;
 }
 
@@ -1350,7 +1381,10 @@ a {
     );
     color: #0b1220;
     box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
-    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        filter 0.15s ease;
     margin-top: 20px;
 }
 .btn--hero::after {
@@ -1407,7 +1441,8 @@ a {
         var(--accent-from),
         var(--accent-to)
     );
-    -webkit-mask: linear-gradient(#000 0 0) content-box,
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -1446,7 +1481,9 @@ a {
     border-radius: 14px;
     background: var(--muted);
     border: 1px solid var(--border);
-    transition: transform 0.14s ease, background 0.14s ease,
+    transition:
+        transform 0.14s ease,
+        background 0.14s ease,
         box-shadow 0.14s ease;
 }
 .drawer__item + .drawer__item {
@@ -1573,7 +1610,9 @@ a {
 
 .drawer__panel {
     transform: translateX(102%);
-    transition: transform 0.34s var(--tr-open), opacity 0.2s ease;
+    transition:
+        transform 0.34s var(--tr-open),
+        opacity 0.2s ease;
 }
 .drawer__backdrop {
     opacity: 0;
@@ -1592,7 +1631,9 @@ a {
 /* плавное закрытие (отдельный тайминг) */
 .drawer--closing .drawer__panel {
     transform: translateX(102%);
-    transition: transform 0.3s var(--tr-close), opacity 0.2s ease;
+    transition:
+        transform 0.3s var(--tr-close),
+        opacity 0.2s ease;
 }
 .drawer--closing .drawer__backdrop {
     opacity: 0;
@@ -1644,9 +1685,13 @@ a {
         var(--accent-to)
     );
     color: #0b1220;
-    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16),
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.55);
-    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 /* кружок со стрелкой — как у "Все турниры" */
@@ -1657,7 +1702,8 @@ a {
     display: grid;
     place-items: center;
     flex: 0 0 auto;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
         0 2px 8px rgba(0, 0, 0, 0.18);
 }
 :root:not([data-theme="light"]) .row--cta .arrow {
@@ -1673,7 +1719,8 @@ a {
 .row--cta:hover .chip {
     transform: translateY(-2px);
     filter: saturate(1.05);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22),
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.55);
     color: #fff;
 }
@@ -1698,13 +1745,17 @@ a {
 
 /* анимация только у самой кнопки внутри */
 .row--cta .chip {
-    transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
     will-change: transform;
 }
 .row--cta:hover .chip {
     transform: translateY(-2px);
     filter: saturate(1.05);
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22),
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22),
         inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 .row--cta:active .chip {
@@ -1781,7 +1832,10 @@ a {
     gap: 16px;
     border-radius: 16px;
 
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+        system-ui,
+        -apple-system,
+        sans-serif;
     font-size: 16px;
     color: #888899;
     font-weight: 500;
@@ -1806,7 +1860,11 @@ a {
     }
     .nav-item:hover:not(.active) .material-symbols-outlined {
         color: #fff;
-        font-variation-settings: "FILL" 1, "wght" 300, "GRAD" 0, "opsz" 24;
+        font-variation-settings:
+            "FILL" 1,
+            "wght" 300,
+            "GRAD" 0,
+            "opsz" 24;
     }
 }
 
@@ -1835,7 +1893,8 @@ a {
     border-radius: 16px;
     padding: 1px;
     background: linear-gradient(176.35deg, #f43f5e, #f59e0b);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -1855,7 +1914,11 @@ a {
 }
 
 .nav-item.active .material-symbols-outlined {
-    font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+    font-variation-settings:
+        "FILL" 0,
+        "wght" 300,
+        "GRAD" 0,
+        "opsz" 24;
 }
 
 /* Theme toggle */
@@ -2026,7 +2089,8 @@ a {
 
 /* Bottom Row Widgets */
 .task-widget {
-    background: radial-gradient(
+    background:
+        radial-gradient(
             circle at top right,
             rgba(255, 255, 255, 0.03),
             transparent 40%
@@ -2169,7 +2233,9 @@ a {
     color: var(--fg);
     background: var(--field-bg-dark);
     outline: none;
-    transition: box-shadow 0.15s ease, border-color 0.15s ease,
+    transition:
+        box-shadow 0.15s ease,
+        border-color 0.15s ease,
         background 0.15s ease;
 }
 :root[data-theme="light"] .input,
@@ -2218,8 +2284,11 @@ a {
     place-items: center;
     outline: none;
     cursor: pointer;
-    transition: filter 0.15s ease, border-color 0.15s ease,
-        background 0.15s ease, transform 0.15s ease;
+    transition:
+        filter 0.15s ease,
+        border-color 0.15s ease,
+        background 0.15s ease,
+        transform 0.15s ease;
 }
 .checkbox input:active {
     transform: scale(0.98);
@@ -2251,7 +2320,9 @@ a {
     filter: none;
     background: var(--muted) !important;
     color: color-mix(in oklab, var(--fg), #000 15%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 transparent !important;
     cursor: not-allowed;
 }
 
@@ -2319,7 +2390,12 @@ a {
     height: 48px;
     padding: 0;
     text-align: center;
-    font: 800 20px/48px system-ui, -apple-system, Segoe UI, Roboto, Arial;
+    font:
+        800 20px/48px system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Arial;
     letter-spacing: 0.02em;
 }
 .code-sep {
@@ -2348,304 +2424,6 @@ a {
         height: 46px;
         line-height: 46px;
     }
-}
-/* ===== PATCH • 2025-10-05 ===== */
-
-/* (A) Стрелка в градиентных кнопках (например, "Полный рейтинг") — всегда белая */
-.btn--accent svg,
-.btn--accent svg path {
-    color: #fff;
-    stroke: #fff;
-    fill: #fff;
-}
-
-/* (B) Меню/модалки: панель не мерцает, появляется яркой сразу */
-.drawer__backdrop {
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.22s ease;
-}
-.drawer__panel {
-    z-index: 2;
-    opacity: 1;
-    transition: transform 0.34s ease;
-}
-.drawer--open .drawer__backdrop {
-    opacity: 0.5;
-}
-.drawer--open .drawer__panel {
-    transform: translateX(0);
-}
-
-.modal__panel {
-    box-sizing: border-box;
-    padding: 16px 18px;
-    max-width: min(560px, 96vw);
-}
-#codeModal .modal__panel {
-    max-width: min(600px, 96vw);
-}
-.modal .modal__panel {
-    transform: translateY(16px);
-}
-.modal--open .modal__panel {
-    transform: translateY(0);
-}
-
-/* (C) Выровнять "глаз" у полей пароля + зарезервировать место */
-.field.input-group {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    align-items: center;
-}
-.field.input-group label {
-    grid-column: 1 / -1;
-}
-.field.input-group .input {
-    grid-row: 2;
-    grid-column: 1;
-    padding-right: 10px;
-}
-.field.input-group .input-toggle {
-    grid-row: 2;
-    grid-column: 2;
-    position: static;
-    transform: none;
-    margin-left: 8px;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    background: var(--muted);
-    border: 1px solid var(--border);
-    color: var(--fg);
-}
-.input-toggle:hover {
-    filter: brightness(1.05);
-}
-.input-toggle:active {
-    transform: scale(0.98);
-}
-/* Состояние "закрыт" — добавляем диагональную черту */
-.input-toggle.line::after {
-    content: "";
-    width: 18px;
-    height: 2px;
-    background: currentColor;
-    transform: rotate(-32deg);
-}
-
-/* (D) Пояснения об ошибках под полями паролей */
-.field [data-error-for="pass"],
-.field [data-error-for="pass2"] {
-    margin-top: 4px;
-}
-
-/* (E) Код: решаем паддинг справа и мобильную адаптацию */
-.code-grid {
-    justify-content: center;
-} /* центрируем весь набор */
-@media (max-width: 420px) {
-    .code-grid {
-        grid-template-columns: repeat(4, 36px) 18px repeat(4, 36px);
-        gap: 6px;
-    }
-    .code-cell {
-        width: 36px;
-        height: 44px;
-        line-height: 44px;
-    }
-}
-@media (max-width: 370px) {
-    .modal__panel {
-        width: 94vw;
-        padding: 14px;
-    } /* симметричные отступы на узких экранах */
-    .code-grid {
-        grid-template-columns: repeat(4, 34px) 14px repeat(4, 34px);
-        gap: 6px;
-    }
-    .code-cell {
-        width: 34px;
-        height: 40px;
-        line-height: 40px;
-    }
-}
-
-/* (F) Кнопки по умолчанию серые (когда disabled) */
-.btn.is-disabled,
-.btn:disabled {
-    filter: none;
-    background: var(--muted) !important;
-    color: color-mix(in oklab, var(--fg), #000 15%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
-    cursor: not-allowed;
-}
-
-/* (G) Ссылки под формами — меньше и аккуратнее */
-.form__links {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 10px;
-    font-size: 13px;
-}
-.form__links a {
-    color: color-mix(in oklab, var(--fg), #fff 8%);
-    text-decoration: none;
-}
-.form__links a:hover {
-    color: var(--fg-strong);
-    text-decoration: underline;
-}
-/* ===== PATCH • 2025-10-05 ===== */
-
-/* Стрелка в градиентных кнопках (например, “Полный рейтинг”) — белая */
-.btn--accent svg,
-.btn--accent svg path {
-    color: #fff;
-    stroke: #fff;
-    fill: #fff;
-}
-
-/* Панель меню/модалок — появляется яркой сразу, без тёмной вспышки */
-.drawer__backdrop {
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.22s ease;
-}
-.drawer__panel {
-    z-index: 2;
-    opacity: 1;
-    transition: transform 0.34s ease;
-}
-.drawer--open .drawer__backdrop {
-    opacity: 0.5;
-}
-.drawer--open .drawer__panel {
-    transform: translateX(0);
-}
-.modal__panel {
-    box-sizing: border-box;
-    padding: 16px 18px;
-    max-width: min(560px, 96vw);
-}
-#codeModal .modal__panel {
-    max-width: min(600px, 96vw);
-}
-.modal .modal__panel {
-    transform: translateY(16px);
-}
-.modal--open .modal__panel {
-    transform: translateY(0);
-}
-
-/* Выровненный глаз + место под него */
-.field.input-group {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto;
-    align-items: center;
-}
-.field.input-group label {
-    grid-column: 1 / -1;
-}
-.field.input-group .input {
-    grid-row: 2;
-    grid-column: 1;
-    padding-right: 10px;
-}
-.field.input-group .input-toggle {
-    grid-row: 2;
-    grid-column: 2;
-    position: static;
-    transform: none;
-    margin-left: 8px;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    background: var(--muted);
-    border: 1px solid var(--border);
-    color: var(--fg);
-}
-.input-toggle svg {
-    transition: transform 0.12s ease, opacity 0.12s ease;
-}
-.input-toggle:hover {
-    filter: brightness(1.05);
-}
-.input-toggle:active {
-    transform: scale(0.98);
-}
-
-/* Сообщения об ошибках под паролями */
-.field [data-error-for="pass"],
-.field [data-error-for="pass2"] {
-    margin-top: 4px;
-}
-
-/* Код: центрирование + мобильная адаптация (350px ок) */
-.code-grid {
-    justify-content: center;
-}
-@media (max-width: 420px) {
-    .code-grid {
-        grid-template-columns: repeat(4, 36px) 18px repeat(4, 36px);
-        gap: 6px;
-    }
-    .code-cell {
-        width: 36px;
-        height: 44px;
-        line-height: 44px;
-    }
-}
-@media (max-width: 370px) {
-    .modal__panel {
-        width: 94vw;
-        padding: 14px;
-    }
-    .code-grid {
-        grid-template-columns: repeat(4, 34px) 14px repeat(4, 34px);
-        gap: 6px;
-    }
-    .code-cell {
-        width: 34px;
-        height: 40px;
-        line-height: 40px;
-    }
-}
-
-/* Кнопки неактивны (серые), пока форма не валидна */
-.btn.is-disabled,
-.btn:disabled {
-    filter: none;
-    background: var(--muted) !important;
-    color: color-mix(in oklab, var(--fg), #000 15%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
-    cursor: not-allowed;
-}
-
-/* Компактные ссылки под формами */
-.form__links {
-    display: flex;
-    gap: 14px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 10px;
-    font-size: 13px;
-}
-.form__links a {
-    color: color-mix(in oklab, var(--fg), #fff 8%);
-    text-decoration: none;
-}
-.form__links a:hover {
-    color: var(--fg-strong);
-    text-decoration: underline;
 }
 
 /* ===== FIX v3 — 2025‑10‑05 ===== */
@@ -2768,7 +2546,8 @@ a {
     border-radius: 12px;
     padding: 1px;
     background: linear-gradient(176.35deg, #f43f5e, #f59e0b);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
         linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -2805,7 +2584,9 @@ a {
     filter: none;
     background: var(--muted) !important;
     color: color-mix(in oklab, var(--fg), #000 15%);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 0 transparent !important;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 0 0 transparent !important;
     cursor: not-allowed;
 }
 
@@ -2976,7 +2757,8 @@ a {
 /* Valid input glowing state (matches .input-toggle.is-active) */
 .input.is-valid {
     border: 1px solid transparent !important;
-    background: linear-gradient(
+    background:
+        linear-gradient(
                 176.35deg,
                 rgba(244, 63, 94, 0.1),
                 rgba(245, 158, 11, 0.1)
@@ -2991,7 +2773,8 @@ a {
 /* Fix for light mode (shadow visibility) */
 :root[data-theme="light"] .input.is-valid {
     box-shadow: 0 0 12px rgba(244, 63, 94, 0.35);
-    background: linear-gradient(
+    background:
+        linear-gradient(
                 176.35deg,
                 rgba(244, 63, 94, 0.2),
                 rgba(245, 158, 11, 0.2)
@@ -3205,7 +2988,9 @@ a {
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s;
 }
 .btn--gradient-block:hover {
     transform: translateY(-2px);
@@ -3482,8 +3267,10 @@ a {
         rgba(245, 158, 11, 0.05) 100%
     );
     border-radius: 8px;
-    transition: height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
-        background 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background 0.3s ease,
+        box-shadow 0.3s ease;
     position: relative;
 }
 
@@ -3887,7 +3674,9 @@ a {
     gap: 16px;
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
 }
 
 .tournament-card:hover {
@@ -4748,7 +4537,8 @@ a {
     }
 }
 .metric-chart .chart-col.is-active .bar {
-    animation: growBar 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards,
+    animation:
+        growBar 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) backwards,
         pulseBreath 3s infinite ease-in-out 1s; /* Start breathing after grow */
 }
 
@@ -4756,7 +4546,9 @@ a {
 [data-view-anim] {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
 }
 [data-view-anim].in {
     opacity: 1;
@@ -4801,7 +4593,9 @@ a {
     gap: 30px;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
+    transition:
+        opacity 0.5s ease,
+        visibility 0.5s ease;
 }
 
 .loader-overlay.is-visible {
@@ -4835,7 +4629,8 @@ a {
     background: linear-gradient(135deg, var(--accent-from), var(--accent-to));
     background-size: 200% 200%;
     box-shadow: 0 10px 30px rgba(244, 63, 94, 0.4);
-    animation: cubeRoll 1.2s infinite ease-in-out,
+    animation:
+        cubeRoll 1.2s infinite ease-in-out,
         cubeShimmer 2s infinite linear;
 }
 
@@ -5037,7 +4832,9 @@ body.loading {
     align-items: center;
     gap: 16px;
     transform: translateX(120%);
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+    transition:
+        transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.4s ease;
     opacity: 0;
 }
 

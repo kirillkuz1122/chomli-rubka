@@ -103,12 +103,12 @@ const Sound = {
         osc.frequency.setValueAtTime(800, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(
             100,
-            this.ctx.currentTime + 0.1
+            this.ctx.currentTime + 0.1,
         );
         gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(
             0.01,
-            this.ctx.currentTime + 0.1
+            this.ctx.currentTime + 0.1,
         );
         osc.connect(gain);
         gain.connect(this.ctx.destination);
@@ -123,7 +123,7 @@ const Sound = {
         osc.frequency.setValueAtTime(100, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(
             400,
-            this.ctx.currentTime + 0.3
+            this.ctx.currentTime + 0.3,
         );
         gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
         gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
@@ -248,8 +248,8 @@ const MegaSearch = {
                     Math.min(
                         currRow[j] + 1,
                         prevRow[j + 1] + 1,
-                        prevRow[j] + cost
-                    )
+                        prevRow[j] + cost,
+                    ),
                 );
             }
             prevRow = currRow;
@@ -274,7 +274,7 @@ const MegaSearch = {
         return words.some(
             (w) =>
                 this.getDistance(query, w) <= 1 ||
-                this.getDistance(fixed, w) <= 1
+                this.getDistance(fixed, w) <= 1,
         );
     },
 };
@@ -361,7 +361,7 @@ function fitWord() {
         const ratio = (maxW * 0.98) / w;
         const next = Math.max(
             minPx,
-            Math.min(maxPx, Math.floor(fs * Math.min(1, ratio)))
+            Math.min(maxPx, Math.floor(fs * Math.min(1, ratio))),
         );
         el.style.fontSize = next + "px";
     }
@@ -507,10 +507,10 @@ const DYNAMIC_MODALS_HTML = `
         <div class="code-grid">
           ${Array(8)
               .fill(
-                  '<input class="input code-cell" maxlength="1" pattern="[A-Za-z0-9]" autocomplete="off">'
+                  '<input class="input code-cell" maxlength="1" pattern="[A-Za-z0-9]" autocomplete="off">',
               )
               .map((el, i) =>
-                  i === 4 ? '<div class="code-sep">—</div>' + el : el
+                  i === 4 ? '<div class="code-sep">—</div>' + el : el,
               )
               .join("")}
         </div>
@@ -548,10 +548,10 @@ const DYNAMIC_MODALS_HTML = `
         <div class="code-grid">
           ${Array(8)
               .fill(
-                  '<input class="input code-cell" maxlength="1" pattern="[A-Za-z0-9]" autocomplete="off">'
+                  '<input class="input code-cell" maxlength="1" pattern="[A-Za-z0-9]" autocomplete="off">',
               )
               .map((el, i) =>
-                  i === 4 ? '<div class="code-sep">—</div>' + el : el
+                  i === 4 ? '<div class="code-sep">—</div>' + el : el,
               )
               .join("")}
         </div>
@@ -792,7 +792,7 @@ function setupForm(form) {
             }</span>`;
             btn.setAttribute(
                 "aria-label",
-                isPass ? "Показать пароль" : "Скрыть пароль"
+                isPass ? "Показать пароль" : "Скрыть пароль",
             );
             btn.classList.toggle("is-active", !isPass);
         };
@@ -1075,17 +1075,17 @@ function initDragScroll() {
                 e.stopPropagation();
             }
         },
-        true
+        true,
     );
 
     // Кнопки влево/вправо
     const btnLeft = document.getElementById("hsLeft");
     const btnRight = document.getElementById("hsRight");
     btnLeft?.addEventListener("click", () =>
-        slider.scrollBy({ left: -300, behavior: "smooth" })
+        slider.scrollBy({ left: -300, behavior: "smooth" }),
     );
     btnRight?.addEventListener("click", () =>
-        slider.scrollBy({ left: 300, behavior: "smooth" })
+        slider.scrollBy({ left: 300, behavior: "smooth" }),
     );
 
     // Поддержка колесика мыши (Advanced Logic with Smart Snap)
@@ -1131,7 +1131,7 @@ function initDragScroll() {
                 e.preventDefault();
             }
         },
-        { passive: false }
+        { passive: false },
     );
 }
 
@@ -1156,7 +1156,7 @@ document
 const dots = document.querySelectorAll(".side-nav__dot");
 if (dots.length) {
     const sections = ["hero", "what", "tournaments", "top", "footer"].map(
-        (id) => document.getElementById(id)
+        (id) => document.getElementById(id),
     );
 
     const dotObserver = new IntersectionObserver(
@@ -1166,13 +1166,13 @@ if (dots.length) {
                     dots.forEach((d) => {
                         d.classList.toggle(
                             "active",
-                            d.getAttribute("href") === `#${entry.target.id}`
+                            d.getAttribute("href") === `#${entry.target.id}`,
                         );
                     });
                 }
             });
         },
-        { threshold: 0.5 }
+        { threshold: 0.5 },
     );
 
     sections.forEach((s) => {
@@ -1221,7 +1221,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             },
-            { threshold: 0.1 }
+            { threshold: 0.1 },
         );
         heroObserver.observe(heroBtn);
     }
@@ -1237,15 +1237,24 @@ document.addEventListener("DOMContentLoaded", () => {
    ========================================= */
 
 function switchToWorkspace() {
+    // Reset scroll BEFORE switching to avoid layout jumps
+    window.scrollTo({ top: 0, behavior: "instant" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
     document.getElementById("landing-view").hidden = true;
     document.getElementById("workspace-view").hidden = false;
-    document.body.style.overflow = "auto"; // Ensure scroll is enabled
+    document.body.style.overflow = "auto";
     document.body.style.paddingTop = "0";
     ViewManager.open("dashboard");
     closeAnyModal();
 }
 
 function switchToLanding() {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
     document.getElementById("landing-view").hidden = false;
     document.getElementById("workspace-view").hidden = true;
 }
@@ -1294,7 +1303,10 @@ const ViewManager = {
         }
 
         // Re-attach observers and scroll to top
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: "instant" });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
         requestAnimationFrame(() => {
             const newBobs = this.content.querySelectorAll("[data-view-anim]");
             newBobs.forEach((el) => {
@@ -1424,7 +1436,7 @@ function renderDashboard() {
                                 </div>
                                 <div class="bar-lbl">${i.l}</div>
                             </div>
-                        `
+                        `,
                             )
                             .join("")}
                     </div>
@@ -1458,7 +1470,7 @@ function renderDashboard() {
                                 </div>
                                 <div class="bar-lbl">${i.l}</div>
                             </div>
-                        `
+                        `,
                              )
                              .join("")}
                     </div>
@@ -1639,21 +1651,21 @@ function renderTournamentList(data) {
                     t.actionType === "join"
                         ? "btn--join"
                         : t.actionType === "outline"
-                        ? "btn--outline-tour"
-                        : "btn--muted-tour"
+                          ? "btn--outline-tour"
+                          : "btn--muted-tour"
                 }">
                     <span>${t.action}</span>
                     ${
                         t.actionType === "join"
                             ? '<span class="material-symbols-outlined">logout</span>'
                             : t.actionType === "outline"
-                            ? '<span class="material-symbols-outlined">chevron_right</span>'
-                            : '<span class="material-symbols-outlined">bar_chart</span>'
+                              ? '<span class="material-symbols-outlined">chevron_right</span>'
+                              : '<span class="material-symbols-outlined">bar_chart</span>'
                     }
                 </button>
             </div>
         </div>
-    `
+    `,
         )
         .join("");
 }
@@ -1665,7 +1677,7 @@ function initTournamentsInteractions(container) {
     if (!container) return;
 
     const listContainer = container.querySelector(
-        "#tournaments-list-container"
+        "#tournaments-list-container",
     );
     const filters = ViewManager.tourFilters;
 
@@ -1679,7 +1691,7 @@ function initTournamentsInteractions(container) {
             const query = filters.search.toLowerCase().trim();
             const matchesSearch = MegaSearch.match(
                 query,
-                t.title + " " + t.desc
+                t.title + " " + t.desc,
             );
 
             // Несколько категорий
@@ -1781,7 +1793,7 @@ function initTournamentsInteractions(container) {
                 .forEach((i) => i.classList.remove("active"));
             el.classList.add("active");
             updateList();
-        }
+        },
     );
 
     // 2. Поповер Календаря
@@ -1964,7 +1976,7 @@ function initTournamentsInteractions(container) {
     ];
 
     const chips = container.querySelectorAll(
-        ".chip-btn:not([data-slug='other'])"
+        ".chip-btn:not([data-slug='other'])",
     );
     const otherBtn = container.querySelector('[data-slug="other"]');
 
@@ -1985,7 +1997,7 @@ function initTournamentsInteractions(container) {
         if (otherBtn) {
             const quickSlugs = ["algo", "team", "ml", "marathon"];
             const hasOther = filters.categories.some(
-                (c) => !quickSlugs.includes(c)
+                (c) => !quickSlugs.includes(c),
             );
             otherBtn.classList.toggle("active", hasOther);
         }
@@ -1995,7 +2007,7 @@ function initTournamentsInteractions(container) {
         if (popover && popover.querySelector(".popover-grid")) {
             const query = popover.querySelector(".popover-search")?.value || "";
             const filtered = categoryNames.filter((n) =>
-                n.toLowerCase().includes(query.toLowerCase())
+                n.toLowerCase().includes(query.toLowerCase()),
             );
             popover.querySelector(".popover-grid").innerHTML = filtered
                 .map((name) => {
@@ -2016,7 +2028,7 @@ function initTournamentsInteractions(container) {
 
         const renderCats = (searchQuery = "") => {
             const filtered = categoryNames.filter((n) =>
-                n.toLowerCase().includes(searchQuery.toLowerCase())
+                n.toLowerCase().includes(searchQuery.toLowerCase()),
             );
             return `
                 <div class="popover-title">Все категории</div>
@@ -2055,7 +2067,7 @@ function initTournamentsInteractions(container) {
                 popover.innerHTML = renderCats();
                 setTimeout(
                     () => popover.querySelector(".popover-search")?.focus(),
-                    10
+                    10,
                 );
             }
         });
@@ -2070,7 +2082,7 @@ function initTournamentsInteractions(container) {
 
                 if (filters.categories.includes(slug)) {
                     filters.categories = filters.categories.filter(
-                        (c) => c !== slug
+                        (c) => c !== slug,
                     );
                 } else {
                     filters.categories.push(slug);
@@ -2091,7 +2103,7 @@ function initTournamentsInteractions(container) {
             if (e.target.classList.contains("popover-search")) {
                 const query = e.target.value.toLowerCase();
                 const filtered = categoryNames.filter((n) =>
-                    n.toLowerCase().includes(query)
+                    n.toLowerCase().includes(query),
                 );
                 popover.querySelector(".popover-grid").innerHTML = filtered
                     .map((name) => {
@@ -2128,7 +2140,7 @@ function initTournamentsInteractions(container) {
             } else {
                 if (filters.categories.includes(slug)) {
                     filters.categories = filters.categories.filter(
-                        (c) => c !== slug
+                        (c) => c !== slug,
                     );
                 } else {
                     filters.categories.push(slug);
