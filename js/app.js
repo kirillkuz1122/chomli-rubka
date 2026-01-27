@@ -1298,6 +1298,8 @@ const ViewManager = {
             };
             this.content.innerHTML = renderTournaments();
             initTournamentsInteractions(this.content);
+        } else if (viewName === "team") {
+            this.content.innerHTML = renderTeam();
         } else {
             this.content.innerHTML = `<div class="section__title" data-view-anim>Раздел ${viewName} в разработке</div>`;
         }
@@ -1484,6 +1486,80 @@ function renderDashboard() {
 }
 
 /* =========================================
+   8.5 TEAMS RENDERER
+   ========================================= */
+function renderTeam() {
+    return `
+        <div class="grid" style="position: absolute; inset: 0; z-index: -1;"></div>
+        <div class="team-view">
+             <div class="team-head-row" data-view-anim>
+                <h1 class="dash-header">Команда</h1>
+            </div>
+
+            <div class="tabs-nav" data-view-anim style="transition-delay: 0.05s">
+                <div class="tab-item active">
+                    <span class="material-symbols-outlined icon">settings</span>
+                    <span class="tab-text">Настройки</span>
+                </div>
+                <div class="tab-item">
+                    <span class="material-symbols-outlined icon">analytics</span>
+                    <span class="tab-text">Аналитика</span>
+                </div>
+            </div>
+            
+            <div class="team-invite-card" data-view-anim style="transition-delay: 0.1s">
+                <div class="invite-icon-box">
+                    <span class="material-symbols-outlined">mail</span>
+                </div>
+                <div class="invite-content">
+                    <div class="invite-title">Вас пригласили в команду "CosmoCoders"</div>
+                    <div class="invite-desc">Приглашение от пользователя <a href="#" class="text-accent-link">@cosmo_leader</a></div>
+                </div>
+                <div class="invite-actions">
+                    <button class="btn btn--muted btn--sm">Отклонить</button>
+                    <button class="btn btn--accent btn--sm">Принять</button>
+                </div>
+            </div>
+
+            <div class="team-separator" data-view-anim style="transition-delay: 0.15s"></div>
+
+            <div class="team-manage-section" data-view-anim style="transition-delay: 0.2s">
+                <div class="team-section-head">
+                    <h2 class="team-section-title">Управление командой</h2>
+                    <p class="team-section-desc">Вы можете создать новую команду или присоединиться к существующей.</p>
+                </div>
+                
+                <div class="team-actions-grid">
+                    <!-- Create Team -->
+                     <div class="card dash-card team-action-card">
+                        <div class="action-icon-box bg-accent-soft">
+                             <span class="material-symbols-outlined text-accent-icon">group_add</span>
+                        </div>
+                        <div class="action-card-content">
+                            <h3 class="action-title">Создать команду</h3>
+                            <p class="action-desc">Создайте свою команду и пригласите в нее участников.</p>
+                            <button class="btn btn--accent btn--wide">Создать</button>
+                        </div>
+                     </div>
+
+                    <!-- Join Team -->
+                     <div class="card dash-card team-action-card">
+                        <div class="action-icon-box bg-orange-soft">
+                             <span class="material-symbols-outlined text-orange-icon">login</span>
+                        </div>
+                        <div class="action-card-content">
+                            <h3 class="action-title">Присоединиться к команде</h3>
+                            <p class="action-desc">Войдите в состав команды по приглашению или коду.</p>
+                            <button class="btn btn--muted btn--wide">Присоединиться</button>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/* =========================================
    9. TOURNAMENTS RENDERER
    ========================================= */
 
@@ -1567,6 +1643,7 @@ const TOURNAMENTS_DATA = [
 
 function renderTournaments() {
     return `
+        <div class="grid" style="position: absolute; inset: 0; z-index: -1;"></div>
         <div class="tour-view">
             <div class="tour-head-row" data-view-anim>
                 <h1 class="dash-header" style="margin:0">Турниры</h1>
@@ -1593,7 +1670,7 @@ function renderTournaments() {
                         <button class="chip-btn" data-slug="marathon">Марафон</button>
                         <button class="chip-btn" data-slug="other">Еще</button>
                     </div>
-                    <div class="action-btns">
+                    <div class="action-btns" style="position: relative; display: flex; gap: 8px; margin-left: auto;">
                         <button class="btn btn--icon-only" data-slug="sort" title="Сортировка">
                             <span class="material-symbols-outlined">swap_vert</span>
                         </button>
@@ -1743,8 +1820,8 @@ function initTournamentsInteractions(container) {
         else popover.classList.add("tour-popover--left");
 
         popover.innerHTML = popoverHtml;
-        btn.parentElement.style.position = "relative";
-        btn.parentElement.appendChild(popover);
+        btn.style.position = "relative"; // Anchor to the button itself
+        btn.appendChild(popover);
 
         btn.addEventListener("click", (e) => {
             e.stopPropagation();
